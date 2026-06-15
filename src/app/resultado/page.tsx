@@ -17,7 +17,6 @@ const CONFIG_NIVEL: Record<NivelViabilidade, {
 export default function ResultadoPage() {
   const router = useRouter();
   const [resultado, setResultado] = useState<ResultadoAnalise | null>(null);
-  const [mostrarLead, setMostrarLead] = useState(false);
   const [lead, setLead] = useState({ nome: "", email: "", telefone: "" });
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
@@ -135,47 +134,75 @@ export default function ResultadoPage() {
         {resultado.nivelViabilidade !== "INELEGIVEL" && (
           <div style={{ background: "var(--dark)", padding: "3rem" }}>
             {!enviado ? (
-              <>
-                <div style={{ fontSize: 10, letterSpacing: "0.28em", color: "var(--gold-light)", textTransform: "uppercase", marginBottom: "1rem" }}>Próximo passo</div>
-                <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 30, fontWeight: 300, color: "#F5F0E8", marginBottom: "1rem" }}>
-                  Quanto você pode <em style={{ fontStyle: "italic", color: "var(--gold-light)" }}>recuperar</em>?
-                </h2>
-                <p style={{ fontSize: 13, fontWeight: 300, lineHeight: 1.85, color: "rgba(245,240,232,0.55)", marginBottom: "2rem" }}>
-                  Nossa equipe faz a análise completa das suas notas fiscais e calcula o valor exato de impostos recuperáveis dos últimos 5 anos — sem custo antecipado para você.
-                </p>
-                {!mostrarLead ? (
-                  <button onClick={() => setMostrarLead(true)} className="btn-gold">
-                    Solicitar análise completa →
-                  </button>
-                ) : (
-                  <form onSubmit={enviarLead} style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 460 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "start" }}>
+                {/* Lado esquerdo — pitch */}
+                <div>
+                  <div style={{ fontSize: 10, letterSpacing: "0.28em", color: "var(--gold-light)", textTransform: "uppercase", marginBottom: "1rem" }}>Próximo passo</div>
+                  <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 32, fontWeight: 300, color: "#F5F0E8", marginBottom: "1.25rem", lineHeight: 1.15 }}>
+                    Quanto você pode <em style={{ fontStyle: "italic", color: "var(--gold-light)" }}>recuperar</em>?
+                  </h2>
+                  <p style={{ fontSize: 13, fontWeight: 300, lineHeight: 1.85, color: "rgba(245,240,232,0.55)", marginBottom: "2rem" }}>
+                    Nossa equipe faz a análise completa das suas notas fiscais e calcula o valor exato de impostos recuperáveis dos últimos 5 anos — sem custo antecipado.
+                  </p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                    {[
+                      "Cálculo do valor exato a recuperar",
+                      "Análise das NF-e dos últimos 5 anos",
+                      "Sem honorários antecipados",
+                    ].map(item => (
+                      <div key={item} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ color: "var(--gold-light)", fontSize: 14 }}>✓</span>
+                        <span style={{ fontSize: 12, color: "rgba(245,240,232,0.6)", letterSpacing: "0.06em" }}>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Lado direito — formulário */}
+                <div>
+                  <div style={{ fontSize: 11, letterSpacing: "0.14em", color: "rgba(245,240,232,0.4)", marginBottom: "1.25rem", textTransform: "uppercase" }}>
+                    Solicitar análise completa
+                  </div>
+                  <form onSubmit={enviarLead} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                     {[
                       { key: "nome", placeholder: "Dr. João da Silva", label: "Nome completo", type: "text" },
                       { key: "email", placeholder: "contato@clinica.com.br", label: "E-mail", type: "email" },
                       { key: "telefone", placeholder: "(18) 99999-9999", label: "WhatsApp", type: "tel" },
                     ].map(({ key, placeholder, label, type }) => (
                       <div key={key}>
-                        <label style={{ display: "block", fontSize: 10, letterSpacing: "0.2em", color: "rgba(245,240,232,0.45)", textTransform: "uppercase", marginBottom: 6 }}>{label}</label>
+                        <label style={{ display: "block", fontSize: 10, letterSpacing: "0.2em", color: "rgba(245,240,232,0.4)", textTransform: "uppercase", marginBottom: 6 }}>{label}</label>
                         <input
                           type={type} placeholder={placeholder}
                           value={lead[key as keyof typeof lead]}
                           onChange={e => setLead(p => ({ ...p, [key]: e.target.value }))}
-                          style={{ width: "100%", padding: "12px 16px", border: "1px solid rgba(184,151,90,0.4)", background: "rgba(255,255,255,0.05)", fontFamily: "'Jost', sans-serif", fontSize: 14, fontWeight: 300, color: "#F5F0E8", outline: "none" }}
+                          style={{
+                            width: "100%", padding: "13px 16px",
+                            border: "1px solid rgba(184,151,90,0.35)",
+                            background: "rgba(255,255,255,0.04)",
+                            fontFamily: "'Jost', sans-serif", fontSize: 14, fontWeight: 300,
+                            color: "#F5F0E8", outline: "none",
+                            transition: "border-color 0.2s",
+                          }}
+                          onFocus={e => { (e.target as HTMLElement).style.borderColor = "rgba(184,151,90,0.7)"; }}
+                          onBlur={e => { (e.target as HTMLElement).style.borderColor = "rgba(184,151,90,0.35)"; }}
                         />
                       </div>
                     ))}
                     {erroLead && <p style={{ fontSize: 12, color: "#fca5a5" }}>{erroLead}</p>}
-                    <button type="submit" disabled={enviando} className="btn-gold" style={{ marginTop: 8 }}>
+                    <button type="submit" disabled={enviando} className="btn-gold" style={{ marginTop: 4, padding: "15px 24px" }}>
                       {enviando ? "Enviando…" : "Quero minha análise completa →"}
                     </button>
+                    <p style={{ fontSize: 10, color: "rgba(245,240,232,0.3)", letterSpacing: "0.06em" }}>
+                      🔒 Seus dados são usados apenas para entrarmos em contato.
+                    </p>
                   </form>
-                )}
-              </>
+                </div>
+              </div>
             ) : (
-              <div style={{ textAlign: "center", padding: "2rem 0" }}>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 48, color: "var(--gold)", marginBottom: "1rem" }}>✓</div>
-                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 26, fontWeight: 300, color: "#F5F0E8", marginBottom: "0.75rem" }}>Solicitação recebida</h3>
-                <p style={{ fontSize: 13, fontWeight: 300, lineHeight: 1.85, color: "rgba(245,240,232,0.55)" }}>
+              <div style={{ textAlign: "center", padding: "3rem 0" }}>
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 56, color: "var(--gold)", marginBottom: "1rem", lineHeight: 1 }}>✓</div>
+                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 300, color: "#F5F0E8", marginBottom: "0.75rem" }}>Solicitação recebida</h3>
+                <p style={{ fontSize: 13, fontWeight: 300, lineHeight: 1.85, color: "rgba(245,240,232,0.55)", maxWidth: 400, margin: "0 auto" }}>
                   Nossa equipe entrará em contato em até 1 dia útil pelo WhatsApp informado. Separe suas notas fiscais dos últimos 5 anos para agilizar a análise.
                 </p>
               </div>

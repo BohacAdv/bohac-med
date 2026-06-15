@@ -50,7 +50,7 @@ export default function HomePage() {
       {/* ── NAV ── */}
       <nav style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "1.5rem 3rem",
+        padding: "1.25rem 3rem",
         borderBottom: "1px solid var(--line)",
         background: "var(--cream)",
         position: "sticky", top: 0, zIndex: 10,
@@ -83,65 +83,77 @@ export default function HomePage() {
 
       {/* ── HERO ── */}
       <section style={{
-        minHeight: "88vh",
+        minHeight: "calc(100vh - 68px)",
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        padding: "0 3rem",
-        alignItems: "center",
-        borderBottom: "1px solid var(--line)",
         position: "relative",
         overflow: "hidden",
+        borderBottom: "1px solid var(--line)",
       }}>
         {/* fundo direito */}
         <div style={{
-          position: "absolute", right: 0, top: 0, bottom: 0, width: "45%",
+          position: "absolute", right: 0, top: 0, bottom: 0, width: "42%",
           background: "var(--cream-dark)", zIndex: 0,
         }} />
 
+        {/* marca d'água */}
+        <div style={{
+          position: "absolute", right: "6%", top: "50%",
+          transform: "translateY(-50%)",
+          fontFamily: "'Cormorant Garamond', serif", fontSize: 260, fontWeight: 300,
+          color: "rgba(184,151,90,0.07)", lineHeight: 1, pointerEvents: "none",
+          letterSpacing: "-0.05em", userSelect: "none",
+        }}>§</div>
+
         {/* coluna esquerda */}
-        <div style={{ position: "relative", zIndex: 1, paddingRight: "4rem" }}>
-          <div className="section-tag-el">Análise tributária gratuita</div>
+        <div style={{
+          position: "relative", zIndex: 1,
+          display: "flex", flexDirection: "column", justifyContent: "center",
+          padding: "5rem 3.5rem 5rem 3rem",
+        }}>
+          <div className="section-tag-el" style={{ marginBottom: "1.25rem" }}>Análise tributária gratuita</div>
           <h1 style={{
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 52,
+            fontSize: 56,
             fontWeight: 300,
-            lineHeight: 1.12,
-            marginBottom: "1.5rem",
+            lineHeight: 1.1,
+            marginBottom: "1.25rem",
+            letterSpacing: "-0.01em",
           }}>
-            Sua clínica pode estar<br />
-            pagando imposto<br />
-            <em style={{ fontStyle: "italic", color: "var(--gold)" }}>a mais</em>
+            Sua clínica pode<br />
+            estar pagando<br />
+            imposto <em style={{ fontStyle: "italic", color: "var(--gold)" }}>a mais</em>
           </h1>
-          <p style={{ fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: "var(--muted)", maxWidth: 380, marginBottom: "3rem" }}>
-            A tese de <strong style={{ fontWeight: 400, color: "var(--mid)" }}>equiparação hospitalar</strong> permite que médicos
-            e clínicas reduzam drasticamente o IRPJ e a CSLL — de forma legal, reconhecida pelo STJ.
-            Descubra agora se você tem esse direito.
+          <p style={{ fontSize: 14, fontWeight: 300, lineHeight: 1.9, color: "var(--muted)", maxWidth: 420, marginBottom: "2.5rem" }}>
+            A tese de <strong style={{ fontWeight: 500, color: "var(--mid)" }}>equiparação hospitalar</strong> permite que médicos
+            e clínicas reduzam o IRPJ de 32% para 8% sobre a receita bruta — de forma legal, reconhecida pelo STJ.
           </p>
 
           {/* Formulário CNPJ */}
-          <form onSubmit={handleAnalisar} style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 400 }}>
-            <div>
-              <label style={{ display: "block", fontSize: 10, letterSpacing: "0.2em", color: "var(--muted)", textTransform: "uppercase", marginBottom: 6 }}>
-                CNPJ da sua empresa
-              </label>
-              <input
-                type="text"
-                value={cnpj}
-                onChange={e => setCnpj(formatarCNPJ(e.target.value))}
-                placeholder="00.000.000/0001-00"
-                className="bohac-input"
-                style={{ fontSize: 18, textAlign: "center", letterSpacing: "0.08em" }}
-                inputMode="numeric"
-                maxLength={18}
-                disabled={carregando}
-              />
-            </div>
-            {erro && <p style={{ fontSize: 12, color: "#b91c1c" }}>{erro}</p>}
+          <form onSubmit={handleAnalisar} style={{ maxWidth: 460 }}>
+            <label style={{
+              display: "block", fontSize: 10, letterSpacing: "0.22em",
+              color: "var(--muted)", textTransform: "uppercase", marginBottom: 8,
+            }}>
+              CNPJ da sua empresa
+            </label>
+            <input
+              type="text"
+              value={cnpj}
+              onChange={e => setCnpj(formatarCNPJ(e.target.value))}
+              placeholder="00.000.000/0001-00"
+              className="bohac-input"
+              style={{ fontSize: 20, textAlign: "center", letterSpacing: "0.1em", padding: "16px 20px" }}
+              inputMode="numeric"
+              maxLength={18}
+              disabled={carregando}
+            />
+            {erro && <p style={{ fontSize: 12, color: "#b91c1c", marginTop: 8 }}>{erro}</p>}
             <button
               type="submit"
               disabled={carregando}
               className="btn-gold"
-              style={{ width: "100%", textAlign: "center" }}
+              style={{ width: "100%", textAlign: "center", marginTop: 10, padding: "16px 32px", fontSize: 12 }}
             >
               {carregando ? (
                 <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
@@ -156,15 +168,29 @@ export default function HomePage() {
                 "Verificar agora — é grátis"
               )}
             </button>
-            <p style={{ fontSize: 11, color: "var(--muted)", letterSpacing: "0.06em" }}>
-              🔒 Seus dados são usados apenas para a análise.
-            </p>
+
+            {/* Trust bar */}
+            <div style={{
+              display: "flex", gap: "1.5rem", marginTop: "1rem",
+              paddingTop: "1rem", borderTop: "1px solid var(--line)",
+            }}>
+              {[
+                { icon: "🔒", texto: "Dados protegidos" },
+                { icon: "⚡", texto: "Resultado em segundos" },
+                { icon: "✓", texto: "100% gratuito" },
+              ].map(({ icon, texto }) => (
+                <span key={texto} style={{ fontSize: 11, color: "var(--muted)", letterSpacing: "0.06em", display: "flex", alignItems: "center", gap: 5 }}>
+                  {icon} {texto}
+                </span>
+              ))}
+            </div>
           </form>
 
-          <div style={{ marginTop: "2rem" }}>
+          <div style={{ marginTop: "1.75rem" }}>
             <a href="/analise" style={{
               fontSize: 11, letterSpacing: "0.18em", fontWeight: 400, textTransform: "uppercase",
               color: "var(--mid)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8,
+              borderBottom: "1px solid var(--line)", paddingBottom: 2,
             }}>
               Analisar pela descrição de serviços <span>→</span>
             </a>
@@ -174,43 +200,79 @@ export default function HomePage() {
         {/* coluna direita — stats */}
         <div style={{
           position: "relative", zIndex: 1,
-          display: "flex", flexDirection: "column", alignItems: "center",
-          padding: "5rem 2rem", gap: "2rem",
+          display: "flex", flexDirection: "column", justifyContent: "center",
+          padding: "5rem 3rem 5rem 4rem",
         }}>
-          <div style={{
-            position: "absolute", top: "3rem", right: "3rem",
-            fontFamily: "'Cormorant Garamond', serif", fontSize: 180, fontWeight: 300,
-            color: "rgba(184,151,90,0.08)", lineHeight: 1, pointerEvents: "none",
-            letterSpacing: "-0.05em",
-          }}>§</div>
-
           {[
-            { num: "32→8%", label: "Redução da base de cálculo do IRPJ" },
-            { num: "5 anos", label: "De impostos pagos a mais para recuperar" },
-            { num: "STJ", label: "Jurisprudência consolidada — Tema 217" },
-          ].map(({ num, label }, i) => (
-            <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: i < 2 ? 0 : 0 }}>
-              {i > 0 && <div style={{ width: 1, height: 40, background: "var(--line)", margin: "0 auto" }} />}
-              <div style={{
-                background: "#fff", border: "1px solid var(--line)", padding: "1.5rem 2rem",
-                width: 240, textAlign: "center",
-              }}>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 36, fontWeight: 600, color: "var(--gold)", lineHeight: 1 }}>
+            {
+              num: "32→8%",
+              detalhe: "de redução",
+              label: "Base de cálculo do IRPJ",
+              sub: "Da receita bruta, não do lucro",
+            },
+            {
+              num: "5 anos",
+              detalhe: "retroativos",
+              label: "Impostos pagos a mais",
+              sub: "Prazo para recuperação judicial",
+            },
+            {
+              num: "Tema 217",
+              detalhe: "STJ",
+              label: "Jurisprudência consolidada",
+              sub: "Superior Tribunal de Justiça",
+            },
+          ].map(({ num, detalhe, label, sub }, i) => (
+            <div key={i}>
+              {i > 0 && <div style={{ height: 1, background: "var(--line)", margin: "2rem 0" }} />}
+              <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 6 }}>
+                <span style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: 44, fontWeight: 600,
+                  color: "var(--gold)", lineHeight: 1,
+                }}>
                   {num}
-                </div>
-                <div style={{ fontSize: 11, letterSpacing: "0.16em", color: "var(--muted)", textTransform: "uppercase", marginTop: 6 }}>
-                  {label}
-                </div>
+                </span>
+                <span style={{
+                  fontSize: 11, letterSpacing: "0.14em",
+                  color: "var(--gold-dark)", textTransform: "uppercase", fontWeight: 500,
+                }}>
+                  {detalhe}
+                </span>
+              </div>
+              <div style={{ fontSize: 13, fontWeight: 500, color: "var(--dark)", letterSpacing: "0.04em", marginBottom: 3 }}>
+                {label}
+              </div>
+              <div style={{ fontSize: 11, color: "var(--muted)", letterSpacing: "0.06em" }}>
+                {sub}
               </div>
             </div>
           ))}
         </div>
       </section>
 
+      {/* ── LEGAL BAR ── */}
+      <div style={{
+        background: "var(--dark)",
+        padding: "1.25rem 3rem",
+        display: "flex", alignItems: "center", justifyContent: "center", gap: "3rem",
+        flexWrap: "wrap",
+      }}>
+        {[
+          "⚖️  Art. 15, §1°, III, \"a\" — Lei 9.249/95",
+          "🏛️  STJ — Recurso Repetitivo Tema 217",
+          "🏥  38 CNAEs elegíveis — Divisão 86 IBGE",
+        ].map(item => (
+          <span key={item} style={{ fontSize: 11, letterSpacing: "0.12em", color: "rgba(245,240,232,0.45)", fontWeight: 300 }}>
+            {item}
+          </span>
+        ))}
+      </div>
+
       {/* ── O QUE É A TESE ── */}
       <section id="sobre" style={{ padding: "6rem 3rem", borderBottom: "1px solid var(--line)" }}>
         <div className="section-tag-el">A tese tributária</div>
-        <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 38, fontWeight: 300, marginBottom: "4rem" }}>
+        <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 40, fontWeight: 300, marginBottom: "4rem", maxWidth: 560 }}>
           O que é a <em style={{ fontStyle: "italic" }}>equiparação hospitalar</em>?
         </h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5px", background: "var(--line)", border: "1px solid var(--line)" }}>
@@ -262,7 +324,7 @@ export default function HomePage() {
             <span style={{ display: "block", width: 24, height: 1, background: "var(--gold-light)" }} />
             Como funciona
           </div>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 38, fontWeight: 300, color: "#F5F0E8", marginBottom: "4rem" }}>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 40, fontWeight: 300, color: "#F5F0E8", marginBottom: "4rem" }}>
             Análise em <em style={{ fontStyle: "italic", color: "var(--gold-light)" }}>menos de 10 segundos</em>
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "2rem" }}>
@@ -287,19 +349,23 @@ export default function HomePage() {
         background: "var(--gold)", padding: "4rem 3rem",
         display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem",
       }}>
-        <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 30, fontWeight: 300, color: "#fff" }}>
-          Verifique agora se sua clínica tem esse direito.<br />
-          <em style={{ fontStyle: "italic" }}>A análise é gratuita e leva segundos.</em>
+        <div>
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 32, fontWeight: 300, color: "#fff", marginBottom: "0.5rem" }}>
+            Verifique agora se sua clínica tem esse direito.
+          </div>
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 300, color: "rgba(255,255,255,0.75)", fontStyle: "italic" }}>
+            A análise é gratuita e leva menos de 10 segundos.
+          </div>
         </div>
         <a
           href="#"
           onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
           style={{
-            flexShrink: 0, padding: "14px 36px",
+            flexShrink: 0, padding: "16px 40px",
             border: "1px solid #fff", color: "#fff",
             fontFamily: "'Jost', sans-serif", fontSize: 11, letterSpacing: "0.2em", fontWeight: 500,
             textTransform: "uppercase", textDecoration: "none",
-            transition: "all 0.25s",
+            transition: "all 0.25s", whiteSpace: "nowrap",
           }}
           onMouseEnter={e => { (e.target as HTMLElement).style.background = "#fff"; (e.target as HTMLElement).style.color = "var(--gold)"; }}
           onMouseLeave={e => { (e.target as HTMLElement).style.background = "transparent"; (e.target as HTMLElement).style.color = "#fff"; }}
@@ -311,23 +377,35 @@ export default function HomePage() {
       {/* ── FOOTER ── */}
       <footer style={{
         background: "var(--dark)", padding: "3rem",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
-        <div>
-          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, fontWeight: 600, letterSpacing: "0.08em", color: "#F5F0E8" }}>
-            BOHAC MED
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "2rem" }}>
+          <div>
+            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, fontWeight: 600, letterSpacing: "0.08em", color: "#F5F0E8" }}>
+              BOHAC MED
+            </div>
+            <div style={{ fontSize: 9, letterSpacing: "0.22em", fontWeight: 300, color: "var(--gold-light)", textTransform: "uppercase", marginTop: 2 }}>
+              Advogados Associados · Setor Médico
+            </div>
+            <div style={{ fontSize: 10, letterSpacing: "0.1em", color: "rgba(245,240,232,0.35)", marginTop: 8 }}>
+              CNPJ: 39.293.156/0001-43 — Bohac Sociedade de Advogados
+            </div>
           </div>
-          <div style={{ fontSize: 9, letterSpacing: "0.22em", fontWeight: 300, color: "var(--gold-light)", textTransform: "uppercase", marginTop: 2 }}>
-            Advogados Associados · Setor Médico
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", alignItems: "flex-end" }}>
+            {[
+              { label: "Tel.", valor: "(18) 3222-6245" },
+              { label: "Email", valor: "contato@bohacadvocacia.com.br" },
+              { label: "Instagram", valor: "@bohac.advocacia" },
+            ].map(({ label, valor }) => (
+              <span key={valor} style={{ fontSize: 11, letterSpacing: "0.08em", color: "rgba(245,240,232,0.4)" }}>
+                <span style={{ color: "rgba(245,240,232,0.25)", marginRight: 6 }}>{label}</span>{valor}
+              </span>
+            ))}
           </div>
         </div>
-        <div style={{ display: "flex", gap: "2rem" }}>
-          {["(18) 3222-6245", "contato@bohacadvocacia.com.br", "@bohac.advocacia"].map(item => (
-            <span key={item} style={{ fontSize: 11, letterSpacing: "0.1em", color: "rgba(245,240,232,0.4)" }}>{item}</span>
-          ))}
-        </div>
-        <div style={{ fontSize: 11, color: "rgba(245,240,232,0.3)", letterSpacing: "0.06em" }}>
-          © {new Date().getFullYear()} Bohac Advogados Associados
+        <div style={{ borderTop: "1px solid rgba(184,151,90,0.15)", paddingTop: "1.5rem" }}>
+          <p style={{ fontSize: 10, color: "rgba(245,240,232,0.25)", letterSpacing: "0.06em", lineHeight: 1.7 }}>
+            © {new Date().getFullYear()} Bohac Sociedade de Advogados — CNPJ 39.293.156/0001-43. Bohac Med é um serviço de triagem automatizada com fins informativos. Não constitui parecer jurídico. OAB/SP. Todos os direitos reservados.
+          </p>
         </div>
       </footer>
     </main>
