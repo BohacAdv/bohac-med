@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
+
+:root {
+  --gold: #B8975A;
+  --gold-light: #D4B483;
+  --gold-dark: #8B6E3A;
+  --cream: #F9F6F0;
+  --cream-dark: #EDE8DF;
+  --dark: #1A1714;
+  --mid: #3D3830;
+  --muted: #7A7060;
+  --line: rgba(184,151,90,0.25);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Jost', system-ui, sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+}
+
+@layer components {
+  .btn-gold {
+    display: inline-block;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    font-weight: 500;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    background: var(--gold);
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.25s;
+  }
+  .btn-gold:hover { background: var(--gold-dark); }
+  .btn-gold:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .btn-outline-gold {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    font-weight: 500;
+    text-transform: uppercase;
+    padding: 13px 32px;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    background: transparent;
+  }
+  .btn-outline-gold:hover { background: var(--gold); color: #fff; }
+
+  .section-tag-el {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    font-weight: 400;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .section-tag-el::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .bohac-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    background: #fff;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--dark);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .bohac-input:focus { border-color: var(--gold); }
+
+  .line-divider {
+    border: none;
+    border-top: 1px solid var(--line);
+  }
+}
