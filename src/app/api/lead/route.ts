@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import type { DadosLead } from "@/types";
+import { notificarNovoLead } from "@/lib/whatsapp";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -35,8 +36,14 @@ export async function POST(req: NextRequest) {
 
     if (error) throw new Error(error.message);
 
-    // Notificação por e-mail (opcional — pode ser adicionada depois via Resend)
-    // await notificarAdvogado(body);
+    // Notificação WhatsApp para o advogado (fire-and-forget)
+    notificarNovoLead({
+      nome: body.nome,
+      email: body.email,
+      telefone: body.telefone,
+      cnpj: body.cnpj ?? undefined,
+      nivelViabilidade: body.resultadoAnalise?.nivelViabilidade,
+    }).catch(() => {});
 
     return NextResponse.json({ sucesso: true, mensagem: "Lead registrado com sucesso." });
   } catch (error: unknown) {
