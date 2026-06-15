@@ -11,11 +11,18 @@ export async function consultarCNPJ(cnpj: string): Promise<DadosCNPJ> {
   const cnpjLimpo = cnpj.replace(/\D/g, "");
   if (cnpjLimpo.length !== 14) throw new Error("CNPJ inválido — deve ter 14 dígitos.");
 
-  const res = await fetch(`${BRASIL_API}/${cnpjLimpo}`, { next: { revalidate: 3600 } });
-  if (!res.ok) {
-    if (res.status === 404) throw new Error("CNPJ não encontrado na Receita Federal.");
-    throw new Error("Erro ao consultar a Receita Federal. Tente novamente em instantes.");
-  }
+    const res = await fetch(`${BRASIL_API}/${cnpjLimpo}`, {
+          cache: "no-store",
+          headers: {
+                  "User-Agent": "Mozilla/5.0 (compatible; BohacMed/1.0; +https://bohac-med.vercel.app)",
+                  "Accept": "application/json",
+          },
+    });
+    if (!res.ok) {
+          if (res.status === 404) throw new Error("CNPJ não encontrado na Receita Federal.");
+          if (res.status === 429) throw new Error("Muitas consultas simultâneas. Aguarde alguns segundos e tente novamente.");
+          throw new Error(`Erro ao consultar a Receita Federal (HTTP ${res.status}). Tente novamente em instantes.`);
+    }
 
   const data = await res.json();
 
