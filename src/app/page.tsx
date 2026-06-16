@@ -56,7 +56,11 @@ export default function HomePage() {
         background: "var(--cream)",
         position: "sticky", top: 0, zIndex: 10,
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          aria-label="Voltar ao topo"
+          style={{ display: "flex", alignItems: "center", gap: 14, background: "none", border: "none", padding: 0, margin: 0, cursor: "pointer", textAlign: "left", font: "inherit" }}
+        >
           <BrandMark size={46} />
           <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
             <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 600, letterSpacing: "0.08em" }}>
@@ -66,7 +70,7 @@ export default function HomePage() {
               Advogados Associados
             </span>
           </div>
-        </div>
+        </button>
         <div className="nav-links" style={{ display: "flex", gap: "2.5rem" }}>
           <a href="#como-funciona" style={{ fontSize: 13, letterSpacing: "0.18em", fontWeight: 400, color: "var(--muted)", textDecoration: "none", textTransform: "uppercase" }}>
             Como funciona

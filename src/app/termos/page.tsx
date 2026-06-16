@@ -18,10 +18,10 @@ export default function TermosPage() {
           <Link href="/" className="inline-flex items-center gap-2 text-gold-light hover:text-cream text-xs uppercase tracking-widest transition-colors">
             ← Voltar ao início
           </Link>
-          <div className="flex items-center gap-3 mt-4">
+          <Link href="/" aria-label="Voltar para a página inicial" className="flex items-center gap-3 mt-4 w-fit hover:opacity-80 transition-opacity">
             <BrandMark size={32} tone="onDark" />
             <h1 className="font-serif text-3xl font-light">Termos de Uso</h1>
-          </div>
+          </Link>
           <p className="text-gold-light/60 text-sm mt-1">Atualizados em {atualizadoEm}</p>
         </div>
       </header>

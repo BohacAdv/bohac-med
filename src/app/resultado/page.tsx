@@ -58,7 +58,11 @@ export default function ResultadoPage() {
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "1.5rem 3rem", borderBottom: "1px solid var(--line)", background: "var(--cream)",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <button
+          onClick={() => router.push("/")}
+          aria-label="Voltar para a página inicial"
+          style={{ display: "flex", alignItems: "center", gap: 10, background: "none", border: "none", padding: 0, margin: 0, cursor: "pointer", textAlign: "left", font: "inherit" }}
+        >
           <BrandMark size={30} />
           <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
             <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 600, letterSpacing: "0.08em" }}>
@@ -66,7 +70,7 @@ export default function ResultadoPage() {
             </span>
             <span style={{ fontSize: 9, letterSpacing: "0.22em", fontWeight: 300, color: "var(--muted)", textTransform: "uppercase" }}>Advogados Associados</span>
           </div>
-        </div>
+        </button>
         <button onClick={() => router.push("/")} style={{ fontSize: 11, letterSpacing: "0.16em", color: "var(--muted)", background: "none", border: "none", cursor: "pointer", textTransform: "uppercase" }}>
           ← Nova análise
         </button>
