@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ResultadoAnaliseNFe } from "@/types";
+import BrandMark from "@/components/BrandMark";
 
 export default function AnalisePage() {
   const router = useRouter();
@@ -42,11 +43,14 @@ export default function AnalisePage() {
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "1.5rem 3rem", borderBottom: "1px solid var(--line)", background: "var(--cream)",
       }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
-          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 600, letterSpacing: "0.08em" }}>
-            BOHAC <span style={{ color: "var(--gold)" }}>MED</span>
-          </span>
-          <span style={{ fontSize: 9, letterSpacing: "0.22em", fontWeight: 300, color: "var(--muted)", textTransform: "uppercase" }}>Advogados Associados</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <BrandMark size={30} />
+          <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 600, letterSpacing: "0.08em" }}>
+              BOHAC <span style={{ color: "var(--gold)" }}>MED</span>
+            </span>
+            <span style={{ fontSize: 9, letterSpacing: "0.22em", fontWeight: 300, color: "var(--muted)", textTransform: "uppercase" }}>Advogados Associados</span>
+          </div>
         </div>
         <button onClick={() => router.push("/")} style={{ fontSize: 11, letterSpacing: "0.16em", color: "var(--muted)", background: "none", border: "none", cursor: "pointer", textTransform: "uppercase" }}>
           ← Voltar

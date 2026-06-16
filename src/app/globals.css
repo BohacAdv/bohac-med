@@ -10,9 +10,13 @@
   --gold-dark: #8B6E3A;
   --cream: #F9F6F0;
   --cream-dark: #EDE8DF;
-  --dark: #1A1714;
-  --mid: #3D3830;
-  --muted: #7A7060;
+  --navy: #1B2240;
+  --navy-deep: #11152A;
+  --navy-light: #3A4568;
+  --navy-line: rgba(27,34,64,0.18);
+  --dark: #161B2C;
+  --mid: #34405E;
+  --muted: #6B7280;
   --line: rgba(184,151,90,0.25);
 }
 

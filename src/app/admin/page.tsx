@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@supabase/supabase-js";
+import BrandMark from "@/components/BrandMark";
 
 // ─── Supabase (client-side, apenas leitura pública pelo anon key) ─────────────
 const supabase = createClient(
@@ -227,11 +228,14 @@ export default function AdminPage() {
   // ── Login ───────────────────────────────────────────────────────────────────
   if (!autenticado) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-sm">
-          <div className="text-center mb-6">
-            <div className="text-3xl font-bold text-blue-900">Bohac Med</div>
-            <div className="text-gray-500 text-sm mt-1">Painel administrativo</div>
+      <div className="min-h-screen bg-cream flex items-center justify-center font-sans">
+        <div className="bg-white border border-gold/20 shadow-lg p-8 w-full max-w-sm">
+          <div className="text-center mb-6 flex flex-col items-center gap-2">
+            <BrandMark size={40} />
+            <div className="font-serif text-2xl font-semibold text-bohac-dark mt-1">
+              BOHAC <span className="text-gold font-light">MED</span>
+            </div>
+            <div className="text-muted text-sm">Painel administrativo</div>
           </div>
           <form
             onSubmit={(e) => {
@@ -245,11 +249,11 @@ export default function AdminPage() {
               placeholder="Senha"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gold/30 px-4 py-2 mb-4 text-bohac-dark focus:outline-none focus:ring-2 focus:ring-gold"
             />
             <button
               type="submit"
-              className="w-full bg-blue-900 text-white rounded-lg py-2 font-semibold hover:bg-blue-800 transition"
+              className="w-full bg-navy text-cream py-2 font-semibold uppercase tracking-wide text-sm hover:bg-navy-light transition"
             >
               Entrar
             </button>
@@ -261,7 +265,7 @@ export default function AdminPage() {
               )}&body=${encodeURIComponent(
                 "Olá, esqueci a senha do painel administrativo do Bohac Med. Pode me enviar a senha de acesso?"
               )}`}
-              className="text-blue-700 text-sm hover:underline"
+              className="text-gold-dark text-sm hover:underline"
             >
               Esqueci minha senha?
             </a>

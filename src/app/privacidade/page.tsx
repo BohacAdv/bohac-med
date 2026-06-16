@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import BrandMark from "@/components/BrandMark";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade — Bohac Med",
@@ -10,29 +11,34 @@ export default function PrivacidadePage() {
   const atualizadoEm = "15 de junho de 2026";
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-cream font-sans text-bohac-dark">
       {/* Header */}
-      <header className="bg-blue-900 text-white px-6 py-4">
-        <Link href="/" className="text-blue-300 hover:text-white text-sm">
-          ← Voltar ao início
-        </Link>
-        <h1 className="text-2xl font-bold mt-2">Política de Privacidade</h1>
-        <p className="text-blue-300 text-sm">Atualizada em {atualizadoEm}</p>
+      <header className="bg-navy text-cream px-6 md:px-10 py-8 border-b border-gold/30">
+        <div className="max-w-3xl mx-auto">
+          <Link href="/" className="inline-flex items-center gap-2 text-gold-light hover:text-cream text-xs uppercase tracking-widest transition-colors">
+            ← Voltar ao início
+          </Link>
+          <div className="flex items-center gap-3 mt-4">
+            <BrandMark size={32} tone="onDark" />
+            <h1 className="font-serif text-3xl font-light">Política de Privacidade</h1>
+          </div>
+          <p className="text-gold-light/60 text-sm mt-1">Atualizada em {atualizadoEm}</p>
+        </div>
       </header>
 
-      <article className="max-w-3xl mx-auto px-6 py-10 prose prose-gray">
+      <article className="max-w-3xl mx-auto px-6 py-12">
 
         {/* 1. Identificação do controlador */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-3">1. Identificação do Controlador</h2>
-          <p className="text-gray-700 leading-relaxed">
+          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">1. Identificação do Controlador</h2>
+          <p className="text-mid leading-relaxed">
             A plataforma <strong>Bohac Med</strong>, acessível em{" "}
-            <a href="https://bohacmed.com.br" className="text-blue-700">bohacmed.com.br</a>, é
+            <a href="https://bohacmed.com.br" className="text-gold-dark underline hover:text-gold transition-colors">bohacmed.com.br</a>, é
             operada pela <strong>Bohac Sociedade de Advogados</strong> (CNPJ 39.293.156/0001-43),
             com sede na Rua Emílio Mori, 426, Presidente Prudente/SP — CEP 19015-230. Para
             questões relacionadas à privacidade e proteção de dados, entre em contato pelo
             e-mail{" "}
-            <a href="mailto:privacidade@bohacadvogados.com.br" className="text-blue-700">
+            <a href="mailto:privacidade@bohacadvogados.com.br" className="text-gold-dark underline hover:text-gold transition-colors">
               privacidade@bohacadvogados.com.br
             </a>
             .
@@ -41,24 +47,24 @@ export default function PrivacidadePage() {
 
         {/* 2. Dados coletados */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-3">2. Quais Dados Coletamos</h2>
-          <p className="text-gray-700 leading-relaxed mb-3">
+          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">2. Quais Dados Coletamos</h2>
+          <p className="text-mid leading-relaxed mb-3">
             Coletamos as seguintes categorias de dados, sempre com a finalidade específica
             de verificar a viabilidade da equiparação hospitalar:
           </p>
 
           <div className="space-y-4">
-            <div className="bg-white rounded-lg border border-gray-200 p-4">
-              <h3 className="font-semibold text-gray-900 mb-1">2.1 Dados de identificação pessoal</h3>
-              <p className="text-gray-600 text-sm">
+            <div className="bg-white border border-gold/20 p-4">
+              <h3 className="font-serif font-semibold text-bohac-dark mb-1">2.1 Dados de identificação pessoal</h3>
+              <p className="text-muted text-sm">
                 Nome completo, endereço de e-mail e número de telefone/WhatsApp, fornecidos
                 voluntariamente ao solicitar contato com a equipe jurídica.
               </p>
             </div>
 
-            <div className="bg-white rounded-lg border border-gray-200 p-4">
-              <h3 className="font-semibold text-gray-900 mb-1">2.2 Dados empresariais (CNPJ e CNAEs)</h3>
-              <p className="text-gray-600 text-sm">
+            <div className="bg-white border border-gold/20 p-4">
+              <h3 className="font-serif font-semibold text-bohac-dark mb-1">2.2 Dados empresariais (CNPJ e CNAEs)</h3>
+              <p className="text-muted text-sm">
                 Número do CNPJ fornecido pelo usuário. A partir dele, consultamos automaticamente
                 a Receita Federal (API pública) para obter a razão social, atividades econômicas
                 (CNAEs) e situação cadastral. Esses dados são utilizados exclusivamente para
@@ -66,7 +72,7 @@ export default function PrivacidadePage() {
               </p>
             </div>
 
-            <div className="bg-orange-50 rounded-lg border border-orange-200 p-4">
+            <div className="bg-orange-50 border border-orange-200 p-4">
               <h3 className="font-semibold text-orange-900 mb-1">
                 2.3 Dados de Nota Fiscal Eletrônica (NF-e) — Dado Sensível Fiscal
               </h3>
@@ -88,18 +94,18 @@ export default function PrivacidadePage() {
 
         {/* 3. Finalidades e bases legais */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-3">
+          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">
             3. Finalidades do Tratamento e Bases Legais (LGPD)
           </h2>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
-              <thead className="bg-gray-100">
+            <table className="w-full text-sm border border-gold/20">
+              <thead className="bg-cream-dark">
                 <tr>
-                  <th className="text-left px-4 py-2 text-gray-700">Finalidade</th>
-                  <th className="text-left px-4 py-2 text-gray-700">Base Legal (LGPD)</th>
+                  <th className="text-left px-4 py-2 text-bohac-dark font-serif font-semibold">Finalidade</th>
+                  <th className="text-left px-4 py-2 text-bohac-dark font-serif font-semibold">Base Legal (LGPD)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gold/10">
                 {[
                   ["Análise de viabilidade de equiparação hospitalar", "Art. 7º, II — execução de contrato a pedido do titular"],
                   ["Contato por WhatsApp para apresentação de proposta jurídica", "Art. 7º, I — consentimento (coletado no formulário de lead)"],
@@ -107,8 +113,8 @@ export default function PrivacidadePage() {
                   ["Cumprimento de obrigações legais e regulatórias (ex: guarda de registros)", "Art. 7º, II — cumprimento de obrigação legal"],
                 ].map(([fin, base]) => (
                   <tr key={fin} className="bg-white">
-                    <td className="px-4 py-2 text-gray-700">{fin}</td>
-                    <td className="px-4 py-2 text-gray-500">{base}</td>
+                    <td className="px-4 py-2 text-mid">{fin}</td>
+                    <td className="px-4 py-2 text-muted">{base}</td>
                   </tr>
                 ))}
               </tbody>
@@ -118,13 +124,13 @@ export default function PrivacidadePage() {
 
         {/* 4. Compartilhamento */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-3">4. Compartilhamento de Dados</h2>
-          <p className="text-gray-700 leading-relaxed mb-3">
+          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">4. Compartilhamento de Dados</h2>
+          <p className="text-mid leading-relaxed mb-3">
             Não vendemos, alugamos ou comercializamos seus dados pessoais. O compartilhamento
             ocorre somente com os seguintes <strong>operadores</strong> contratados, que tratam
             dados apenas sob nossas instruções:
           </p>
-          <ul className="list-disc list-inside space-y-2 text-gray-700 text-sm">
+          <ul className="list-disc list-inside space-y-2 text-mid text-sm">
             <li>
               <strong>Supabase Inc.</strong> (banco de dados em nuvem) — armazenamento
               dos leads e resultados de análise, com servidores nos EUA sob cláusulas
@@ -142,7 +148,7 @@ export default function PrivacidadePage() {
                 href="https://www.anthropic.com/legal/privacy"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-700"
+                className="text-gold-dark underline hover:text-gold transition-colors"
               >
                 Política de Privacidade da Anthropic
               </a>
@@ -157,8 +163,8 @@ export default function PrivacidadePage() {
 
         {/* 5. Retenção */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-3">5. Prazo de Retenção</h2>
-          <p className="text-gray-700 leading-relaxed">
+          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">5. Prazo de Retenção</h2>
+          <p className="text-mid leading-relaxed">
             Os dados de identificação e o resultado da análise são retidos por{" "}
             <strong>5 (cinco) anos</strong> a partir da coleta, prazo compatível com a
             prescrição de obrigações civis e com as exigências de guarda de registros eletrônicos
@@ -169,13 +175,13 @@ export default function PrivacidadePage() {
 
         {/* 6. Direitos dos titulares */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-3">
+          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">
             6. Direitos dos Titulares de Dados
           </h2>
-          <p className="text-gray-700 leading-relaxed mb-3">
+          <p className="text-mid leading-relaxed mb-3">
             Em conformidade com o art. 18 da LGPD (Lei nº 13.709/2018), você tem direito a:
           </p>
-          <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
+          <ul className="list-disc list-inside space-y-1 text-mid text-sm">
             <li>Confirmar a existência de tratamento dos seus dados;</li>
             <li>Acessar seus dados;</li>
             <li>Corrigir dados incompletos, inexatos ou desatualizados;</li>
@@ -184,9 +190,9 @@ export default function PrivacidadePage() {
             <li>Revogar o consentimento a qualquer momento;</li>
             <li>Peticionar à Autoridade Nacional de Proteção de Dados (ANPD).</li>
           </ul>
-          <p className="text-gray-700 text-sm mt-3">
+          <p className="text-mid text-sm mt-3">
             Para exercer qualquer desses direitos, envie solicitação para{" "}
-            <a href="mailto:privacidade@bohacadvogados.com.br" className="text-blue-700">
+            <a href="mailto:privacidade@bohacadvogados.com.br" className="text-gold-dark underline hover:text-gold transition-colors">
               privacidade@bohacadvogados.com.br
             </a>
             . Responderemos em até 15 dias corridos.
@@ -195,8 +201,8 @@ export default function PrivacidadePage() {
 
         {/* 7. Segurança */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-3">7. Segurança dos Dados</h2>
-          <p className="text-gray-700 leading-relaxed">
+          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">7. Segurança dos Dados</h2>
+          <p className="text-mid leading-relaxed">
             Adotamos medidas técnicas e organizacionais adequadas para proteger seus dados,
             incluindo: transmissão criptografada via HTTPS/TLS 1.3, controle de acesso por
             funções no banco de dados (Row Level Security), e restrição de acesso ao painel
@@ -208,8 +214,8 @@ export default function PrivacidadePage() {
 
         {/* 8. Cookies */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-3">8. Cookies</h2>
-          <p className="text-gray-700 leading-relaxed">
+          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">8. Cookies</h2>
+          <p className="text-mid leading-relaxed">
             Esta plataforma utiliza apenas cookies estritamente necessários para o funcionamento
             da sessão. Não utilizamos cookies de rastreamento, publicidade ou analytics de
             terceiros.
@@ -218,8 +224,8 @@ export default function PrivacidadePage() {
 
         {/* 9. Alterações */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-3">9. Alterações desta Política</h2>
-          <p className="text-gray-700 leading-relaxed">
+          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">9. Alterações desta Política</h2>
+          <p className="text-mid leading-relaxed">
             Reservamo-nos o direito de atualizar esta Política periodicamente. Alterações
             relevantes serão comunicadas pelo e-mail cadastrado ou por aviso na plataforma
             com antecedência mínima de 30 dias.
@@ -227,10 +233,10 @@ export default function PrivacidadePage() {
         </section>
 
         {/* Rodapé */}
-        <div className="border-t border-gray-200 pt-6 mt-8 text-xs text-gray-400">
+        <div className="border-t border-gold/20 pt-6 mt-10 text-xs text-muted">
           <p>
             Bohac Sociedade de Advogados · CNPJ 39.293.156/0001-43 ·{" "}
-            <Link href="/termos" className="text-blue-600">Termos de Uso</Link>
+            <Link href="/termos" className="text-gold-dark underline hover:text-gold transition-colors">Termos de Uso</Link>
           </p>
         </div>
       </article>

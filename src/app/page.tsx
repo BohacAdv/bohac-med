@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import BrandMark from "@/components/BrandMark";
 
 export default function HomePage() {
   const router = useRouter();
@@ -55,13 +56,16 @@ export default function HomePage() {
         background: "var(--cream)",
         position: "sticky", top: 0, zIndex: 10,
       }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
-          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 600, letterSpacing: "0.08em" }}>
-            BOHAC <span style={{ fontWeight: 300, color: "var(--gold)" }}>MED</span>
-          </span>
-          <span style={{ fontSize: 9, letterSpacing: "0.22em", fontWeight: 300, color: "var(--muted)", textTransform: "uppercase" }}>
-            Advogados Associados
-          </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <BrandMark size={34} />
+          <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 600, letterSpacing: "0.08em" }}>
+              BOHAC <span style={{ fontWeight: 300, color: "var(--gold)" }}>MED</span>
+            </span>
+            <span style={{ fontSize: 9, letterSpacing: "0.22em", fontWeight: 300, color: "var(--muted)", textTransform: "uppercase" }}>
+              Advogados Associados
+            </span>
+          </div>
         </div>
         <div style={{ display: "flex", gap: "2.5rem" }}>
           <a href="#como-funciona" style={{ fontSize: 12, letterSpacing: "0.18em", fontWeight: 400, color: "var(--muted)", textDecoration: "none", textTransform: "uppercase" }}>
@@ -379,15 +383,18 @@ export default function HomePage() {
         background: "var(--dark)", padding: "3rem",
       }}>
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "2rem" }}>
-          <div>
-            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, fontWeight: 600, letterSpacing: "0.08em", color: "#F5F0E8" }}>
-              BOHAC MED
-            </div>
-            <div style={{ fontSize: 9, letterSpacing: "0.22em", fontWeight: 300, color: "var(--gold-light)", textTransform: "uppercase", marginTop: 2 }}>
-              Advogados Associados · Setor Médico
-            </div>
-            <div style={{ fontSize: 10, letterSpacing: "0.1em", color: "rgba(245,240,232,0.35)", marginTop: 8 }}>
-              CNPJ: 39.293.156/0001-43 — Bohac Sociedade de Advogados
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
+            <BrandMark size={32} tone="onDark" />
+            <div>
+              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 18, fontWeight: 600, letterSpacing: "0.08em", color: "#F5F0E8" }}>
+                BOHAC MED
+              </div>
+              <div style={{ fontSize: 9, letterSpacing: "0.22em", fontWeight: 300, color: "var(--gold-light)", textTransform: "uppercase", marginTop: 2 }}>
+                Advogados Associados · Setor Médico
+              </div>
+              <div style={{ fontSize: 10, letterSpacing: "0.1em", color: "rgba(245,240,232,0.35)", marginTop: 8 }}>
+                CNPJ: 39.293.156/0001-43 — Bohac Sociedade de Advogados
+              </div>
             </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", alignItems: "flex-end" }}>
