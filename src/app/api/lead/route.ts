@@ -30,6 +30,8 @@ export async function POST(req: NextRequest) {
         mensagem: body.mensagem ?? null,
         origem: body.origem ?? "site",
         resultado_analise: body.resultadoAnalise ?? null,
+        notas_fiscais: body.notasFiscais ?? null,
+        parecer_nfe: body.parecerNfe ?? null,
         criado_em: new Date().toISOString(),
       },
     ]);
@@ -42,7 +44,8 @@ export async function POST(req: NextRequest) {
       email: body.email,
       telefone: body.telefone,
       cnpj: body.cnpj ?? undefined,
-      nivelViabilidade: body.resultadoAnalise?.nivelViabilidade,
+      nivelViabilidade: body.resultadoAnalise?.nivelViabilidade ?? body.parecerNfe?.nivelViabilidadeGeral,
+      qtdNotasFiscais: body.notasFiscais?.length,
     }).catch(() => {});
 
     return NextResponse.json({ sucesso: true, mensagem: "Lead registrado com sucesso." });
