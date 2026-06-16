@@ -43,6 +43,28 @@ export interface ResultadoAnaliseNFe {
   servicosIdentificados: string[];
 }
 
+// ─── Anexo de notas fiscais (upload de arquivo, não texto colado) ─────────────
+
+export interface NotaFiscalAnexo {
+  nomeArquivo: string;
+  caminho: string; // path dentro do bucket "notas-fiscais" no Supabase Storage
+  tipo: string;     // mime type / extensão do arquivo
+}
+
+export interface NotaFiscalAvaliada {
+  nomeArquivo: string;
+  servicosIdentificados: string[];
+  enquadrado: boolean;
+  observacoesRelevantes: string;
+}
+
+export interface ResultadoAnaliseNFeArquivos {
+  parecer: string; // parecer corrido, agregando todas as notas enviadas
+  enquadradoGeral: boolean;
+  nivelViabilidadeGeral: NivelViabilidade;
+  notas: NotaFiscalAvaliada[];
+}
+
 export interface DadosLead {
   nome: string;
   email: string;
@@ -51,5 +73,7 @@ export interface DadosLead {
   mensagem?: string;
   origem: "site" | "whatsapp";
   resultadoAnalise?: ResultadoAnalise;
+  notasFiscais?: NotaFiscalAnexo[];
+  parecerNfe?: ResultadoAnaliseNFeArquivos;
   criadoEm?: string;
 }

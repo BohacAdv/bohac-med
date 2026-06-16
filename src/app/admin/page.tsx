@@ -26,6 +26,26 @@ const FASES_CONTRATUAIS = [
 
 type FaseContratual = (typeof FASES_CONTRATUAIS)[number];
 
+interface NotaFiscalAnexo {
+  nomeArquivo: string;
+  caminho: string;
+  tipo: string;
+}
+
+interface NotaFiscalAvaliada {
+  nomeArquivo: string;
+  servicosIdentificados: string[];
+  enquadrado: boolean;
+  observacoesRelevantes: string;
+}
+
+interface ParecerNfe {
+  parecer: string;
+  enquadradoGeral: boolean;
+  nivelViabilidadeGeral: NivelViabilidade;
+  notas: NotaFiscalAvaliada[];
+}
+
 interface Lead {
   id: string;
   nome: string;
@@ -39,6 +59,8 @@ interface Lead {
     pontuacao: number;
     justificativa: string;
   } | null;
+  notas_fiscais: NotaFiscalAnexo[] | null;
+  parecer_nfe: ParecerNfe | null;
   criado_em: string;
   tratamentos?: Tratamento[];
 }
@@ -107,7 +129,29 @@ export default function AdminPage() {
   const [novoComentario, setNovoComentario] = useState("");
   const [salvandoComentario, setSalvandoComentario] = useState(false);
 
+  // Download de notas fiscais anexadas (bucket privado)
+  const [baixandoNota, setBaixandoNota] = useState<string | null>(null);
+
   const SENHA_ADMIN = process.env.NEXT_PUBLIC_ADMIN_PASSWORD ?? "bohac2024";
+
+  // ── Baixar nota fiscal anexada (gera URL assinada e abre em nova aba) ──────
+  async function baixarNotaFiscal(caminho: string) {
+    setBaixandoNota(caminho);
+    try {
+      const res = await fetch("/api/admin/nota-fiscal-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ caminho, senha }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.erro ?? "Erro ao gerar link.");
+      window.open(data.url, "_blank");
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Erro ao baixar nota fiscal.");
+    } finally {
+      setBaixandoNota(null);
+    }
+  }
 
   // ── Carregar leads ──────────────────────────────────────────────────────────
   const carregarLeads = useCallback(async () => {
@@ -526,6 +570,47 @@ export default function AdminPage() {
                   </div>
                   <div className="text-gray-600 leading-relaxed">
                     {leadSelecionado.resultado_analise.justificativa}
+                  </div>
+                </div>
+              )}
+
+              {leadSelecionado.parecer_nfe && (
+                <div className="mt-3 p-3 bg-gray-50 rounded-lg text-xs">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span
+                      className={`px-2 py-0.5 rounded-full font-semibold ${
+                        COR_NIVEL[leadSelecionado.parecer_nfe.nivelViabilidadeGeral]
+                      }`}
+                    >
+                      {leadSelecionado.parecer_nfe.nivelViabilidadeGeral}
+                    </span>
+                    <span className="text-gray-500">Parecer das notas fiscais anexadas</span>
+                  </div>
+                  <div className="text-gray-600 leading-relaxed whitespace-pre-line">
+                    {leadSelecionado.parecer_nfe.parecer}
+                  </div>
+                </div>
+              )}
+
+              {leadSelecionado.notas_fiscais && leadSelecionado.notas_fiscais.length > 0 && (
+                <div className="mt-3">
+                  <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                    Notas fiscais anexadas ({leadSelecionado.notas_fiscais.length})
+                  </div>
+                  <div className="space-y-1.5">
+                    {leadSelecionado.notas_fiscais.map((nf, i) => (
+                      <button
+                        key={i}
+                        onClick={() => baixarNotaFiscal(nf.caminho)}
+                        disabled={baixandoNota === nf.caminho}
+                        className="w-full flex items-center justify-between gap-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg px-3 py-2 text-xs text-left transition disabled:opacity-50"
+                      >
+                        <span className="truncate text-gray-700">📎 {nf.nomeArquivo}</span>
+                        <span className="text-blue-600 font-medium whitespace-nowrap">
+                          {baixandoNota === nf.caminho ? "Gerando link..." : "Baixar ↓"}
+                        </span>
+                      </button>
+                    ))}
                   </div>
                 </div>
               )}

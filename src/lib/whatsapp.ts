@@ -157,6 +157,7 @@ export async function notificarNovoLead(dados: {
   telefone: string;
   cnpj?: string;
   nivelViabilidade?: string;
+  qtdNotasFiscais?: number;
 }): Promise<void> {
   const numeroAdvogado = process.env.WHATSAPP_NOTIFY_NUMBER;
   if (!numeroAdvogado) return;
@@ -170,8 +171,9 @@ export async function notificarNovoLead(dados: {
     `📧 *E-mail:* ${dados.email}\n` +
     `📱 *WhatsApp:* ${dados.telefone}\n` +
     (dados.cnpj ? `🏢 *CNPJ:* ${dados.cnpj}\n` : "") +
-    `📊 *Viabilidade:* ${nivel}\n\n` +
-    `_Acesse o Supabase para detalhes completos._`;
+    `📊 *Viabilidade:* ${nivel}\n` +
+    (dados.qtdNotasFiscais ? `📎 *Notas fiscais anexadas:* ${dados.qtdNotasFiscais}\n` : "") +
+    `\n_Acesse o Supabase para detalhes completos._`;
 
   // Tenta texto simples primeiro (dentro da janela 24h após conversa recente)
   await enviarTexto(numeroAdvogado, mensagem);
