@@ -402,10 +402,18 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-        <div style={{ borderTop: "1px solid rgba(184,151,90,0.15)", paddingTop: "1.5rem" }}>
+        <div style={{ borderTop: "1px solid rgba(184,151,90,0.15)", paddingTop: "1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
           <p style={{ fontSize: 10, color: "rgba(245,240,232,0.25)", letterSpacing: "0.06em", lineHeight: 1.7 }}>
             © {new Date().getFullYear()} Bohac Sociedade de Advogados — CNPJ 39.293.156/0001-43. Bohac Med é um serviço de triagem automatizada com fins informativos. Não constitui parecer jurídico. OAB/SP. Todos os direitos reservados.
           </p>
+          <div style={{ display: "flex", gap: "1.5rem" }}>
+            <a href="/privacidade" style={{ fontSize: 10, color: "rgba(245,240,232,0.35)", letterSpacing: "0.08em", textDecoration: "none" }}>
+              Política de Privacidade
+            </a>
+            <a href="/termos" style={{ fontSize: 10, color: "rgba(245,240,232,0.35)", letterSpacing: "0.08em", textDecoration: "none" }}>
+              Termos de Uso
+            </a>
+          </div>
         </div>
       </footer>
     </main>
