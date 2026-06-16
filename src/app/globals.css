@@ -32,11 +32,11 @@ body {
   .btn-gold {
     display: inline-block;
     font-family: 'Jost', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.2em;
     font-weight: 500;
     text-transform: uppercase;
-    padding: 14px 32px;
+    padding: 15px 32px;
     background: var(--gold);
     color: #fff;
     text-decoration: none;
@@ -49,7 +49,7 @@ body {
 
   .btn-outline-gold {
     display: inline-block;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.18em;
     font-weight: 500;
     text-transform: uppercase;
@@ -67,7 +67,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.28em;
     font-weight: 400;
     color: var(--gold);
@@ -88,7 +88,7 @@ body {
     border: 1px solid var(--line);
     background: #fff;
     font-family: 'Jost', sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 300;
     color: var(--dark);
     outline: none;
