@@ -42,10 +42,13 @@ interface Lead {
   tratamentos?: Tratamento[];
 }
 
+type TipoTratamento = "fase" | "comentario";
+
 interface Tratamento {
   id: string;
   lead_id: string;
-  fase: FaseContratual;
+  tipo: TipoTratamento;
+  fase: FaseContratual | null;
   anotacao: string;
   criado_em: string;
   criado_por: string;
@@ -73,6 +76,15 @@ function formatarCNPJ(cnpj: string) {
   return cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
 }
 
+// Retorna a fase contratual vigente do lead, considerando apenas
+// os registros do tipo "fase" (ignora comentários internos).
+function obterFaseAtual(lead: Lead): FaseContratual | null {
+  const registrosDeFase = (lead.tratamentos ?? []).filter(
+    (t) => t.tipo === "fase" && t.fase
+  );
+  return registrosDeFase.at(-1)?.fase ?? null;
+}
+
 // ─── Componente principal ─────────────────────────────────────────────────────
 export default function AdminPage() {
   const [senha, setSenha] = useState("");
@@ -83,11 +95,16 @@ export default function AdminPage() {
   const [filtroNivel, setFiltroNivel] = useState<NivelViabilidade | "TODOS">("TODOS");
   const [filtroFase, setFiltroFase] = useState<FaseContratual | "TODAS">("TODAS");
   const [busca, setBusca] = useState("");
+  const [visualizacao, setVisualizacao] = useState<"lista" | "kanban">("lista");
 
-  // Form de novo tratamento
+  // Form de novo tratamento (mudança de fase)
   const [novaFase, setNovaFase] = useState<FaseContratual>("Primeiro contato");
   const [novaAnotacao, setNovaAnotacao] = useState("");
   const [salvando, setSalvando] = useState(false);
+
+  // Form de novo comentário (não altera a fase)
+  const [novoComentario, setNovoComentario] = useState("");
+  const [salvandoComentario, setSalvandoComentario] = useState(false);
 
   const SENHA_ADMIN = process.env.NEXT_PUBLIC_ADMIN_PASSWORD ?? "bohac2024";
 
@@ -107,13 +124,24 @@ export default function AdminPage() {
     if (autenticado) carregarLeads();
   }, [autenticado, carregarLeads]);
 
-  // ── Adicionar tratamento ────────────────────────────────────────────────────
+  // ── Recarregar um único lead (após inserir tratamento/comentário) ──────────
+  const recarregarLeadSelecionado = useCallback(async (leadId: string) => {
+    const { data } = await supabase
+      .from("leads")
+      .select(`*, tratamentos:lead_tratamentos(*)`)
+      .eq("id", leadId)
+      .single();
+    if (data) setLeadSelecionado(data as Lead);
+  }, []);
+
+  // ── Adicionar tratamento (mudança de fase) ──────────────────────────────────
   async function adicionarTratamento() {
     if (!leadSelecionado || !novaAnotacao.trim()) return;
     setSalvando(true);
     const { error } = await supabase.from("lead_tratamentos").insert([
       {
         lead_id: leadSelecionado.id,
+        tipo: "fase",
         fase: novaFase,
         anotacao: novaAnotacao.trim(),
         criado_por: "Guilherme",
@@ -122,15 +150,47 @@ export default function AdminPage() {
     if (!error) {
       setNovaAnotacao("");
       await carregarLeads();
-      // Atualiza lead selecionado com os novos dados
-      const { data } = await supabase
-        .from("leads")
-        .select(`*, tratamentos:lead_tratamentos(*)`)
-        .eq("id", leadSelecionado.id)
-        .single();
-      if (data) setLeadSelecionado(data as Lead);
+      await recarregarLeadSelecionado(leadSelecionado.id);
     }
     setSalvando(false);
+  }
+
+  // ── Adicionar comentário interno (não altera a fase do lead) ───────────────
+  async function adicionarComentario() {
+    if (!leadSelecionado || !novoComentario.trim()) return;
+    setSalvandoComentario(true);
+    const { error } = await supabase.from("lead_tratamentos").insert([
+      {
+        lead_id: leadSelecionado.id,
+        tipo: "comentario",
+        fase: null,
+        anotacao: novoComentario.trim(),
+        criado_por: "Guilherme",
+      },
+    ]);
+    if (!error) {
+      setNovoComentario("");
+      await carregarLeads();
+      await recarregarLeadSelecionado(leadSelecionado.id);
+    }
+    setSalvandoComentario(false);
+  }
+
+  // ── Mover lead de fase via drag-and-drop no quadro Kanban ───────────────────
+  async function moverFaseKanban(leadId: string, novaFase: FaseContratual) {
+    const lead = leads.find((l) => l.id === leadId);
+    if (!lead || obterFaseAtual(lead) === novaFase) return;
+    await supabase.from("lead_tratamentos").insert([
+      {
+        lead_id: leadId,
+        tipo: "fase",
+        fase: novaFase,
+        anotacao: `Movido para "${novaFase}" via quadro Kanban.`,
+        criado_por: "Guilherme",
+      },
+    ]);
+    await carregarLeads();
+    if (leadSelecionado?.id === leadId) await recarregarLeadSelecionado(leadId);
   }
 
   // ── Filtros ─────────────────────────────────────────────────────────────────
@@ -138,7 +198,7 @@ export default function AdminPage() {
     const nivel = l.resultado_analise?.nivelViabilidade;
     if (filtroNivel !== "TODOS" && nivel !== filtroNivel) return false;
 
-    const ultimaFase = l.tratamentos?.at(-1)?.fase;
+    const ultimaFase = obterFaseAtual(l);
     if (filtroFase !== "TODAS" && ultimaFase !== filtroFase) return false;
 
     if (busca) {
@@ -160,7 +220,7 @@ export default function AdminPage() {
     alta: leads.filter((l) => l.resultado_analise?.nivelViabilidade === "ALTA").length,
     media: leads.filter((l) => l.resultado_analise?.nivelViabilidade === "MEDIA").length,
     contratos: leads.filter((l) =>
-      l.tratamentos?.some((t) => t.fase === "Contrato assinado")
+      l.tratamentos?.some((t) => t.tipo === "fase" && t.fase === "Contrato assinado")
     ).length,
   };
 
@@ -194,6 +254,18 @@ export default function AdminPage() {
               Entrar
             </button>
           </form>
+          <div className="text-center mt-4">
+            <a
+              href={`mailto:guilherme.pbh@hotmail.com?subject=${encodeURIComponent(
+                "Recuperação de senha — Painel Bohac Med"
+              )}&body=${encodeURIComponent(
+                "Olá, esqueci a senha do painel administrativo do Bohac Med. Pode me enviar a senha de acesso?"
+              )}`}
+              className="text-blue-700 text-sm hover:underline"
+            >
+              Esqueci minha senha?
+            </a>
+          </div>
         </div>
       </div>
     );
@@ -261,6 +333,24 @@ export default function AdminPage() {
             <option key={f} value={f}>{f}</option>
           ))}
         </select>
+        <div className="flex gap-1 bg-gray-200 rounded-lg p-1">
+          <button
+            onClick={() => setVisualizacao("lista")}
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition ${
+              visualizacao === "lista" ? "bg-white shadow-sm text-blue-900" : "text-gray-500"
+            }`}
+          >
+            Lista
+          </button>
+          <button
+            onClick={() => setVisualizacao("kanban")}
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition ${
+              visualizacao === "kanban" ? "bg-white shadow-sm text-blue-900" : "text-gray-500"
+            }`}
+          >
+            Kanban
+          </button>
+        </div>
         <button
           onClick={carregarLeads}
           className="ml-auto bg-blue-900 text-white rounded-lg px-4 py-2 text-sm hover:bg-blue-800 transition"
@@ -269,9 +359,67 @@ export default function AdminPage() {
         </button>
       </div>
 
-      {/* Layout: tabela + painel lateral */}
+      {/* Layout: tabela/kanban + painel lateral */}
       <div className="px-6 pb-6 flex gap-4" style={{ minHeight: "60vh" }}>
-        {/* Tabela de leads */}
+        {visualizacao === "kanban" ? (
+        /* Quadro Kanban */
+        <div className="flex-1 overflow-x-auto">
+          <div className="flex gap-3 h-full pb-2" style={{ minWidth: "max-content" }}>
+            {FASES_CONTRATUAIS.map((fase) => {
+              const leadsNaFase = leadsFiltrados.filter((l) => {
+                const faseAtual = obterFaseAtual(l);
+                return faseAtual === fase || (faseAtual === null && fase === "Primeiro contato");
+              });
+              return (
+                <div
+                  key={fase}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    const leadId = e.dataTransfer.getData("text/plain");
+                    if (leadId) moverFaseKanban(leadId, fase);
+                  }}
+                  className="w-64 flex-shrink-0 bg-gray-100 rounded-xl flex flex-col"
+                >
+                  <div className="px-3 py-2.5 border-b border-gray-200 flex items-center justify-between">
+                    <span className="font-semibold text-xs text-gray-600 uppercase tracking-wide">{fase}</span>
+                    <span className="text-xs text-gray-400 bg-white rounded-full px-2 py-0.5">{leadsNaFase.length}</span>
+                  </div>
+                  <div className="flex-1 overflow-y-auto p-2 space-y-2" style={{ maxHeight: "60vh" }}>
+                    {leadsNaFase.map((lead) => (
+                      <div
+                        key={lead.id}
+                        draggable
+                        onDragStart={(e) => e.dataTransfer.setData("text/plain", lead.id)}
+                        onClick={() => setLeadSelecionado(lead)}
+                        className={`bg-white rounded-lg shadow-sm p-3 cursor-pointer hover:shadow-md transition border-2 ${
+                          leadSelecionado?.id === lead.id ? "border-blue-500" : "border-transparent"
+                        }`}
+                      >
+                        <div className="font-medium text-sm text-gray-900">{lead.nome}</div>
+                        {lead.resultado_analise?.nivelViabilidade && (
+                          <span
+                            className={`inline-block mt-1.5 px-2 py-0.5 rounded-full text-xs font-semibold ${
+                              COR_NIVEL[lead.resultado_analise.nivelViabilidade]
+                            }`}
+                          >
+                            {lead.resultado_analise.nivelViabilidade}
+                          </span>
+                        )}
+                        <div className="text-gray-400 text-xs mt-1.5">{lead.telefone}</div>
+                      </div>
+                    ))}
+                    {leadsNaFase.length === 0 && (
+                      <div className="text-gray-300 text-xs text-center py-6">Arraste um lead aqui</div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        ) : (
+        /* Tabela de leads */
         <div className="flex-1 bg-white rounded-xl shadow-sm overflow-auto">
           {carregando ? (
             <div className="flex items-center justify-center h-40 text-gray-400">
@@ -294,7 +442,7 @@ export default function AdminPage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {leadsFiltrados.map((lead) => {
-                  const ultimaFase = lead.tratamentos?.at(-1)?.fase ?? "—";
+                  const ultimaFase = obterFaseAtual(lead) ?? "—";
                   const nivel = lead.resultado_analise?.nivelViabilidade;
                   const ativo = leadSelecionado?.id === lead.id;
                   return (
@@ -338,6 +486,7 @@ export default function AdminPage() {
             </table>
           )}
         </div>
+        )}
 
         {/* Painel lateral de tratamentos */}
         {leadSelecionado && (
@@ -389,11 +538,22 @@ export default function AdminPage() {
                 </div>
               ) : (
                 [...(leadSelecionado.tratamentos ?? [])].reverse().map((t) => (
-                  <div key={t.id} className="border-l-2 border-blue-200 pl-3">
+                  <div
+                    key={t.id}
+                    className={`border-l-2 pl-3 ${
+                      t.tipo === "comentario" ? "border-amber-300" : "border-blue-200"
+                    }`}
+                  >
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
-                        {t.fase}
-                      </span>
+                      {t.tipo === "comentario" ? (
+                        <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">
+                          💬 Comentário
+                        </span>
+                      ) : (
+                        <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
+                          {t.fase}
+                        </span>
+                      )}
                       <span className="text-xs text-gray-400">{formatarData(t.criado_em)}</span>
                     </div>
                     <p className="text-sm text-gray-700 leading-relaxed">{t.anotacao}</p>
@@ -402,10 +562,10 @@ export default function AdminPage() {
               )}
             </div>
 
-            {/* Form novo tratamento */}
-            <div className="p-4 border-t bg-gray-50 rounded-b-xl">
+            {/* Form novo tratamento (mudança de fase) */}
+            <div className="p-4 border-t bg-gray-50">
               <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-                Novo tratamento
+                Mudança de fase
               </div>
               <select
                 value={novaFase}
@@ -417,7 +577,7 @@ export default function AdminPage() {
                 ))}
               </select>
               <textarea
-                rows={3}
+                rows={2}
                 placeholder="Anotação sobre o tratamento dado..."
                 value={novaAnotacao}
                 onChange={(e) => setNovaAnotacao(e.target.value)}
@@ -428,7 +588,28 @@ export default function AdminPage() {
                 disabled={salvando || !novaAnotacao.trim()}
                 className="w-full bg-blue-900 text-white rounded-lg py-2 text-sm font-semibold hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {salvando ? "Salvando..." : "Registrar tratamento"}
+                {salvando ? "Salvando..." : "Registrar mudança de fase"}
+              </button>
+            </div>
+
+            {/* Form novo comentário (não altera a fase) */}
+            <div className="p-4 border-t bg-gray-50 rounded-b-xl">
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                Comentário interno
+              </div>
+              <textarea
+                rows={2}
+                placeholder="Adicionar um comentário, sem alterar a fase..."
+                value={novoComentario}
+                onChange={(e) => setNovoComentario(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-2 resize-none focus:outline-none focus:ring-2 focus:ring-amber-400"
+              />
+              <button
+                onClick={adicionarComentario}
+                disabled={salvandoComentario || !novoComentario.trim()}
+                className="w-full bg-amber-500 text-white rounded-lg py-2 text-sm font-semibold hover:bg-amber-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {salvandoComentario ? "Salvando..." : "Adicionar comentário"}
               </button>
             </div>
           </div>
