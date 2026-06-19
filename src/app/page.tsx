@@ -4,6 +4,16 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import BrandMark from "@/components/BrandMark";
 
+const GOLD = "#BF9A57";
+const GOLD_DARK = "#a9853f";
+const GOLD_LIGHT = "#d8bc83";
+const NAVY = "#0C2438";
+const NAVY_700 = "#102d45";
+const CREAM = "#F6F2EA";
+const INK = "#12253a";
+const MUTED_NAVY = "#aebccb";
+const WA_NUMBER = "5518999999999";
+
 export default function HomePage() {
   const router = useRouter();
   const [cnpj, setCnpj] = useState("");
@@ -46,430 +56,917 @@ export default function HomePage() {
   }
 
   return (
-    <main style={{ background: "var(--cream)", fontFamily: "'Jost', sans-serif", color: "var(--dark)" }}>
+    <main style={{ fontFamily: "'Jost', sans-serif", color: INK, background: CREAM }}>
 
       {/* ── NAV ── */}
-      <nav className="nav-bar" style={{
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "1.25rem 3rem",
-        borderBottom: "1px solid var(--line)",
-        background: "var(--cream)",
-        position: "sticky", top: 0, zIndex: 10,
+      <header style={{
+        position: "sticky", top: 0, zIndex: 50,
+        background: NAVY, borderBottom: `1px solid rgba(191,154,87,0.18)`,
       }}>
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          aria-label="Voltar ao topo"
-          style={{ display: "flex", alignItems: "center", gap: 14, background: "none", border: "none", padding: 0, margin: 0, cursor: "pointer", textAlign: "left", font: "inherit" }}
-        >
-          <BrandMark size={46} />
-          <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 600, letterSpacing: "0.08em" }}>
-              BOHAC <span style={{ fontWeight: 300, color: "var(--gold)" }}>MED</span>
+        <div className="wrap nav-inner">
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            aria-label="Bohac Med — início"
+            style={{
+              display: "flex", alignItems: "center", gap: 12,
+              background: "none", border: "none", cursor: "pointer", padding: 0,
+            }}
+          >
+            <BrandMark size={40} tone="onDark" />
+            <span style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: 21, fontWeight: 600, letterSpacing: "0.1em",
+              color: CREAM,
+            }}>
+              BOHAC <span style={{ color: GOLD, fontWeight: 400 }}>MED</span>
             </span>
-            <span style={{ fontSize: 10, letterSpacing: "0.22em", fontWeight: 300, color: "var(--muted)", textTransform: "uppercase" }}>
-              Advogados Associados
-            </span>
-          </div>
-        </button>
-        <div className="nav-links" style={{ display: "flex", gap: "2.5rem" }}>
-          <a href="#como-funciona" style={{ fontSize: 13, letterSpacing: "0.18em", fontWeight: 400, color: "var(--muted)", textDecoration: "none", textTransform: "uppercase" }}>
-            Como funciona
-          </a>
-          <a href="#sobre" style={{ fontSize: 13, letterSpacing: "0.18em", fontWeight: 400, color: "var(--muted)", textDecoration: "none", textTransform: "uppercase" }}>
-            A tese
+          </button>
+
+          <nav className="nav-links" aria-label="Navegação principal">
+            {[
+              { label: "A tese", href: "#tese" },
+              { label: "Como funciona", href: "#como-funciona" },
+              { label: "Quem se beneficia", href: "#beneficia" },
+              { label: "Outras áreas", href: "#areas" },
+            ].map(({ label, href }) => (
+              <a key={href} href={href} style={{
+                fontSize: 13, letterSpacing: "0.14em", fontWeight: 400,
+                color: MUTED_NAVY, textDecoration: "none", textTransform: "uppercase",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.color = GOLD_LIGHT)}
+              onMouseLeave={e => (e.currentTarget.style.color = MUTED_NAVY)}
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+
+          <a href="#verificar" className="btn-nav-cta" style={{
+            padding: "11px 28px",
+            background: GOLD, color: "#fff",
+            fontFamily: "'Jost', sans-serif",
+            fontSize: 12, letterSpacing: "0.18em", fontWeight: 500,
+            textDecoration: "none", textTransform: "uppercase",
+            transition: "background 0.2s", whiteSpace: "nowrap",
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = GOLD_DARK)}
+          onMouseLeave={e => (e.currentTarget.style.background = GOLD)}
+          >
+            Verificar meu CNPJ
           </a>
         </div>
-        <a
-          href="https://wa.me/5518999999999"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-outline-gold"
-        >
-          Falar com advogado
-        </a>
-      </nav>
+      </header>
 
       {/* ── HERO ── */}
-      <section className="hero-section" style={{
-        minHeight: "calc(100vh - 78px)",
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        position: "relative",
+      <section style={{
+        background: NAVY,
+        padding: "5rem 0 0",
         overflow: "hidden",
-        borderBottom: "1px solid var(--line)",
+        position: "relative",
       }}>
-        {/* fundo direito */}
-        <div className="hero-bg-panel" style={{
-          position: "absolute", right: 0, top: 0, bottom: 0, width: "42%",
-          background: "var(--cream-dark)", zIndex: 0,
+        {/* fundo decorativo */}
+        <div style={{
+          position: "absolute", inset: 0, pointerEvents: "none",
+          background: `radial-gradient(ellipse 70% 60% at 70% 40%, rgba(191,154,87,0.06) 0%, transparent 70%)`,
         }} />
 
-        {/* marca d'água */}
-        <div className="hero-watermark" style={{
-          position: "absolute", right: "6%", top: "50%",
-          transform: "translateY(-50%)",
-          fontFamily: "'Cormorant Garamond', serif", fontSize: 260, fontWeight: 300,
-          color: "rgba(184,151,90,0.07)", lineHeight: 1, pointerEvents: "none",
-          letterSpacing: "-0.05em", userSelect: "none",
-        }}>§</div>
-
-        {/* coluna esquerda */}
-        <div className="hero-left" style={{
-          position: "relative", zIndex: 1,
-          display: "flex", flexDirection: "column", justifyContent: "center",
-          padding: "5rem 3.5rem 5rem 3rem",
-        }}>
-          <div className="section-tag-el" style={{ marginBottom: "1.25rem" }}>Análise tributária gratuita</div>
-          <h1 style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "clamp(36px, 6vw, 60px)",
-            fontWeight: 300,
-            lineHeight: 1.1,
-            marginBottom: "1.25rem",
-            letterSpacing: "-0.01em",
-          }}>
-            Sua clínica pode<br />
-            estar pagando<br />
-            imposto <em style={{ fontStyle: "italic", color: "var(--gold)" }}>a mais</em>
-          </h1>
-          <p style={{ fontSize: 16, fontWeight: 300, lineHeight: 1.85, color: "var(--muted)", maxWidth: 460, marginBottom: "2.5rem" }}>
-            A tese de <strong style={{ fontWeight: 500, color: "var(--mid)" }}>equiparação hospitalar</strong> permite que médicos
-            e clínicas reduzam o IRPJ de 32% para 8% <strong style={{ fontWeight: 500, color: "var(--mid)" }}>e a CSLL de 32% para 12%</strong> sobre
-            a receita bruta — de forma legal, reconhecida pelo STJ.
-          </p>
-
-          {/* Formulário CNPJ */}
-          <form onSubmit={handleAnalisar} style={{ maxWidth: 460 }}>
-            <label style={{
-              display: "block", fontSize: 11, letterSpacing: "0.22em",
-              color: "var(--muted)", textTransform: "uppercase", marginBottom: 8,
+        <div className="wrap hero-grid">
+          {/* ── Coluna esquerda: copy ── */}
+          <div className="hero-copy">
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 10,
+              fontSize: 11, letterSpacing: "0.28em", fontWeight: 600,
+              color: GOLD, textTransform: "uppercase", marginBottom: "1.5rem",
             }}>
-              CNPJ da sua empresa
-            </label>
-            <input
-              type="text"
-              value={cnpj}
-              onChange={e => setCnpj(formatarCNPJ(e.target.value))}
-              placeholder="00.000.000/0001-00"
-              className="bohac-input"
-              style={{ fontSize: 20, textAlign: "center", letterSpacing: "0.1em", padding: "16px 20px" }}
-              inputMode="numeric"
-              maxLength={18}
-              disabled={carregando}
-            />
-            {erro && <p style={{ fontSize: 13, color: "#b91c1c", marginTop: 8 }}>{erro}</p>}
-            <button
-              type="submit"
-              disabled={carregando}
-              className="btn-gold"
-              style={{ width: "100%", textAlign: "center", marginTop: 10, padding: "16px 32px", fontSize: 13 }}
-            >
-              {carregando ? (
-                <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                  <svg style={{ animation: "spin 1s linear infinite", width: 16, height: 16 }} viewBox="0 0 24 24" fill="none">
-                    <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
-                    <circle style={{ opacity: 0.25 }} cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path style={{ opacity: 0.75 }} fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                  </svg>
-                  Consultando Receita Federal…
-                </span>
-              ) : (
-                "Verificar agora — é grátis"
-              )}
-            </button>
+              <span style={{ width: 24, height: 1, background: GOLD, display: "block" }} />
+              Análise tributária gratuita
+            </div>
 
-            {/* Trust bar */}
-            <div className="trust-bar" style={{
-              display: "flex", gap: "1.5rem", marginTop: "1rem",
-              paddingTop: "1rem", borderTop: "1px solid var(--line)",
-              flexWrap: "wrap",
+            <h1 style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "clamp(38px, 5.5vw, 66px)",
+              fontWeight: 600, lineHeight: 1.05,
+              color: CREAM, marginBottom: "1.5rem", letterSpacing: "-0.01em",
             }}>
+              Sua clínica pode<br />
+              estar pagando<br />
+              imposto{" "}
+              <em style={{ fontStyle: "italic", color: GOLD }}>a mais.</em>
+            </h1>
+
+            <p style={{
+              fontSize: 16, fontWeight: 300, lineHeight: 1.8,
+              color: MUTED_NAVY, maxWidth: 500, marginBottom: "2rem",
+            }}>
+              A tese da{" "}
+              <strong style={{ color: CREAM, fontWeight: 500 }}>equiparação hospitalar</strong>{" "}
+              permite que médicos e clínicas reduzam a base de cálculo do IRPJ e da CSLL
+              sobre a receita bruta — de forma legal e reconhecida pelo STJ.
+            </p>
+
+            {/* Pills */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", marginBottom: "2rem" }}>
               {[
-                { icon: "🔒", texto: "Dados protegidos" },
-                { icon: "⚡", texto: "Resultado em segundos" },
-                { icon: "✓", texto: "100% gratuito" },
-              ].map(({ icon, texto }) => (
-                <span key={texto} style={{ fontSize: 12, color: "var(--muted)", letterSpacing: "0.06em", display: "flex", alignItems: "center", gap: 5 }}>
-                  {icon} {texto}
+                <>Base IRPJ <s style={{ color: MUTED_NAVY }}>32%</s> <b style={{ color: GOLD }}>8%</b></>,
+                <>Base CSLL <s style={{ color: MUTED_NAVY }}>32%</s> <b style={{ color: GOLD }}>12%</b></>,
+                <><b style={{ color: GOLD }}>5 anos</b> retroativos</>,
+              ].map((content, i) => (
+                <span key={i} style={{
+                  padding: "6px 14px",
+                  border: `1px solid rgba(191,154,87,0.35)`,
+                  color: CREAM, fontSize: 13, letterSpacing: "0.04em",
+                  background: "rgba(191,154,87,0.08)",
+                }}>
+                  {content}
                 </span>
               ))}
             </div>
-          </form>
 
-          <div style={{ marginTop: "1.75rem" }}>
-            <a href="/analise" style={{
-              fontSize: 12, letterSpacing: "0.18em", fontWeight: 400, textTransform: "uppercase",
-              color: "var(--mid)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8,
-              borderBottom: "1px solid var(--line)", paddingBottom: 2,
+            {/* Legal strip */}
+            <div className="legal-strip">
+              {[
+                { icon: "⚖️", label: <><b>Arts. 15 e 20</b> · Lei 9.249/95</> },
+                { icon: "🏛️", label: <><b>STJ</b> · Repetitivo Tema 217</> },
+                { icon: "📄", label: <><b>Receita Federal</b> · IN RFB 1.700/2017</> },
+                { icon: "📋", label: <><b>38 CNAEs</b> elegíveis →</>, href: "/cnaes-elegiveis" },
+              ].map(({ icon, label, href }, i) => {
+                const style: React.CSSProperties = {
+                  display: "flex", alignItems: "center", gap: 8,
+                  fontSize: 12, color: MUTED_NAVY, letterSpacing: "0.04em",
+                  textDecoration: "none",
+                  cursor: href ? "pointer" : "default",
+                  transition: "color 0.2s",
+                };
+                const content = <><span>{icon}</span><span>{label}</span></>;
+                return href ? (
+                  <a key={i} href={href} style={style}
+                    onMouseEnter={e => (e.currentTarget.style.color = GOLD_LIGHT)}
+                    onMouseLeave={e => (e.currentTarget.style.color = MUTED_NAVY)}
+                  >{content}</a>
+                ) : (
+                  <span key={i} style={style}>{content}</span>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ── Coluna direita: checker card ── */}
+          <div className="hero-checker" id="verificar">
+            <div style={{
+              background: "#fff",
+              padding: "2.25rem",
+              borderRadius: 4,
+              boxShadow: "0 24px 80px rgba(0,0,0,0.35), 0 4px 16px rgba(0,0,0,0.2)",
+              maxWidth: 420,
+              width: "100%",
             }}>
-              Analisar pela descrição de serviços <span>→</span>
-            </a>
+              {/* card header */}
+              <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: "0.75rem" }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: "50%",
+                  background: `rgba(191,154,87,0.12)`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="1.7" style={{ width: 20, height: 20 }}>
+                    <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 style={{
+                    fontFamily: "'Cormorant Garamond', serif",
+                    fontSize: 21, fontWeight: 600, color: INK, margin: 0, lineHeight: 1.2,
+                  }}>
+                    Verifique gratuitamente
+                  </h3>
+                </div>
+              </div>
+
+              <p style={{ fontSize: 14, color: "#5a6776", lineHeight: 1.6, marginBottom: "1.5rem" }}>
+                Informe o CNPJ da sua clínica e descubra em segundos se você tem direito à redução.
+              </p>
+
+              <form onSubmit={handleAnalisar}>
+                <label style={{
+                  display: "block", fontSize: 11, letterSpacing: "0.2em",
+                  fontWeight: 600, textTransform: "uppercase",
+                  color: "#5a6776", marginBottom: 6,
+                }}>
+                  CNPJ da empresa
+                </label>
+                <input
+                  type="text"
+                  value={cnpj}
+                  onChange={e => setCnpj(formatarCNPJ(e.target.value))}
+                  placeholder="00.000.000/0000-00"
+                  inputMode="numeric"
+                  maxLength={18}
+                  disabled={carregando}
+                  style={{
+                    display: "block", width: "100%",
+                    padding: "13px 16px",
+                    border: `1px solid ${erro ? "#b91c1c" : "rgba(12,36,56,0.18)"}`,
+                    fontFamily: "'Jost', sans-serif",
+                    fontSize: 18, fontWeight: 400, textAlign: "center",
+                    letterSpacing: "0.08em", color: INK,
+                    outline: "none", transition: "border-color 0.2s",
+                    borderRadius: 2, marginBottom: 4,
+                  }}
+                  onFocus={e => { if (!erro) e.target.style.borderColor = GOLD; }}
+                  onBlur={e => { if (!erro) e.target.style.borderColor = "rgba(12,36,56,0.18)"; }}
+                />
+                {erro && <p style={{ fontSize: 12, color: "#b91c1c", marginBottom: 8, marginTop: 2 }}>{erro}</p>}
+
+                <button
+                  type="submit"
+                  disabled={carregando}
+                  style={{
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    gap: 8, width: "100%",
+                    padding: "14px 24px",
+                    background: carregando ? GOLD_DARK : GOLD,
+                    color: "#fff", border: "none", cursor: carregando ? "not-allowed" : "pointer",
+                    fontFamily: "'Jost', sans-serif",
+                    fontSize: 13, letterSpacing: "0.18em", fontWeight: 600,
+                    textTransform: "uppercase",
+                    borderRadius: 2, marginTop: 4, transition: "background 0.2s",
+                  }}
+                  onMouseEnter={e => { if (!carregando) (e.currentTarget as HTMLElement).style.background = GOLD_DARK; }}
+                  onMouseLeave={e => { if (!carregando) (e.currentTarget as HTMLElement).style.background = GOLD; }}
+                >
+                  {carregando ? (
+                    <>
+                      <svg style={{ animation: "spin 1s linear infinite", width: 16, height: 16, flexShrink: 0 }} viewBox="0 0 24 24" fill="none">
+                        <circle style={{ opacity: 0.25 }} cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path style={{ opacity: 0.75 }} fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                      </svg>
+                      Consultando Receita Federal…
+                    </>
+                  ) : (
+                    <>Verificar agora — é grátis →</>
+                  )}
+                </button>
+
+                {/* Trust bar */}
+                <div style={{
+                  display: "flex", gap: "1rem", marginTop: "1rem",
+                  paddingTop: "1rem", borderTop: "1px solid rgba(12,36,56,0.1)",
+                  flexWrap: "wrap", justifyContent: "center",
+                }}>
+                  {[
+                    { icon: "🔒", text: "Dados protegidos" },
+                    { icon: "⚡", text: "Resultado em segundos" },
+                    { icon: "✓", text: "100% gratuito" },
+                  ].map(({ icon, text }) => (
+                    <span key={text} style={{
+                      fontSize: 11, color: "#5a6776", letterSpacing: "0.06em",
+                      display: "flex", alignItems: "center", gap: 5,
+                    }}>
+                      {icon} {text}
+                    </span>
+                  ))}
+                </div>
+
+                <p style={{ textAlign: "center", marginTop: "0.75rem" }}>
+                  <a href="/analise" style={{
+                    fontSize: 12, color: "#5a6776", letterSpacing: "0.1em",
+                    textDecoration: "none", borderBottom: "1px solid rgba(12,36,56,0.15)",
+                    paddingBottom: 1, transition: "color 0.2s",
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = GOLD)}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#5a6776")}
+                  >
+                    Analisar pela descrição de serviços →
+                  </a>
+                </p>
+              </form>
+            </div>
           </div>
         </div>
 
-        {/* coluna direita — stats */}
-        <div className="hero-right" style={{
-          position: "relative", zIndex: 1,
-          display: "flex", flexDirection: "column", justifyContent: "center",
-          paddingTop: "5rem", paddingRight: "3rem", paddingBottom: "5rem",
-          paddingLeft: "calc(16% + 1.5rem)",
-        }}>
+        {/* bottom wave separator */}
+        <div style={{ height: 48, background: CREAM, clipPath: "ellipse(55% 100% at 50% 100%)", marginTop: -1 }} />
+      </section>
+
+      {/* ── STATS ── */}
+      <section style={{ background: CREAM, padding: "4rem 0", borderBottom: `1px solid rgba(12,36,56,0.08)` }}>
+        <div className="wrap stats-grid">
           {[
             {
-              num: "32→8%",
-              detalhe: "de redução · IRPJ",
-              label: "Redução do IRPJ e da CSLL",
-              sub: "IRPJ: de 32% para 8% · CSLL: de 32% para 12% — sobre a receita bruta, não o lucro",
+              big: <><span style={{ fontSize: "0.55em", color: "#aaa" }}>32%</span> <span style={{ color: GOLD }}>8%</span></>,
+              label: "Redução da base do IRPJ",
+              desc: "A CSLL cai de 32% para 12% — sobre a receita bruta, não o lucro.",
             },
             {
-              num: "5 anos",
-              detalhe: "retroativos",
-              label: "Impostos pagos a mais",
-              sub: "Prazo para recuperação judicial",
+              big: <><span style={{ color: NAVY }}>5</span> <span style={{ fontSize: "0.45em", color: GOLD, alignSelf: "center" }}>anos</span></>,
+              label: "Recuperação retroativa",
+              desc: "Prazo para reaver, na Justiça, os impostos pagos a mais no passado.",
             },
             {
-              num: "Tema 217",
-              detalhe: "STJ",
-              label: "Jurisprudência consolidada",
-              sub: "Superior Tribunal de Justiça",
+              big: <><span style={{ fontSize: "0.55em", color: "#aaa" }}>Tema</span> <span style={{ color: GOLD }}>217</span></>,
+              label: "Jurisprudência do STJ",
+              desc: "Tese consolidada em recurso repetitivo pelo Superior Tribunal de Justiça.",
             },
-          ].map(({ num, detalhe, label, sub }, i) => (
-            <div key={i}>
-              {i > 0 && <div style={{ height: 1, background: "var(--line)", margin: "2rem 0" }} />}
-              <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
-                <span style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: 48, fontWeight: 600,
-                  color: "var(--gold)", lineHeight: 1,
-                }}>
-                  {num}
-                </span>
-                <span style={{
-                  fontSize: 12, letterSpacing: "0.14em",
-                  color: "var(--gold-dark)", textTransform: "uppercase", fontWeight: 500,
-                }}>
-                  {detalhe}
-                </span>
+          ].map(({ big, label, desc }, i) => (
+            <div key={i} className="stat-cell" style={{
+              textAlign: "center", padding: "2rem 1.5rem",
+              borderLeft: i > 0 ? `1px solid rgba(12,36,56,0.1)` : "none",
+            }}>
+              <div style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontSize: "clamp(44px, 6vw, 72px)", fontWeight: 700,
+                lineHeight: 1, marginBottom: "0.75rem",
+                display: "flex", alignItems: "baseline", justifyContent: "center", gap: 6,
+              }}>
+                {big}
               </div>
-              <div style={{ fontSize: 14, fontWeight: 500, color: "var(--dark)", letterSpacing: "0.04em", marginBottom: 4 }}>
+              <div style={{ fontSize: 14, fontWeight: 600, letterSpacing: "0.06em", color: INK, marginBottom: "0.5rem" }}>
                 {label}
               </div>
-              <div style={{ fontSize: 12, color: "var(--muted)", letterSpacing: "0.04em", lineHeight: 1.6, maxWidth: 320 }}>
-                {sub}
-              </div>
+              <p style={{ fontSize: 13, color: "#5a6776", lineHeight: 1.65, maxWidth: 260, margin: "0 auto" }}>
+                {desc}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── LEGAL BAR ── */}
-      <div style={{
-        background: "var(--dark)",
-        padding: "1.25rem 3rem",
-        display: "flex", alignItems: "center", justifyContent: "center", gap: "3rem",
-        flexWrap: "wrap",
-      }}>
-        {[
-          "⚖️  Arts. 15 e 20, Lei 9.249/95 — IRPJ e CSLL",
-          "🏛️  STJ — Recurso Repetitivo Tema 217",
-          "🏥  38 CNAEs elegíveis — Divisão 86 IBGE",
-        ].map(item => (
-          <span key={item} style={{ fontSize: 12, letterSpacing: "0.1em", color: "rgba(245,240,232,0.45)", fontWeight: 300 }}>
-            {item}
-          </span>
-        ))}
-      </div>
-
-      {/* ── O QUE É A TESE ── */}
-      <section id="sobre" className="content-section" style={{ padding: "6rem 3rem", borderBottom: "1px solid var(--line)" }}>
-        <div className="section-tag-el">A tese tributária</div>
-        <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(30px, 4vw, 44px)", fontWeight: 300, marginBottom: "4rem", maxWidth: 560 }}>
-          O que é a <em style={{ fontStyle: "italic" }}>equiparação hospitalar</em>?
-        </h2>
-        <div className="tese-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5px", background: "var(--line)", border: "1px solid var(--line)" }}>
-          {[
-            {
-              icon: "⚖️",
-              titulo: "Base legal sólida",
-              texto: "Prevista no art. 15, §1°, III, \"a\" da Lei 9.249/95 e reconhecida pelo STJ no Tema 217. Não é um artifício — é um direito seu que a maioria dos contadores desconhece.",
-            },
-            {
-              icon: "📉",
-              titulo: "Redução real de impostos",
-              texto: "A base de cálculo do IRPJ cai de 32% para 8% e a da CSLL de 32% para 12% sobre a receita bruta. Para uma clínica com R$500 mil de faturamento anual, isso pode representar mais de R$60 mil de economia.",
-            },
-            {
-              icon: "🏥",
-              titulo: "Para quem se aplica",
-              texto: "Clínicas médicas, laboratórios, diagnóstico por imagem, fisioterapia, cirurgia ambulatorial, hemodiálise e outros serviços de natureza hospitalar.",
-            },
-          ].map(({ icon, titulo, texto }) => (
-            <div key={titulo} style={{ background: "var(--cream)", padding: "2.5rem 2rem" }}>
-              <div style={{
-                width: 56, height: 56, border: "1px solid var(--gold)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                marginBottom: "1.25rem", fontSize: 28,
-              }}>{icon}</div>
-              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 600, marginBottom: "0.75rem" }}>
-                {titulo}
-              </div>
-              <p style={{ fontSize: 15, fontWeight: 300, lineHeight: 1.8, color: "var(--muted)" }}>{texto}</p>
+      {/* ── A TESE ── */}
+      <section id="tese" style={{ background: NAVY_700, padding: "6rem 0" }}>
+        <div className="wrap">
+          <div style={{ marginBottom: "3rem" }}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 10,
+              fontSize: 11, letterSpacing: "0.28em", fontWeight: 600,
+              color: GOLD, textTransform: "uppercase", marginBottom: "1rem",
+            }}>
+              <span style={{ width: 24, height: 1, background: GOLD, display: "block" }} />
+              A tese tributária
             </div>
-          ))}
+            <h2 style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "clamp(30px, 4vw, 46px)", fontWeight: 600,
+              color: CREAM, maxWidth: 560, lineHeight: 1.1,
+            }}>
+              O que é a <em style={{ fontStyle: "italic" }}>equiparação hospitalar</em>?
+            </h2>
+            <p style={{ fontSize: 16, color: MUTED_NAVY, marginTop: "1rem", maxWidth: 600, lineHeight: 1.7 }}>
+              Um direito previsto em lei e reconhecido pelos tribunais — que a maioria dos contadores ainda desconhece.
+            </p>
+          </div>
+
+          <div className="tese-grid-3">
+            {[
+              {
+                titulo: "Base legal sólida",
+                texto: <>Prevista no art. 15, §1º, III, "a" da <b>Lei 9.249/95</b> e reconhecida pelo STJ no Tema 217. Não é artifício — é um direito seu.</>,
+                icon: "⚖️",
+              },
+              {
+                titulo: "Redução real de impostos",
+                texto: <>A base do IRPJ cai de 32% para 8% e a da CSLL de 32% para 12%. Para uma clínica com <b>R$ 500 mil/ano</b>, isso pode significar mais de <b>R$ 60 mil</b> de economia.</>,
+                icon: "📉",
+              },
+              {
+                titulo: "Para quem se aplica",
+                texto: "Clínicas médicas, laboratórios, diagnóstico por imagem, fisioterapia, cirurgia ambulatorial, hemodiálise e outros serviços de natureza hospitalar.",
+                icon: "🏥",
+              },
+            ].map(({ titulo, texto, icon }) => (
+              <div key={titulo} style={{
+                background: "rgba(255,255,255,0.04)",
+                border: `1px solid rgba(191,154,87,0.2)`,
+                padding: "2.25rem 2rem",
+                borderRadius: 4,
+                transition: "background 0.2s",
+              }}>
+                <div style={{
+                  width: 52, height: 52,
+                  border: `1px solid rgba(191,154,87,0.4)`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 26, marginBottom: "1.25rem",
+                }}>
+                  {icon}
+                </div>
+                <h3 style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: 21, fontWeight: 600, color: CREAM,
+                  marginBottom: "0.75rem",
+                }}>
+                  {titulo}
+                </h3>
+                <p style={{ fontSize: 15, fontWeight: 300, lineHeight: 1.8, color: MUTED_NAVY }}>
+                  {texto}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ── COMO FUNCIONA ── */}
-      <section id="como-funciona" className="content-section" style={{ padding: "6rem 3rem", background: "var(--dark)" }}>
-        <div style={{ position: "relative" }}>
-          <div style={{
-            position: "absolute", right: -60, top: -60,
-            fontFamily: "'Cormorant Garamond', serif", fontSize: 300, fontWeight: 300,
-            color: "rgba(255,255,255,0.02)", lineHeight: 1, pointerEvents: "none",
-          }}>B</div>
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 10,
-            fontSize: 11, letterSpacing: "0.28em", fontWeight: 400,
-            color: "var(--gold-light)", textTransform: "uppercase", marginBottom: "1rem",
-          }}>
-            <span style={{ display: "block", width: 24, height: 1, background: "var(--gold-light)" }} />
-            Como funciona
+      <section id="como-funciona" style={{ background: CREAM, padding: "6rem 0" }}>
+        <div className="wrap">
+          <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 10,
+              fontSize: 11, letterSpacing: "0.28em", fontWeight: 600,
+              color: GOLD, textTransform: "uppercase", marginBottom: "1rem",
+            }}>
+              <span style={{ width: 24, height: 1, background: GOLD, display: "block" }} />
+              Como funciona
+              <span style={{ width: 24, height: 1, background: GOLD, display: "block" }} />
+            </div>
+            <h2 style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "clamp(30px, 4vw, 46px)", fontWeight: 600, color: INK,
+            }}>
+              Análise em <em style={{ fontStyle: "italic", color: GOLD }}>menos de 10 segundos.</em>
+            </h2>
+            <p style={{ fontSize: 16, color: "#5a6776", marginTop: "1rem", maxWidth: 540, margin: "1rem auto 0" }}>
+              Um diagnóstico inicial automático, gratuito e sem compromisso — antes mesmo de falar com a gente.
+            </p>
           </div>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(30px, 4vw, 44px)", fontWeight: 300, color: "#F5F0E8", marginBottom: "4rem" }}>
-            Análise em <em style={{ fontStyle: "italic", color: "var(--gold-light)" }}>menos de 10 segundos</em>
-          </h2>
-          <div className="funciona-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "2rem" }}>
+
+          <div className="steps-grid">
             {[
               { num: "01", titulo: "Informe o CNPJ", texto: "Digite o CNPJ da sua clínica ou empresa médica. Consultamos os dados diretamente na Receita Federal." },
               { num: "02", titulo: "Análise automática", texto: "Verificamos os CNAEs cadastrados e os comparamos com a lista de atividades elegíveis para a tese." },
-              { num: "03", titulo: "Resultado imediato", texto: "Você recebe um diagnóstico claro: viabilidade alta, média, baixa ou não elegível — com a explicação em linguagem simples." },
-              { num: "04", titulo: "Análise completa", texto: "Se houver viabilidade, nossa equipe calcula o valor exato de imposto recuperável e entra em contato." },
+              { num: "03", titulo: "Resultado imediato", texto: "Você recebe um diagnóstico claro: viabilidade alta, média, baixa ou não elegível, em linguagem simples." },
+              { num: "04", titulo: "Análise completa", texto: "Havendo viabilidade, nossa equipe calcula o valor exato recuperável e entra em contato para análise documental." },
             ].map(({ num, titulo, texto }) => (
-              <div key={num} style={{ borderTop: "1px solid rgba(184,151,90,0.4)", paddingTop: "2rem" }}>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 40, fontWeight: 300, color: "rgba(184,151,90,0.35)", lineHeight: 1, marginBottom: "1rem" }}>{num}</div>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 19, fontWeight: 400, color: "#F5F0E8", marginBottom: "0.6rem" }}>{titulo}</div>
-                <p style={{ fontSize: 15, fontWeight: 300, lineHeight: 1.8, color: "rgba(245,240,232,0.5)" }}>{texto}</p>
+              <div key={num} style={{ paddingTop: "2rem", borderTop: `2px solid ${GOLD}` }}>
+                <div style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: 44, fontWeight: 700, color: `rgba(191,154,87,0.25)`,
+                  lineHeight: 1, marginBottom: "1rem",
+                }}>
+                  {num}
+                </div>
+                <h3 style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: 20, fontWeight: 600, color: INK, marginBottom: "0.6rem",
+                }}>
+                  {titulo}
+                </h3>
+                <p style={{ fontSize: 14, lineHeight: 1.8, color: "#5a6776" }}>{texto}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── CTA BAND ── */}
-      <div className="cta-band" style={{
-        background: "var(--gold)", padding: "4rem 3rem",
-        display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem",
-      }}>
-        <div>
-          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 34, fontWeight: 300, color: "#fff", marginBottom: "0.5rem" }}>
-            Verifique agora se sua clínica tem esse direito.
-          </div>
-          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 300, color: "rgba(255,255,255,0.75)", fontStyle: "italic" }}>
-            A análise é gratuita e leva menos de 10 segundos.
-          </div>
-        </div>
-        <a
-          href="#"
-          onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-          style={{
-            flexShrink: 0, padding: "16px 40px",
-            border: "1px solid #fff", color: "#fff",
-            fontFamily: "'Jost', sans-serif", fontSize: 12, letterSpacing: "0.2em", fontWeight: 500,
-            textTransform: "uppercase", textDecoration: "none",
-            transition: "all 0.25s", whiteSpace: "nowrap",
-          }}
-          onMouseEnter={e => { (e.target as HTMLElement).style.background = "#fff"; (e.target as HTMLElement).style.color = "var(--gold)"; }}
-          onMouseLeave={e => { (e.target as HTMLElement).style.background = "transparent"; (e.target as HTMLElement).style.color = "#fff"; }}
-        >
-          Verificar meu CNPJ →
-        </a>
-      </div>
-
-      {/* ── FOOTER ── */}
-      <footer style={{
-        background: "var(--dark)", padding: "3rem",
-      }}>
-        <div className="footer-top" style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "2rem", gap: "2rem" }}>
-          <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-            <BrandMark size={40} tone="onDark" />
-            <div>
-              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 19, fontWeight: 600, letterSpacing: "0.08em", color: "#F5F0E8" }}>
-                BOHAC MED
-              </div>
-              <div style={{ fontSize: 10, letterSpacing: "0.22em", fontWeight: 300, color: "var(--gold-light)", textTransform: "uppercase", marginTop: 2 }}>
-                Advogados Associados · Setor Médico
-              </div>
-              <div style={{ fontSize: 11, letterSpacing: "0.08em", color: "rgba(245,240,232,0.35)", marginTop: 8 }}>
-                CNPJ: 39.293.156/0001-43 — Bohac Sociedade de Advogados
-              </div>
+      {/* ── QUEM SE BENEFICIA ── */}
+      <section id="beneficia" style={{ background: NAVY, padding: "6rem 0" }}>
+        <div className="wrap">
+          <div style={{ marginBottom: "3rem" }}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 10,
+              fontSize: 11, letterSpacing: "0.28em", fontWeight: 600,
+              color: GOLD, textTransform: "uppercase", marginBottom: "1rem",
+            }}>
+              <span style={{ width: 24, height: 1, background: GOLD, display: "block" }} />
+              Atividades elegíveis
             </div>
+            <h2 style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "clamp(30px, 4vw, 46px)", fontWeight: 600, color: CREAM, maxWidth: 560,
+            }}>
+              Quem pode se beneficiar da tese.
+            </h2>
+            <p style={{ fontSize: 16, color: MUTED_NAVY, marginTop: "1rem", maxWidth: 580, lineHeight: 1.7 }}>
+              Serviços de natureza hospitalar enquadrados na Divisão 86 do IBGE — são 38 CNAEs potencialmente elegíveis.
+            </p>
+            <a href="/cnaes-elegiveis" style={{
+              display: "inline-block", marginTop: "1rem",
+              fontSize: 13, letterSpacing: "0.12em", color: GOLD_LIGHT,
+              textDecoration: "none", borderBottom: `1px solid rgba(191,154,87,0.4)`,
+              paddingBottom: 2, transition: "color 0.2s",
+            }}
+            onMouseEnter={e => (e.currentTarget.style.color = CREAM)}
+            onMouseLeave={e => (e.currentTarget.style.color = GOLD_LIGHT)}
+            >
+              Ver a lista completa de CNAEs elegíveis →
+            </a>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", alignItems: "flex-end" }}>
+
+          <div className="benef-grid">
             {[
-              { label: "Tel.", valor: "(18) 3222-6245" },
-              { label: "Email", valor: "contato@bohacadvocacia.com.br" },
-              { label: "Instagram", valor: "@bohac.advocacia" },
-            ].map(({ label, valor }) => (
-              <span key={valor} style={{ fontSize: 12, letterSpacing: "0.06em", color: "rgba(245,240,232,0.4)" }}>
-                <span style={{ color: "rgba(245,240,232,0.25)", marginRight: 6 }}>{label}</span>{valor}
-              </span>
+              { icon: "🏥", label: "Clínicas médicas" },
+              { icon: "🧪", label: "Laboratórios" },
+              { icon: "📷", label: "Diagnóstico por imagem" },
+              { icon: "🦴", label: "Fisioterapia" },
+              { icon: "🔬", label: "Cirurgia ambulatorial" },
+              { icon: "💧", label: "Hemodiálise" },
+              { icon: "🚑", label: "Pronto atendimento" },
+              { icon: "🏨", label: "Day clinics & hospitais" },
+            ].map(({ icon, label }) => (
+              <div key={label} style={{
+                display: "flex", alignItems: "center", gap: 14,
+                padding: "1.25rem 1.5rem",
+                border: `1px solid rgba(191,154,87,0.18)`,
+                background: "rgba(255,255,255,0.03)",
+                borderRadius: 4,
+                transition: "background 0.2s, border-color 0.2s",
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(191,154,87,0.1)";
+                (e.currentTarget as HTMLElement).style.borderColor = `rgba(191,154,87,0.4)`;
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)";
+                (e.currentTarget as HTMLElement).style.borderColor = `rgba(191,154,87,0.18)`;
+              }}
+              >
+                <span style={{ fontSize: 22 }}>{icon}</span>
+                <span style={{ fontSize: 14, fontWeight: 500, color: CREAM, letterSpacing: "0.04em" }}>
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <p style={{
+            display: "flex", alignItems: "flex-start", gap: 10,
+            fontSize: 13, color: MUTED_NAVY, lineHeight: 1.65,
+            marginTop: "2rem", maxWidth: 680,
+          }}>
+            <span style={{ flexShrink: 0 }}>ℹ️</span>
+            Não tem certeza se sua atividade se enquadra? O verificador analisa seu CNPJ específico em segundos.
+          </p>
+        </div>
+      </section>
+
+      {/* ── OUTRAS ÁREAS ── */}
+      <section id="areas" style={{ background: CREAM, padding: "6rem 0" }}>
+        <div className="wrap">
+          <div style={{ marginBottom: "3rem" }}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 10,
+              fontSize: 11, letterSpacing: "0.28em", fontWeight: 600,
+              color: GOLD, textTransform: "uppercase", marginBottom: "1rem",
+            }}>
+              <span style={{ width: 24, height: 1, background: GOLD, display: "block" }} />
+              Além da tese tributária
+            </div>
+            <h2 style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 600, color: INK, maxWidth: 560,
+            }}>
+              A Bohac Med cuida de todo o jurídico do médico.
+            </h2>
+            <p style={{ fontSize: 16, color: "#5a6776", marginTop: "1rem", maxWidth: 560, lineHeight: 1.7 }}>
+              A equiparação hospitalar é só o começo. Somos um escritório dedicado ao setor da saúde, do consultório à gestão.
+            </p>
+          </div>
+
+          <div className="areas-grid">
+            {[
+              {
+                icon: "🛡️",
+                titulo: "Direito Médico",
+                texto: "Defesa em conselhos (CRM) e em ações por suposto erro médico.",
+              },
+              {
+                icon: "🏢",
+                titulo: "Direito Empresarial",
+                texto: "Estruturação de clínicas, contratos e a operação jurídica do dia a dia.",
+              },
+              {
+                icon: "📝",
+                titulo: "Contratos & Societário",
+                texto: "Sociedades, holding, sucessão e acordos entre sócios.",
+              },
+              {
+                icon: "🔏",
+                titulo: "Compliance & LGPD",
+                texto: "Governança de dados de pacientes e conformidade regulatória.",
+              },
+            ].map(({ icon, titulo, texto }) => (
+              <div key={titulo} style={{
+                padding: "2rem",
+                borderTop: `3px solid ${GOLD}`,
+                background: "#fff",
+                borderRadius: "0 0 4px 4px",
+                boxShadow: "0 2px 12px rgba(12,36,56,0.06)",
+                transition: "box-shadow 0.2s",
+              }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(12,36,56,0.12)"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 12px rgba(12,36,56,0.06)"}
+              >
+                <div style={{ fontSize: 32, marginBottom: "1rem" }}>{icon}</div>
+                <h4 style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: 20, fontWeight: 600, color: INK, marginBottom: "0.6rem",
+                }}>
+                  {titulo}
+                </h4>
+                <p style={{ fontSize: 14, color: "#5a6776", lineHeight: 1.7 }}>{texto}</p>
+              </div>
             ))}
           </div>
         </div>
-        <div style={{ borderTop: "1px solid rgba(184,151,90,0.15)", paddingTop: "1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
-          <p style={{ fontSize: 11, color: "rgba(245,240,232,0.25)", letterSpacing: "0.05em", lineHeight: 1.7 }}>
-            © {new Date().getFullYear()} Bohac Sociedade de Advogados — CNPJ 39.293.156/0001-43. Bohac Med é um serviço de triagem automatizada com fins informativos. Não constitui parecer jurídico. OAB/SP. Todos os direitos reservados.
+      </section>
+
+      {/* ── CTA FINAL ── */}
+      <section style={{ background: NAVY, padding: "6rem 0" }}>
+        <div className="wrap" style={{ textAlign: "center" }}>
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 10,
+            fontSize: 11, letterSpacing: "0.28em", fontWeight: 600,
+            color: GOLD, textTransform: "uppercase", marginBottom: "1.5rem",
+          }}>
+            <span style={{ width: 24, height: 1, background: GOLD, display: "block" }} />
+            Comece agora
+            <span style={{ width: 24, height: 1, background: GOLD, display: "block" }} />
+          </div>
+          <h2 style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: "clamp(30px, 4.5vw, 52px)", fontWeight: 600, color: CREAM,
+            maxWidth: 620, margin: "0 auto 1rem",
+          }}>
+            Verifique se sua clínica tem esse direito.
+          </h2>
+          <p style={{ fontSize: 16, color: MUTED_NAVY, marginBottom: "2.5rem", lineHeight: 1.7 }}>
+            A análise é gratuita e leva menos de 10 segundos. Sem compromisso.
           </p>
-          <div style={{ display: "flex", gap: "1.5rem" }}>
-            <a href="/privacidade" style={{ fontSize: 11, color: "rgba(245,240,232,0.35)", letterSpacing: "0.06em", textDecoration: "none" }}>
-              Política de Privacidade
+          <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+            <a href="#verificar" style={{
+              padding: "15px 40px",
+              background: GOLD, color: "#fff",
+              fontFamily: "'Jost', sans-serif",
+              fontSize: 13, letterSpacing: "0.18em", fontWeight: 600,
+              textDecoration: "none", textTransform: "uppercase",
+              transition: "background 0.2s",
+            }}
+            onMouseEnter={e => (e.currentTarget.style.background = GOLD_DARK)}
+            onMouseLeave={e => (e.currentTarget.style.background = GOLD)}
+            >
+              Verificar meu CNPJ →
             </a>
-            <a href="/termos" style={{ fontSize: 11, color: "rgba(245,240,232,0.35)", letterSpacing: "0.06em", textDecoration: "none" }}>
-              Termos de Uso
+            <a
+              href={`https://wa.me/${WA_NUMBER}`}
+              target="_blank" rel="noopener noreferrer"
+              style={{
+                padding: "15px 40px",
+                border: `1px solid rgba(191,154,87,0.5)`,
+                color: GOLD_LIGHT, background: "transparent",
+                fontFamily: "'Jost', sans-serif",
+                fontSize: 13, letterSpacing: "0.18em", fontWeight: 500,
+                textDecoration: "none", textTransform: "uppercase",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={e => { (e.currentTarget.style.background = "rgba(191,154,87,0.15)"); }}
+              onMouseLeave={e => { (e.currentTarget.style.background = "transparent"); }}
+            >
+              Falar com um advogado
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer style={{ background: "#0a1d2e", padding: "3.5rem 0 2rem", borderTop: `1px solid rgba(191,154,87,0.15)` }}>
+        <div className="wrap">
+          <div className="footer-top">
+            {/* brand */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: "1rem" }}>
+                <BrandMark size={36} tone="onDark" />
+                <span style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: 18, fontWeight: 600, letterSpacing: "0.1em", color: CREAM,
+                }}>
+                  BOHAC <span style={{ color: GOLD, fontWeight: 400 }}>MED</span>
+                </span>
+              </div>
+              <p style={{
+                fontSize: 13, color: MUTED_NAVY, lineHeight: 1.65, maxWidth: 320,
+              }}>
+                Advogados associados · Setor médico. Bohac Med é um serviço da Bohac Sociedade de Advogados dedicado à advocacia para médicos, clínicas e empresas da saúde.
+              </p>
+            </div>
+
+            {/* nav */}
+            <div>
+              <h4 style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: GOLD, marginBottom: "1rem", fontWeight: 600 }}>
+                Navegação
+              </h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                {[
+                  { label: "A tese tributária", href: "#tese" },
+                  { label: "Como funciona", href: "#como-funciona" },
+                  { label: "Quem se beneficia", href: "#beneficia" },
+                  { label: "Outras áreas", href: "#areas" },
+                  { label: "Verificar CNPJ", href: "#verificar" },
+                ].map(({ label, href }) => (
+                  <a key={href} href={href} style={{
+                    fontSize: 13, color: MUTED_NAVY, textDecoration: "none", transition: "color 0.2s",
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = CREAM)}
+                  onMouseLeave={e => (e.currentTarget.style.color = MUTED_NAVY)}
+                  >
+                    {label}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* contact */}
+            <div>
+              <h4 style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: GOLD, marginBottom: "1rem", fontWeight: 600 }}>
+                Contato
+              </h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                {[
+                  { label: "(18) 3222-6245", href: "tel:+551832226245" },
+                  { label: "contato@bohacadvocacia.com.br", href: "mailto:contato@bohacadvocacia.com.br" },
+                  { label: "@bohac.advocacia", href: "https://www.instagram.com/bohac.advocacia/", external: true },
+                  { label: "WhatsApp", href: `https://wa.me/${WA_NUMBER}`, external: true },
+                ].map(({ label, href, external }) => (
+                  <a key={href} href={href}
+                    target={external ? "_blank" : undefined}
+                    rel={external ? "noopener noreferrer" : undefined}
+                    style={{ fontSize: 13, color: MUTED_NAVY, textDecoration: "none", transition: "color 0.2s" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = CREAM)}
+                    onMouseLeave={e => (e.currentTarget.style.color = MUTED_NAVY)}
+                  >
+                    {label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            borderTop: `1px solid rgba(191,154,87,0.12)`,
+            paddingTop: "1.5rem", marginTop: "2.5rem",
+            display: "flex", justifyContent: "space-between", alignItems: "flex-start",
+            flexWrap: "wrap", gap: "1rem",
+          }}>
+            <div>
+              <p style={{ fontSize: 11, color: "rgba(174,188,203,0.5)", lineHeight: 1.7, maxWidth: 700 }}>
+                © {new Date().getFullYear()} Bohac Sociedade de Advogados — CNPJ 39.293.156/0001-43 · OAB/SP. Bohac Med é um serviço de triagem automatizada com fins informativos e não constitui parecer jurídico.
+              </p>
+              <div style={{ display: "flex", gap: "1.5rem", marginTop: "0.75rem" }}>
+                <a href="/privacidade" style={{ fontSize: 11, color: "rgba(174,188,203,0.45)", textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={e => (e.currentTarget.style.color = MUTED_NAVY)}
+                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(174,188,203,0.45)")}
+                >
+                  Política de Privacidade
+                </a>
+                <a href="/termos" style={{ fontSize: 11, color: "rgba(174,188,203,0.45)", textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={e => (e.currentTarget.style.color = MUTED_NAVY)}
+                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(174,188,203,0.45)")}
+                >
+                  Termos de Uso
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
 
+      {/* ── FLOATING WHATSAPP ── */}
+      <a
+        href={`https://wa.me/${WA_NUMBER}`}
+        target="_blank" rel="noopener noreferrer"
+        aria-label="Fale no WhatsApp"
+        style={{
+          position: "fixed", bottom: "1.75rem", right: "1.75rem",
+          width: 54, height: 54, borderRadius: "50%",
+          background: "#25D366",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          boxShadow: "0 4px 20px rgba(37,211,102,0.45)",
+          zIndex: 100, transition: "transform 0.2s, box-shadow 0.2s",
+        }}
+        onMouseEnter={e => {
+          (e.currentTarget as HTMLElement).style.transform = "scale(1.1)";
+          (e.currentTarget as HTMLElement).style.boxShadow = "0 6px 28px rgba(37,211,102,0.6)";
+        }}
+        onMouseLeave={e => {
+          (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+          (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 20px rgba(37,211,102,0.45)";
+        }}
+      >
+        <svg viewBox="0 0 24 24" fill="white" style={{ width: 28, height: 28 }}>
+          <path d="M12 2a10 10 0 00-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1112 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6.6 6.6 0 01-3.2-2.8c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.7-1.7c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.4.1-.6.3-.7.7-.9 1.6-.6 2.6.6 2 2 3.4 3.9 4.4.6.3 1.6.6 2.3.5.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.1-.2-.1-.4-.2z"/>
+        </svg>
+      </a>
+
       <style jsx>{`
-        @media (max-width: 860px) {
-          .nav-bar { padding: 1rem 1.25rem !important; }
-          .nav-links { display: none !important; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-          .hero-section {
-            grid-template-columns: 1fr !important;
-            min-height: auto !important;
-          }
-          .hero-bg-panel, .hero-watermark { display: none !important; }
-          .hero-left {
-            padding: 2.75rem 1.5rem 2.5rem 1.5rem !important;
-          }
-          .hero-right {
-            padding: 2.5rem 1.5rem 3rem 1.5rem !important;
-            background: var(--cream-dark);
-            border-top: 1px solid var(--line);
-          }
-
-          .content-section { padding: 3.5rem 1.5rem !important; }
-          .tese-grid { grid-template-columns: 1fr !important; }
-          .funciona-grid { grid-template-columns: 1fr 1fr !important; gap: 2rem 1.25rem !important; }
-
-          .cta-band {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            padding: 3rem 1.5rem !important;
-          }
-          .cta-band a { width: 100%; text-align: center; }
-
-          .footer-top {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-          }
-          .footer-top > div:last-child { align-items: flex-start !important; }
+        .wrap {
+          width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 2rem;
         }
 
-        @media (max-width: 520px) {
-          .funciona-grid { grid-template-columns: 1fr !important; }
+        .nav-inner {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-top: 1rem;
+          padding-bottom: 1rem;
+        }
+
+        .nav-links {
+          display: flex;
+          gap: 2.5rem;
+        }
+
+        .hero-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          align-items: center;
+          gap: 4rem;
+          padding-top: 4rem;
+          padding-bottom: 4rem;
+        }
+
+        .hero-checker {
+          display: flex;
+          justify-content: flex-end;
+        }
+
+        .legal-strip {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1.25rem 2rem;
+          padding-top: 1.75rem;
+          margin-top: 1.75rem;
+          border-top: 1px solid rgba(191,154,87,0.2);
+        }
+
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .tese-grid-3 {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.5rem;
+        }
+
+        .steps-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 2rem;
+        }
+
+        .benef-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1rem;
+        }
+
+        .areas-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1.5rem;
+        }
+
+        .footer-top {
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr;
+          gap: 3rem;
+          margin-bottom: 2rem;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+          .benef-grid { grid-template-columns: repeat(2, 1fr); }
+          .areas-grid { grid-template-columns: repeat(2, 1fr); }
+          .steps-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 860px) {
+          .nav-links { display: none; }
+          .btn-nav-cta { display: none; }
+
+          .hero-grid {
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+            padding-top: 3rem;
+            padding-bottom: 2rem;
+          }
+          .hero-checker { justify-content: stretch; }
+          .hero-checker > div { max-width: 100% !important; }
+
+          .tese-grid-3 { grid-template-columns: 1fr; }
+          .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+          .stat-cell { border-left: none !important; border-top: 1px solid rgba(12,36,56,0.1); }
+          .stat-cell:first-child { border-top: none; }
+          .stats-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+          .benef-grid { grid-template-columns: 1fr 1fr; }
+          .areas-grid { grid-template-columns: 1fr; }
+          .steps-grid { grid-template-columns: 1fr; }
         }
       `}</style>
     </main>
