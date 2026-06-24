@@ -3,66 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-/* ── WebGL shader (golden flowing light) ── */
-const VERT = `
-attribute vec2 a_pos;
-void main(){gl_Position=vec4(a_pos,0,1);}
-`;
-const FRAG = `
-precision mediump float;
-uniform float u_t;
-uniform vec2  u_res;
-
-float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5);}
-float noise(vec2 p){
-  vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);
-  return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),
-             mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);
-}
-float fbm(vec2 p){
-  float v=0.,a=.5;
-  for(int i=0;i<5;i++){v+=a*noise(p);p*=2.1;a*=.5;}
-  return v;
-}
-void main(){
-  vec2 uv=gl_FragCoord.xy/u_res;
-  uv.x*=u_res.x/u_res.y;
-  float t=u_t*.04;
-  vec2 q=vec2(fbm(uv+t),fbm(uv+vec2(1.4,3.7)+t*.7));
-  float f=fbm(uv+1.8*q+vec2(1.7,9.2)+.15*t);
-  vec3 gold=vec3(.75,.60,.34);
-  vec3 deep=vec3(.04,.09,.15);
-  vec3 mid=vec3(.07,.14,.22);
-  vec3 col=mix(deep,mid,.7*f);
-  col=mix(col,gold*.55,clamp(f*f*2.2,0.,1.));
-  float vign=1.-dot(uv-.5,uv-.5)*1.8;
-  col*=vign;
-  gl_FragColor=vec4(col,1.);
-}
-`;
-
-function initWebGL(canvas: HTMLCanvasElement) {
-  const gl = canvas.getContext("webgl");
-  if (!gl) return null;
-  function sh(type: number, src: string) {
-    const s = gl!.createShader(type)!;
-    gl!.shaderSource(s, src); gl!.compileShader(s); return s;
-  }
-  const prog = gl.createProgram()!;
-  gl.attachShader(prog, sh(gl.VERTEX_SHADER, VERT));
-  gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FRAG));
-  gl.linkProgram(prog); gl.useProgram(prog);
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
-  const loc = gl.getAttribLocation(prog, "a_pos");
-  gl.enableVertexAttribArray(loc);
-  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-  const uT  = gl.getUniformLocation(prog, "u_t");
-  const uRes= gl.getUniformLocation(prog, "u_res");
-  return { gl, prog, uT, uRes };
-}
-
 /* ── CNPJ mask ── */
 function maskCNPJ(v: string) {
   return v.replace(/\D/g,"").slice(0,14)
@@ -85,37 +25,10 @@ function validCNPJ(c: string) {
 
 export default function HomePage() {
   const router = useRouter();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const waRef     = useRef<HTMLAnchorElement>(null);
   const [cnpj, setCnpj] = useState("");
   const [err,  setErr]  = useState(false);
-
-  /* WebGL */
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = initWebGL(canvas);
-    if (!ctx) return;
-    const { gl, uT, uRes } = ctx;
-    let raf: number, t = 0;
-    function resize() {
-      canvas!.width  = canvas!.offsetWidth;
-      canvas!.height = canvas!.offsetHeight;
-      gl.viewport(0,0,canvas!.width,canvas!.height);
-    }
-    resize();
-    window.addEventListener("resize", resize);
-    function loop() {
-      t++;
-      gl.uniform1f(uT, t);
-      gl.uniform2f(uRes, canvas!.width, canvas!.height);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      raf = requestAnimationFrame(loop);
-    }
-    loop();
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize",resize); };
-  }, []);
 
   /* Header scroll + WA float + reveal */
   useEffect(() => {
@@ -181,7 +94,14 @@ export default function HomePage() {
 
       {/* ── HERO ── */}
       <section className="hero hero--eq section-pad" id="topo">
-        <canvas className="hero__canvas" ref={canvasRef} />
+        <video
+          className="hero__video"
+          src="/hero-bg.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
         <div className="wrap">
           <div className="hero__grid">
             {/* Coluna esquerda */}
@@ -190,9 +110,13 @@ export default function HomePage() {
                 <span className="kicker on-navy">Equiparação Hospitalar</span>
               </div>
               <h1 className="reveal" data-d="1">
-                Reduza os impostos da sua clínica em até{" "}
-                <em>60%</em> com amparo legal
+                Sua clínica paga{" "}
+                <em>60% a mais</em>{" "}
+                de imposto do que deveria
               </h1>
+              <p className="hero__sub reveal" data-d="2">
+                A equiparação hospitalar reduz o IRPJ de 32% para 8% e a CSLL de 12% para 3,08% — um direito garantido em lei que a maioria das clínicas ainda não aplica.
+              </p>
               <div className="hero__highlight reveal" data-d="2">
                 <span className="hero__pill">
                   <b>IRPJ</b> <s>32%</s> → <b>8%</b>
@@ -208,7 +132,7 @@ export default function HomePage() {
                   rel="noopener"
                   className="btn btn--gold btn-lg"
                 >
-                  Verificar elegibilidade
+                  Quero parar de pagar a mais
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="arrow"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </a>
                 <a href="#tese" className="btn btn--ghost-light btn-lg">
@@ -258,7 +182,7 @@ export default function HomePage() {
                     </div>
                     <h3>Verificação de Elegibilidade</h3>
                   </div>
-                  <p className="checker__sub">Análise gratuita em segundos. Sem compromisso.</p>
+                  <p className="checker__sub">Descubra em segundos se sua clínica tem direito à redução. Grátis e sem compromisso.</p>
                   <div className={`checker__field${err ? " invalid" : ""}`}>
                     <label htmlFor="cnpj-input">CNPJ da sua empresa</label>
                     <div className="checker__input-row">
@@ -277,7 +201,7 @@ export default function HomePage() {
                     <p className="checker__err">CNPJ inválido. Verifique e tente novamente.</p>
                   </div>
                   <button type="submit" className="btn btn--gold btn-lg checker__submit">
-                    Verificar agora
+                    Verificar agora — é grátis
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="arrow"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                   </button>
                   <div className="checker__trust">
@@ -321,7 +245,7 @@ export default function HomePage() {
                 <span className="to">8%</span>
               </div>
               <p className="lab">IRPJ sobre receita bruta</p>
-              <p className="desc">Redução de base de cálculo via equiparação hospitalar</p>
+              <p className="desc">Queda de 75% na alíquota efetiva do IRPJ — aplicada já no próximo trimestre</p>
             </div>
             <div className="stat-cell">
               <div className="big">
@@ -329,14 +253,14 @@ export default function HomePage() {
                 <span className="to">3,08%</span>
               </div>
               <p className="lab">CSLL efetiva</p>
-              <p className="desc">De 12% para 3,08% sobre o faturamento total</p>
+              <p className="desc">Uma clínica com R$ 1 M/ano de receita pode economizar R$ 90 mil ou mais</p>
             </div>
             <div className="stat-cell">
               <div className="big">
                 <span>+60%</span>
               </div>
-              <p className="lab">Economia tributária</p>
-              <p className="desc">Média obtida pelos clientes atendidos pelo escritório</p>
+              <p className="lab">Economia tributária média</p>
+              <p className="desc">Resultado real obtido pelos clientes do escritório — e possível recuperar até 5 anos retroativos</p>
             </div>
           </div>
         </div>
@@ -347,9 +271,9 @@ export default function HomePage() {
         <div className="wrap">
           <div className="section-head reveal">
             <span className="kicker">Fundamento jurídico</span>
-            <h2>A tese que garante sua economia</h2>
+            <h2>Por que sua clínica tem esse direito</h2>
             <p className="lede">
-              A equiparação hospitalar é um direito previsto em lei federal e reconhecido pelos tribunais superiores. Clínicas e prestadores de serviços de saúde podem reduzir drasticamente sua carga tributária no Lucro Presumido.
+              A equiparação hospitalar não é planejamento tributário agressivo — é um benefício expresso em lei federal, consolidado no STJ e reconhecido pela própria Receita Federal. Ignorá-lo é deixar dinheiro na mesa.
             </p>
           </div>
           <div className="tese-grid">
@@ -362,9 +286,9 @@ export default function HomePage() {
                   <path d="M8 21h8"/>
                 </svg>
               </div>
-              <h3>Base legal sólida</h3>
+              <h3>Direito garantido em lei</h3>
               <p>
-                Fundamento nos <b>Arts. 15 e 20 do RIR</b> e consolidada no STJ. A tese está pacificada nos tribunais superiores e reconhecida pela Receita Federal para CNAEs específicos.
+                Previsto nos <b>Arts. 15 e 20 do RIR</b> e pacificado no STJ. Não é brecha — é norma. A Receita Federal reconhece e aceita a aplicação para os CNAEs corretos.
               </p>
             </div>
             <div className="tese-card reveal" data-d="2">
@@ -373,9 +297,9 @@ export default function HomePage() {
                   <path d="M3 6l6 6 4-4 7 7"/><path d="M21 15v-5h-5"/><path d="M3 20h18"/>
                 </svg>
               </div>
-              <h3>Redução real</h3>
+              <h3>Economia real e imediata</h3>
               <p>
-                IRPJ cai de <b>32% para 8%</b> e CSLL de 12% para 3,08% sobre receita bruta — resultado imediato já no próximo trimestre de apuração.
+                IRPJ cai de <b>32% para 8%</b> e CSLL de 12% para 3,08% sobre receita bruta. O impacto aparece já no <b>primeiro trimestre de apuração</b> após a implementação.
               </p>
             </div>
             <div className="tese-card reveal" data-d="3">
@@ -384,9 +308,9 @@ export default function HomePage() {
                   <path d="M4 21V8l8-5 8 5v13"/><path d="M4 21h16"/><path d="M12 11v6M9 14h6"/>
                 </svg>
               </div>
-              <h3>Para quem se aplica</h3>
+              <h3>Recuperação dos últimos 5 anos</h3>
               <p>
-                Clínicas médicas, odontológicas, laboratórios, centros de diagnóstico por imagem e outros prestadores de <b>serviços hospitalares equiparados</b>.
+                Além da economia futura, é possível <b>reaver tributos pagos a mais nos últimos 5 anos</b> por meio de processo administrativo ou judicial, com total segurança.
               </p>
             </div>
           </div>
@@ -398,35 +322,35 @@ export default function HomePage() {
         <div className="wrap">
           <div className="section-head reveal">
             <span className="kicker">Processo</span>
-            <h2>Como funciona</h2>
+            <h2>Do diagnóstico à economia em 4 etapas</h2>
             <p className="lede">
-              Do diagnóstico fiscal à recuperação de créditos, nosso processo é estruturado para maximizar sua economia com total segurança jurídica.
+              Cuidamos de todo o processo jurídico e contábil. Você só precisa confirmar sua elegibilidade — o resto é com a gente.
             </p>
           </div>
           <div className="steps">
             <div className="step reveal" data-d="1">
               <div className="step__n">01</div>
               <div className="step__bar" />
-              <h3>Verificação do CNPJ</h3>
-              <p>Analisamos seu CNAE e regime tributário para confirmar a elegibilidade para a equiparação hospitalar.</p>
+              <h3>Diagnóstico gratuito do CNPJ</h3>
+              <p>Em minutos, confirmamos se seu CNAE e regime tributário qualificam para a equiparação. Sem custo e sem compromisso.</p>
             </div>
             <div className="step reveal" data-d="2">
               <div className="step__n">02</div>
               <div className="step__bar" />
-              <h3>Diagnóstico tributário</h3>
-              <p>Levantamento dos últimos 5 anos de recolhimentos para calcular o potencial de recuperação de créditos.</p>
+              <h3>Cálculo do potencial de recuperação</h3>
+              <p>Levantamos os últimos 5 anos de recolhimentos e calculamos exatamente quanto você pode recuperar retroativamente.</p>
             </div>
             <div className="step reveal" data-d="3">
               <div className="step__n">03</div>
               <div className="step__bar" />
-              <h3>Elaboração da tese</h3>
-              <p>Preparação da documentação jurídica e contábil necessária para sustentar a equiparação perante a Receita Federal.</p>
+              <h3>Blindagem jurídica completa</h3>
+              <p>Preparamos toda a documentação para sustentar a equiparação perante a Receita Federal — sem risco de autuação.</p>
             </div>
             <div className="step reveal" data-d="4">
               <div className="step__n">04</div>
               <div className="step__bar" />
-              <h3>Implementação e acompanhamento</h3>
-              <p>Aplicação do benefício no próximo trimestre e acompanhamento contínuo para garantir a manutenção da economia.</p>
+              <h3>Você começa a economizar agora</h3>
+              <p>A redução entra em vigor no próximo trimestre. Acompanhamos continuamente para garantir que a economia persista.</p>
             </div>
           </div>
         </div>
@@ -437,9 +361,9 @@ export default function HomePage() {
         <div className="wrap">
           <div className="section-head reveal">
             <span className="kicker on-navy">Elegibilidade</span>
-            <h2>Quem se beneficia</h2>
+            <h2>Quem já está reduzindo impostos</h2>
             <p className="lede">
-              Se sua empresa presta serviços de saúde no Lucro Presumido, há grande chance de você ser elegível.
+              Se você presta serviços de saúde no Lucro Presumido, a chance de elegibilidade é alta. Veja as especialidades que já se beneficiam:
             </p>
           </div>
           <div className="benef-grid">
@@ -600,12 +524,12 @@ export default function HomePage() {
       <section className="final section-pad">
         <div className="wrap">
           <div className="final__inner">
-            <span className="kicker on-navy center reveal">Comece hoje</span>
+            <span className="kicker on-navy center reveal">Cada trimestre conta</span>
             <h2 className="reveal" data-d="1">
-              Sua clínica pode estar pagando impostos a mais agora mesmo
+              Cada trimestre sem a equiparação é dinheiro que não volta mais
             </h2>
             <p className="reveal" data-d="2">
-              Faça a verificação gratuita e descubra quanto você pode economizar com a equiparação hospitalar.
+              A análise é gratuita e leva menos de 5 minutos. Descubra agora quanto sua clínica pode economizar — e quanto já poderia ter economizado.
             </p>
             <div className="final__actions reveal" data-d="3">
               <a
@@ -614,11 +538,11 @@ export default function HomePage() {
                 rel="noopener"
                 className="btn btn--gold btn-lg"
               >
-                Falar com especialista agora
+                Quero economizar agora
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="arrow"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
               <a href="#topo" className="btn btn--ghost-light btn-lg">
-                Verificar meu CNPJ
+                Verificar meu CNPJ grátis
               </a>
             </div>
           </div>
