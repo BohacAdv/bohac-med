@@ -893,167 +893,175 @@ section { position: relative; }
    PRINT / PDF — Parecer Bohac Med
    Ativa via window.print() ou Ctrl+P → Salvar como PDF
    ============================================================ */
-@media print {
-  /* ── Configuração de página A4 ── */
-  @page {
-    size: A4 portrait;
-    margin: 22mm 20mm 26mm 20mm;
-  }
+/* ============================================================
+   PARECER — tela
+   ============================================================ */
+.parecer { max-width: 780px; margin: 0 auto; color: var(--body); }
+.parecer__head { border-bottom: 2px solid var(--gold); padding-bottom: 18px; margin-bottom: 26px; }
+.parecer__meta {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  font-size: var(--fs-micro); letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+}
+.parecer__titulo {
+  margin-top: 14px; font-size: var(--fs-h2); font-weight: var(--fw-light);
+  letter-spacing: var(--ls-section); text-transform: uppercase; color: var(--ink);
+}
+.parecer__sub { margin-top: 8px; font-size: var(--fs-body-sm); color: var(--muted); }
 
-  /* ── Reset de tela ── */
+.parecer__ident dl { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 32px; margin-bottom: 26px; }
+.parecer__ident dt {
+  font-size: var(--fs-micro); letter-spacing: .16em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 4px;
+}
+.parecer__ident dd { font-size: 15px; color: var(--ink); }
+.parecer__alerta { color: #b45309; font-weight: var(--fw-medium); }
+.parecer__aviso {
+  border-left: 3px solid #b45309; background: rgba(180,83,9,.06);
+  padding: 14px 18px; font-size: var(--fs-body-sm); line-height: 1.7; margin-bottom: 26px;
+}
+@media (max-width: 620px) { .parecer__ident dl { grid-template-columns: 1fr; } }
+
+/* Conclusão — sem semáforo e sem emoji; fio dourado e tipografia. */
+.parecer__nivel { border-left: 3px solid var(--gold); padding: 20px 24px; background: var(--cream); margin-bottom: 30px; }
+.parecer__nivel-rot {
+  display: inline-block; font-size: var(--fs-micro); letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase; color: var(--gold-600); margin-bottom: 12px;
+}
+.parecer__nivel--nao_comporta { border-left-color: var(--navy-500); }
+.parecer__nivel--nao_comporta .parecer__nivel-rot { color: var(--navy-500); }
+.parecer__abertura { font-size: var(--fs-lead); line-height: var(--lh-body); color: var(--ink); }
+.parecer__motivo { margin-top: 10px; font-size: var(--fs-body-sm); line-height: 1.75; color: var(--muted); }
+
+.parecer__bloco { margin-bottom: 30px; }
+.parecer__bloco h3 {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-eyebrow); text-transform: uppercase;
+  color: var(--gold-600); margin-bottom: 14px; font-weight: var(--fw-regular);
+}
+.parecer__lista { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.parecer__lista li { font-size: var(--fs-body-sm); line-height: 1.7; padding-left: 16px; position: relative; }
+.parecer__lista li::before { content: "—"; position: absolute; left: 0; color: var(--gold); }
+.parecer__limites { border-top: 1px solid var(--line); padding-top: 24px; }
+
+.parecer__encerra { border-top: 2px solid var(--gold); padding-top: 22px; margin-bottom: 24px; }
+.parecer__encerra h3 {
+  font-size: var(--fs-micro); letter-spacing: var(--ls-eyebrow); text-transform: uppercase;
+  color: var(--gold-600); margin-bottom: 12px;
+}
+.parecer__encerra p { font-size: var(--fs-body-sm); line-height: 1.75; margin-bottom: 10px; }
+.parecer__encerra-destaque { color: var(--ink); font-weight: var(--fw-medium); }
+
+.cnae-table { width: 100%; border-collapse: collapse; }
+.cnae-table th {
+  font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-600);
+  text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); font-weight: var(--fw-regular);
+}
+.cnae-table td { padding: 10px; font-size: 13px; line-height: 1.55; border-bottom: 1px solid var(--line); vertical-align: top; }
+.cnae-cod { white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--ink); }
+.cnae-tag {
+  display: block; font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--gold-600); margin-top: 3px;
+}
+.cnae-nat { white-space: nowrap; }
+.cnae-fund { color: var(--muted); font-size: 12px; }
+.cnae-table tr.nat-hospitalar .cnae-nat { color: var(--gold-600); }
+.cnae-table tr.nat-excluido  .cnae-nat { color: #b45309; }
+.cnae-table tr.nat-nenhum    { opacity: .55; }
+@media (max-width: 720px) {
+  .cnae-table thead { display: none; }
+  .cnae-table tr { display: block; border-bottom: 1px solid var(--line); padding: 10px 0; }
+  .cnae-table td { display: block; border: none; padding: 2px 0; }
+}
+
+.parecer__acoes { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+
+/* ── Captura de lead ── */
+.lead { margin-top: 30px; border: 1px solid var(--line); border-top: 3px solid var(--gold); padding: 26px 24px; background: var(--paper); }
+.lead__t { font-size: var(--fs-h3); font-weight: var(--fw-medium); color: var(--ink); }
+.lead__d { margin-top: 8px; font-size: var(--fs-body-sm); line-height: 1.7; color: var(--muted); }
+.lead__campos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 20px; }
+@media (max-width: 720px) { .lead__campos { grid-template-columns: 1fr; } }
+.lead__campos label { display: flex; flex-direction: column; gap: 6px; }
+.lead__campos span { font-size: var(--fs-micro); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.lead__campos input {
+  padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 0;
+  font-family: var(--sans); font-size: 15px; color: var(--ink); background: #fff;
+}
+.lead__campos input:focus-visible { outline: 2px solid var(--gold-300); outline-offset: 1px; border-color: var(--gold); }
+.lead__hint { margin-top: 10px; font-size: var(--fs-caption); color: var(--muted); }
+.lead__erro { margin-top: 10px; font-size: var(--fs-body-sm); color: #b91c1c; }
+.lead .btn { margin-top: 18px; }
+.lead__lgpd { margin-top: 14px; font-size: var(--fs-micro); line-height: 1.6; color: var(--muted); }
+.lead__lgpd a { color: var(--gold-600); border-bottom: 1px solid var(--line-gold); }
+.lead--ok { border-top-color: var(--gold); }
+.lead__ok-t { font-size: var(--fs-h3); font-weight: var(--fw-medium); color: var(--ink); }
+.lead__ok-d { margin-top: 8px; font-size: var(--fs-body-sm); line-height: 1.7; color: var(--muted); }
+
+/* ============================================================
+   PARECER — impressão (A4)
+   Reescrito: o bloco anterior fora escrito para a /resultado, que era
+   inalcançável, e pedia Cormorant Garamond — família removida do projeto,
+   o que fazia o cabeçalho do parecer cair em Georgia.
+   ============================================================ */
+@media print {
+  @page { size: A4 portrait; margin: 18mm 16mm 20mm 16mm; }
+
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
   html, body {
-    background: #ffffff !important;
-    color: #12253a !important;
-    font-family: "Jost", "Century Gothic", system-ui, sans-serif;
-    font-size: 10.5pt;
-    line-height: 1.65;
-    margin: 0;
-    padding: 0;
+    background: #fff !important;
+    color: #39415a !important;
+    font-family: var(--sans);
+    font-size: 10pt;
+    line-height: 1.6;
+    margin: 0; padding: 0;
   }
 
-  /* ── Elementos escondidos no PDF ── */
-  .print-hide,
-  .site-header,
-  .wa-float,
-  nav,
-  form,
-  button:not(.print-btn),
-  .checker,
-  .declaracao {
-    display: none !important;
-  }
+  .site-header, .drawer, .wa-float, .footer, nav, form,
+  .print-hide, .lead, .parecer__acoes,
+  button:not(.print-keep) { display: none !important; }
 
-  /* ── Elementos visíveis APENAS no PDF ── */
-  .print-only {
-    display: block !important;
-  }
+  main { padding: 0 !important; margin: 0 !important; max-width: 100% !important; background: #fff !important; }
 
-  /* ── Cabeçalho do PDF (logo + título) ── */
-  .pdf-header {
-    display: flex !important;
-    align-items: flex-end;
-    justify-content: space-between;
-    padding-bottom: 14pt;
-    border-bottom: 1.5pt solid #ae8167;
-    margin-bottom: 20pt;
-  }
-  .pdf-header__brand {
-    font-family: "Cormorant Garamond", Georgia, serif;
-    font-size: 22pt;
-    font-weight: 500;
-    letter-spacing: .08em;
-    color: var(--navy);
-    line-height: 1;
-  }
-  .pdf-header__brand em { color: #ae8167; font-style: normal; }
-  .pdf-header__sub {
-    font-size: 7pt;
-    letter-spacing: .24em;
-    text-transform: uppercase;
-    color: #5a6776;
-    font-weight: 300;
-    margin-top: 3pt;
-  }
-  .pdf-header__doc {
-    font-size: 8pt;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    color: #5a6776;
-    text-align: right;
-  }
-  .pdf-header__date { font-weight: 500; color: #ae8167; }
+  .parecer { max-width: 100%; margin: 0; }
 
-  /* ── Rodapé do PDF (WA link) ── */
-  .pdf-footer {
-    display: block !important;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 8pt 20mm;
-    border-top: 1pt solid rgba(12,36,56,.12);
-    font-size: 8pt;
-    color: #5a6776;
-    background: #ffffff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .pdf-footer a {
-    color: #ae8167 !important;
-    font-weight: 600;
-    text-decoration: none;
-  }
+  .parecer__head { border-bottom: 1.5pt solid #ae8167; padding-bottom: 10pt; margin-bottom: 14pt; }
+  .parecer__meta { font-size: 7.5pt; letter-spacing: .14em; color: #6a7189; }
+  .parecer__titulo { font-size: 15pt; letter-spacing: .12em; color: #0f1a33; margin-top: 8pt; }
+  .parecer__sub { font-size: 8.5pt; color: #6a7189; margin-top: 4pt; }
 
-  /* ── Conteúdo do parecer ── */
-  main, .print-content {
-    background: transparent !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-  }
+  .parecer__ident dl { gap: 8pt 24pt; margin-bottom: 14pt; }
+  .parecer__ident dt { font-size: 7pt; color: #6a7189; }
+  .parecer__ident dd { font-size: 10pt; color: #0f1a33; }
 
-  /* ── Evitar quebra dentro de blocos ── */
-  .print-no-break,
-  .cnae-row,
-  .print-section {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
+  .parecer__nivel { border-left: 2.5pt solid #ae8167; background: #fefaf7; padding: 12pt 14pt; margin-bottom: 16pt; }
+  .parecer__nivel-rot { font-size: 8pt; letter-spacing: .2em; color: #99705a; margin-bottom: 6pt; }
+  .parecer__abertura { font-size: 11pt; line-height: 1.55; color: #0f1a33; }
+  .parecer__motivo { font-size: 9pt; color: #6a7189; margin-top: 6pt; }
 
-  /* ── Seção de resultado principal ── */
-  .resultado-card {
-    border: 1.5pt solid rgba(12,36,56,.15) !important;
-    padding: 16pt !important;
-    margin-bottom: 14pt !important;
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
+  .parecer__bloco { margin-bottom: 16pt; }
+  .parecer__bloco h3, .parecer__encerra h3 { font-size: 8pt; letter-spacing: .2em; color: #99705a; margin-bottom: 8pt; }
+  .parecer__lista li { font-size: 9pt; line-height: 1.55; }
 
-  /* ── Tabelas de CNAE ── */
-  .cnae-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 14pt;
-  }
-  .cnae-table th {
-    font-size: 7.5pt;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: #ae8167;
-    border-bottom: 1pt solid rgba(12,36,56,.12);
-    padding: 6pt 8pt;
-    text-align: left;
-  }
-  .cnae-table td {
-    padding: 6pt 8pt;
-    font-size: 9pt;
-    color: #374151;
-    border-bottom: .5pt solid rgba(12,36,56,.07);
-  }
+  .parecer__encerra { border-top: 1.5pt solid #ae8167; padding-top: 12pt; }
+  .parecer__encerra p { font-size: 9pt; line-height: 1.6; }
+  .parecer__encerra-destaque { color: #0f1a33; font-weight: 500; }
 
-  /* ── Links visíveis no PDF ── */
-  a[href] {
-    color: #ae8167 !important;
-    text-decoration: underline;
-  }
+  .cnae-table { width: 100%; border-collapse: collapse; }
+  .cnae-table thead { display: table-header-group; }   /* repete o cabeçalho a cada página */
+  .cnae-table tr { page-break-inside: avoid; break-inside: avoid; }
+  .cnae-table th { font-size: 7pt; color: #99705a; border-bottom: .75pt solid #e3ded7; padding: 5pt 6pt; }
+  .cnae-table td { font-size: 8.5pt; padding: 5pt 6pt; border-bottom: .4pt solid #efeae4; color: #39415a; }
+  .cnae-fund { font-size: 7.5pt; color: #6a7189; }
 
-  /* ── Cabeçalhos ── */
-  h1 { font-size: 18pt; }
-  h2 { font-size: 14pt; }
-  h3 { font-size: 12pt; }
+  .print-no-break { page-break-inside: avoid; break-inside: avoid; }
+  p, li { orphans: 3; widows: 3; }
 
-  /* ── Disclaimer legal ── */
   .print-disclaimer {
-    font-size: 8pt !important;
-    color: #9ca3af !important;
-    margin-top: 16pt;
-    padding-top: 10pt;
-    border-top: .5pt solid rgba(12,36,56,.10);
-    line-height: 1.5;
+    font-size: 7.5pt; color: #8a93ad; line-height: 1.5;
+    margin-top: 14pt; padding-top: 8pt; border-top: .5pt solid #e3ded7;
   }
+
+  a[href] { color: #99705a !important; text-decoration: none; }
 }
 
 /* ============================================================
@@ -1256,3 +1264,7 @@ section { position: relative; }
   .barra__lab { text-align: left; flex: none; }
   .barra__nota { padding-left: 0; }
 }
+.parecer__resto {
+  margin-top: 14px; font-size: var(--fs-caption); line-height: 1.65; color: var(--muted);
+}
+.parecer__resto b { color: var(--ink); font-weight: var(--fw-medium); }

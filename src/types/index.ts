@@ -16,23 +16,38 @@ export interface CNAE {
   descricao: string;
 }
 
+/**
+ * Três níveis. O antigo conjunto de quatro (ALTA/MEDIA/BAIXA/INELEGIVEL) com
+ * score 0–100 sugeria uma medição que a verificação por CNAE não faz.
+ */
+export type Nivel = "COMPORTA_ANALISE" | "REQUER_VERIFICACAO" | "NAO_COMPORTA";
+
+/** Mantido só para a modalidade de notas fiscais, que a IA classifica. */
 export type NivelViabilidade = "ALTA" | "MEDIA" | "BAIXA" | "INELEGIVEL";
 
 export interface ResultadoAnalise {
   cnpj: string;
   razaoSocial: string;
-  nivelViabilidade: NivelViabilidade;
-  pontuacao: number; // 0–100
-  cnaesElegiveis: CNAEAvaliado[];
-  cnaesNaoElegiveis: CNAEAvaliado[];
-  justificativa: string;          // Texto simples para o médico
-  proximosPasosRecomendados: string;
-  analisadoEm: string;            // ISO date
+  nomeFantasia: string;
+  situacao: string;
+  municipio: string;
+  uf: string;
+  nivel: Nivel;
+  /** Número da regra aplicada — rastreabilidade do parecer. */
+  regraAplicada: number;
+  motivo: string;
+  abertura: string;
+  cnaes: CNAEAvaliado[];
+  fundamentos: string[];
+  naoApurado: string[];
+  protocolo: string;
+  analisadoEm: string;
 }
 
 export interface CNAEAvaliado extends CNAE {
-  elegivel: boolean;
-  motivo: string;
+  natureza: "hospitalar" | "apoio" | "excluido" | "nenhum";
+  fundamento: string;
+  principal: boolean;
 }
 
 export interface ResultadoAnaliseNFe {
@@ -67,8 +82,9 @@ export interface ResultadoAnaliseNFeArquivos {
 
 export interface DadosLead {
   nome: string;
-  email: string;
-  telefone: string;
+  /** Ao menos um entre email e telefone deve vir preenchido. */
+  email?: string;
+  telefone?: string;
   cnpj?: string;
   mensagem?: string;
   origem: "site" | "whatsapp";

@@ -13,19 +13,31 @@ export async function POST(req: NextRequest) {
     const body: DadosLead = await req.json();
 
     const { nome, email, telefone } = body;
-    if (!nome || !email || !telefone) {
+
+    // Identificação simples: nome + AO MENOS UM meio de contato.
+    // Antes exigia os três, o que barrava lead legítimo que só quer WhatsApp.
+    const emailOk = typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
+    const telOk = typeof telefone === "string" && telefone.replace(/\D/g, "").length >= 10;
+
+    if (!nome || !nome.trim()) {
+      return NextResponse.json({ erro: "Informe o nome." }, { status: 400 });
+    }
+    if (!emailOk && !telOk) {
       return NextResponse.json(
-        { erro: "Nome, e-mail e telefone são obrigatórios." },
+        { erro: "Informe um e-mail válido ou um WhatsApp com DDD." },
         { status: 400 }
       );
+    }
+    if (email && !emailOk) {
+      return NextResponse.json({ erro: "E-mail inválido." }, { status: 400 });
     }
 
     // Salva no Supabase
     const { error } = await supabase.from("leads").insert([
       {
-        nome: body.nome,
-        email: body.email,
-        telefone: body.telefone,
+        nome: body.nome.trim(),
+        email: emailOk ? email!.trim() : null,
+        telefone: telOk ? telefone! : null,
         cnpj: body.cnpj ?? null,
         mensagem: body.mensagem ?? null,
         origem: body.origem ?? "site",
@@ -40,11 +52,11 @@ export async function POST(req: NextRequest) {
 
     // Notificação WhatsApp para o advogado (fire-and-forget)
     notificarNovoLead({
-      nome: body.nome,
-      email: body.email,
-      telefone: body.telefone,
+      nome: body.nome.trim(),
+      email: emailOk ? email!.trim() : "—",
+      telefone: telOk ? telefone! : "—",
       cnpj: body.cnpj ?? undefined,
-      nivelViabilidade: body.resultadoAnalise?.nivelViabilidade ?? body.parecerNfe?.nivelViabilidadeGeral,
+      nivelViabilidade: body.resultadoAnalise?.nivel ?? body.parecerNfe?.nivelViabilidadeGeral,
       qtdNotasFiscais: body.notasFiscais?.length,
     }).catch(() => {});
 

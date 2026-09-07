@@ -1,13 +1,15 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type {
   ResultadoAnalise,
   ResultadoAnaliseNFeArquivos,
   NotaFiscalAnexo,
 } from "@/types";
-import BrandMark from "@/components/BrandMark";
+import Parecer from "@/components/Parecer";
+import CapturaLead from "@/components/CapturaLead";
+import { ENCERRAMENTO_PARECER } from "@/components/Parecer";
 
 const MAX_NOTAS = 5;
 const EXTENSOES_ACEITAS = ".pdf,.jpg,.jpeg,.png,.xml";
@@ -34,6 +36,7 @@ function validCNPJ(c: string) {
   return r1 === parseInt(n[12]) && r2 === parseInt(n[13]);
 }
 
+/* Mantido apenas para a modalidade de notas fiscais, cujo nível vem da IA. */
 const CORES_NIVEL: Record<string, { bg: string; border: string; badge: string; titulo: string; emoji: string }> = {
   ALTA:       { bg: "#f0fdf4", border: "rgba(22,163,74,0.3)",  badge: "#16a34a", titulo: "Alta viabilidade",   emoji: "✅" },
   MEDIA:      { bg: "#fffbeb", border: "rgba(217,119,6,0.3)",  badge: "#d97706", titulo: "Média viabilidade",  emoji: "⚠️" },
@@ -51,61 +54,36 @@ function Spinner() {
   );
 }
 
-/* ── Resultado CNPJ/Cartão inline ── */
-function ResultadoCnpjCard({
+/* ── Bloco de parecer + captura + PDF (modalidades CNPJ e Cartão) ── */
+function BlocoParecer({
   resultado,
   onCTA,
 }: {
   resultado: ResultadoAnalise;
   onCTA: () => void;
 }) {
-  const cor = CORES_NIVEL[resultado.nivelViabilidade];
+  const [liberado, setLiberado] = useState(false);
+
   return (
     <div style={{ marginTop: "2.5rem" }}>
-      <div style={{ background: cor.bg, border: `1px solid ${cor.border}`, padding: "2rem", marginBottom: "1.5rem" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: "1rem" }}>
-          <span style={{ fontSize: 24 }}>{cor.emoji}</span>
-          <span style={{ fontSize: 10, letterSpacing: "0.2em", fontWeight: 500, textTransform: "uppercase", background: cor.badge, color: "#fff", padding: "3px 10px" }}>
-            {cor.titulo}
-          </span>
-        </div>
-        <p style={{ fontSize: 13, fontWeight: 500, color: "var(--dark)", marginBottom: 4 }}>
-          {resultado.razaoSocial}
-        </p>
-        <p style={{ fontSize: 14, fontWeight: 300, lineHeight: 1.85, color: "var(--navy-500)", marginBottom: "1.25rem" }}>
-          {resultado.justificativa}
-        </p>
-        {resultado.cnaesElegiveis.length > 0 && (
-          <div style={{ borderTop: "1px solid var(--line)", paddingTop: "1rem" }}>
-            <div style={{ fontSize: 10, letterSpacing: "0.2em", color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>
-              CNAEs enquadrados ({resultado.cnaesElegiveis.length})
-            </div>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 6 }}>
-              {resultado.cnaesElegiveis.map((c, i) => (
-                <li key={i} style={{ fontSize: 13, color: "var(--navy-500)", fontWeight: 300, display: "flex", gap: 8 }}>
-                  <span style={{ color: "var(--gold)" }}>—</span>
-                  <span><strong style={{ fontWeight: 500 }}>{c.codigo}</strong> · {c.descricao}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
+      <Parecer r={resultado} />
 
-      {resultado.nivelViabilidade !== "INELEGIVEL" && (
-        <div style={{ background: "var(--dark)", padding: "2rem", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem" }}>
-          <div>
-            <p style={{ fontFamily: "var(--sans)", fontSize: 20, fontWeight: 300, color: "#F5F0E8" }}>
-              Quer uma análise completa com as notas fiscais?
-            </p>
-            <p style={{ fontSize: 12, fontWeight: 300, color: "rgba(245,240,232,0.5)", marginTop: 6 }}>
-              Calculamos o valor exato de impostos recuperáveis dos últimos 5 anos.
-            </p>
-          </div>
-          <button onClick={onCTA} className="btn-outline-gold" style={{ borderColor: "rgba(184,151,90,0.5)", color: "var(--gold-light)", whiteSpace: "nowrap" }}>
-            Enviar notas fiscais →
+      {liberado ? (
+        <div className="parecer__acoes print-hide">
+          <button type="button" className="btn btn--gold" onClick={() => window.print()}>
+            Baixar parecer em PDF
           </button>
+          {resultado.nivel !== "NAO_COMPORTA" && (
+            <button type="button" className="btn btn--ghost" onClick={onCTA}>
+              Aprofundar com as notas fiscais
+            </button>
+          )}
         </div>
+      ) : (
+        <CapturaLead
+          payloadExtra={{ cnpj: resultado.cnpj, resultadoAnalise: resultado }}
+          aoConcluir={() => setLiberado(true)}
+        />
       )}
     </div>
   );
@@ -135,16 +113,15 @@ function AnaliseContent() {
   const [carregandoCnpj, setCarregandoCnpj] = useState(false);
   const [resultadoCnpj, setResultadoCnpj] = useState<ResultadoAnalise | null>(null);
 
-  async function handleAnalisarCnpj(e: React.FormEvent) {
-    e.preventDefault();
+  const consultarCnpj = useCallback(async (valor: string) => {
     setErroCnpj(""); setResultadoCnpj(null);
-    if (!validCNPJ(cnpj)) { setErroCnpj("CNPJ inválido. Verifique e tente novamente."); return; }
+    if (!validCNPJ(valor)) { setErroCnpj("CNPJ inválido. Verifique e tente novamente."); return; }
     setCarregandoCnpj(true);
     try {
       const res = await fetch("/api/analisar-cnpj", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cnpj: cnpj.replace(/\D/g, "") }),
+        body: JSON.stringify({ cnpj: valor.replace(/\D/g, "") }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.erro ?? "Erro na análise.");
@@ -152,7 +129,27 @@ function AnaliseContent() {
     } catch (err: unknown) {
       setErroCnpj(err instanceof Error ? err.message : "Erro inesperado.");
     } finally { setCarregandoCnpj(false); }
+  }, []);
+
+  function handleAnalisarCnpj(e: React.FormEvent) {
+    e.preventDefault();
+    void consultarCnpj(cnpj);
   }
+
+  /* Entrada vinda da home: /analise?cnpj=XXXXXXXXXXXXXX dispara a consulta
+     automaticamente. Antes a home mandava para /resultado?cnpj=, rota que
+     lia sessionStorage — chave que ninguém escrevia — e devolvia para "/". */
+  const [autoRodou, setAutoRodou] = useState(false);
+  useEffect(() => {
+    if (autoRodou) return;
+    const param = searchParams.get("cnpj");
+    if (!param) return;
+    const limpo = param.replace(/\D/g, "");
+    if (limpo.length !== 14) return;
+    setAutoRodou(true);
+    setCnpj(maskCNPJ(limpo));
+    void consultarCnpj(limpo);
+  }, [searchParams, autoRodou, consultarCnpj]);
 
   // ── Estado: Cartão CNPJ ─────────────────────────────────────────
   const [arquivoCartao, setArquivoCartao]         = useState<File | null>(null);
@@ -184,6 +181,7 @@ function AnaliseContent() {
   const [resultadoArquivos, setResultadoArquivos]     = useState<ResultadoAnaliseNFeArquivos | null>(null);
   const [arquivosSalvos, setArquivosSalvos]           = useState<NotaFiscalAnexo[]>([]);
   const [analiseId, setAnaliseId]                     = useState<string>("");
+  const [leadNfEnviado, setLeadNfEnviado]             = useState(false);
 
   function handleSelecionarArquivos(e: React.ChangeEvent<HTMLInputElement>) {
     const selecionados = Array.from(e.target.files ?? []);
@@ -224,29 +222,6 @@ function AnaliseContent() {
 
   const corNivelArquivos = resultadoArquivos ? CORES_NIVEL[resultadoArquivos.nivelViabilidadeGeral] : null;
 
-  // ── Captura de lead (Notas Fiscais enquadradas) ─────────────────
-  const [lead, setLead]               = useState({ nome: "", email: "", telefone: "" });
-  const [enviandoLead, setEnviandoLead] = useState(false);
-  const [leadEnviado, setLeadEnviado] = useState(false);
-  const [erroLead, setErroLead]       = useState("");
-
-  async function enviarLead(e: React.FormEvent) {
-    e.preventDefault();
-    setErroLead("");
-    if (!lead.nome || !lead.email || !lead.telefone) { setErroLead("Preencha todos os campos."); return; }
-    setEnviandoLead(true);
-    try {
-      const res = await fetch("/api/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...lead, origem: "site", notasFiscais: arquivosSalvos, parecerNfe: resultadoArquivos }),
-      });
-      if (!res.ok) throw new Error();
-      setLeadEnviado(true);
-    } catch { setErroLead("Erro ao enviar. Tente novamente."); }
-    finally { setEnviandoLead(false); }
-  }
-
   /* ── TABS CONFIG ── */
   const TABS: { id: Modo; label: string; descricao: string }[] = [
     { id: "cnpj",        label: "Digitar CNPJ",   descricao: "Consulta automática na Receita Federal" },
@@ -260,31 +235,10 @@ function AnaliseContent() {
     <main style={{ background: "var(--cream)", minHeight: "100vh", fontFamily: "'Jost', sans-serif", color: "var(--dark)" }}>
 
       {/* Nav */}
-      <nav style={{
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "1.5rem 3rem", borderBottom: "1px solid var(--line)", background: "var(--cream)",
-      }}>
-        <button
-          onClick={() => router.push("/")}
-          aria-label="Voltar para a página inicial"
-          style={{ display: "flex", alignItems: "center", gap: 10, background: "none", border: "none", padding: 0, cursor: "pointer", font: "inherit" }}
-        >
-          <BrandMark size={30} />
-          <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <span style={{ fontFamily: "var(--sans)", fontSize: 20, fontWeight: 600, letterSpacing: "0.08em" }}>
-              BOHAC <span style={{ color: "var(--gold)" }}>MED</span>
-            </span>
-            <span style={{ fontSize: 9, letterSpacing: "0.22em", fontWeight: 300, color: "var(--muted)", textTransform: "uppercase" }}>Advogados Associados</span>
-          </div>
-        </button>
-        <button onClick={() => router.push("/")} style={{ fontSize: 11, letterSpacing: "0.16em", color: "var(--muted)", background: "none", border: "none", cursor: "pointer", textTransform: "uppercase" }}>
-          ← Voltar
-        </button>
-      </nav>
+      <div style={{ maxWidth: 780, margin: "0 auto", padding: "150px 2rem 4rem" }}>
 
-      <div style={{ maxWidth: 720, margin: "0 auto", padding: "4rem 2rem" }}>
-
-        {/* Cabeçalho */}
+        {/* Cabeçalho — chrome da página, fora do parecer impresso */}
+        <div className="print-hide">
         <div style={{ fontSize: 10, letterSpacing: "0.28em", color: "var(--gold)", textTransform: "uppercase", marginBottom: "1rem", display: "inline-flex", alignItems: "center", gap: 10 }}>
           <span style={{ display: "block", width: 24, height: 1, background: "var(--gold)" }} />
           Verificação de elegibilidade
@@ -325,6 +279,8 @@ function AnaliseContent() {
           <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 10, letterSpacing: "0.06em" }}>
             {tabDescricao}
           </p>
+        </div>
+
         </div>
 
         {/* ══════════════════════════════════════════════
@@ -369,7 +325,7 @@ function AnaliseContent() {
             </form>
 
             {resultadoCnpj && (
-              <ResultadoCnpjCard
+              <BlocoParecer
                 resultado={resultadoCnpj}
                 onCTA={() => setModo("notas-fiscais")}
               />
@@ -439,7 +395,7 @@ function AnaliseContent() {
             </form>
 
             {resultadoCartao && (
-              <ResultadoCnpjCard
+              <BlocoParecer
                 resultado={resultadoCartao}
                 onCTA={() => setModo("notas-fiscais")}
               />
@@ -554,69 +510,36 @@ function AnaliseContent() {
                   </div>
                 )}
 
-                {resultadoArquivos.enquadradoGeral && (
-                  <div style={{ background: "var(--dark)", padding: "3rem" }}>
-                    {!leadEnviado ? (
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "start" }}>
-                        <div>
-                          <div style={{ fontSize: 10, letterSpacing: "0.28em", color: "var(--gold-light)", textTransform: "uppercase", marginBottom: "1rem" }}>Próximo passo</div>
-                          <h2 style={{ fontFamily: "var(--sans)", fontSize: 32, fontWeight: 300, color: "#F5F0E8", marginBottom: "1.25rem", lineHeight: 1.15 }}>
-                            Quanto você pode <em style={{ fontStyle: "italic", color: "var(--gold-light)" }}>recuperar</em>?
-                          </h2>
-                          <p style={{ fontSize: 13, fontWeight: 300, lineHeight: 1.85, color: "rgba(245,240,232,0.55)", marginBottom: "2rem" }}>
-                            Nossa equipe analisa suas notas fiscais e calcula o valor exato de impostos recuperáveis dos últimos 5 anos — sem custo antecipado.
-                          </p>
-                          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                            {["Revisão jurídica das notas anexadas", "Cálculo do valor exato a recuperar", "Sem honorários antecipados"].map(item => (
-                              <div key={item} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                                <span style={{ color: "var(--gold-light)", fontSize: 14 }}>✓</span>
-                                <span style={{ fontSize: 12, color: "rgba(245,240,232,0.6)", letterSpacing: "0.06em" }}>{item}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                        <div>
-                          <div style={{ fontSize: 11, letterSpacing: "0.14em", color: "rgba(245,240,232,0.4)", marginBottom: "1.25rem", textTransform: "uppercase" }}>
-                            Solicitar análise completa
-                          </div>
-                          <form onSubmit={enviarLead} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                            {[
-                              { key: "nome", placeholder: "Dr. João da Silva", label: "Nome completo", type: "text" },
-                              { key: "email", placeholder: "contato@clinica.com.br", label: "E-mail", type: "email" },
-                              { key: "telefone", placeholder: "(18) 99999-9999", label: "WhatsApp", type: "tel" },
-                            ].map(({ key, placeholder, label, type }) => (
-                              <div key={key}>
-                                <label style={{ display: "block", fontSize: 10, letterSpacing: "0.2em", color: "rgba(245,240,232,0.4)", textTransform: "uppercase", marginBottom: 6 }}>{label}</label>
-                                <input
-                                  type={type} placeholder={placeholder}
-                                  value={lead[key as keyof typeof lead]}
-                                  onChange={e => setLead(p => ({ ...p, [key]: e.target.value }))}
-                                  style={{ width: "100%", padding: "13px 16px", border: "1px solid rgba(184,151,90,0.35)", background: "rgba(255,255,255,0.04)", fontFamily: "'Jost', sans-serif", fontSize: 14, fontWeight: 300, color: "#F5F0E8", outline: "none", transition: "border-color 0.2s" }}
-                                  onFocus={e => { (e.target as HTMLElement).style.borderColor = "rgba(184,151,90,0.7)"; }}
-                                  onBlur={e => { (e.target as HTMLElement).style.borderColor = "rgba(184,151,90,0.35)"; }}
-                                />
-                              </div>
-                            ))}
-                            {erroLead && <p style={{ fontSize: 12, color: "#fca5a5" }}>{erroLead}</p>}
-                            <button type="submit" disabled={enviandoLead} className="btn-gold" style={{ marginTop: 4, padding: "15px 24px" }}>
-                              {enviandoLead ? "Enviando…" : "Quero minha análise completa →"}
-                            </button>
-                            <p style={{ fontSize: 10, color: "rgba(245,240,232,0.3)", letterSpacing: "0.06em" }}>
-                              🔒 Suas notas fiscais já enviadas serão vinculadas automaticamente ao seu cadastro.
-                            </p>
-                          </form>
-                        </div>
-                      </div>
-                    ) : (
-                      <div style={{ textAlign: "center", padding: "3rem 0" }}>
-                        <div style={{ fontFamily: "var(--sans)", fontSize: 56, color: "var(--gold)", marginBottom: "1rem", lineHeight: 1 }}>✓</div>
-                        <h3 style={{ fontFamily: "var(--sans)", fontSize: 28, fontWeight: 300, color: "#F5F0E8", marginBottom: "0.75rem" }}>Solicitação recebida</h3>
-                        <p style={{ fontSize: 13, fontWeight: 300, lineHeight: 1.85, color: "rgba(245,240,232,0.55)", maxWidth: 400, margin: "0 auto" }}>
-                          Nossa equipe entrará em contato em até 1 dia útil pelo WhatsApp informado, já com suas notas fiscais em análise.
-                        </p>
-                      </div>
-                    )}
+                {/* Encerramento fixo — igual às demais modalidades. A análise
+                    concreta é o que eleva a precisão, e isso precisa estar dito. */}
+                <section className="parecer__encerra print-no-break" style={{ marginTop: "2rem" }}>
+                  <h3>{ENCERRAMENTO_PARECER.titulo}</h3>
+                  <p>
+                    A descrição de serviço em nota fiscal é indício da atividade prestada, não
+                    prova do enquadramento. A tese exige ainda organização sob a forma de
+                    sociedade empresária e atendimento às normas da ANVISA, requisitos que estes
+                    documentos não demonstram.
+                  </p>
+                  <p className="parecer__encerra-destaque">{ENCERRAMENTO_PARECER.destaque}</p>
+                </section>
+
+                <p className="print-disclaimer">
+                  Documento de caráter informativo, nos termos do Provimento 205/2021 do Conselho
+                  Federal da OAB. Não constitui parecer jurídico definitivo nem oferta de serviços
+                  em relação a caso concreto.
+                </p>
+
+                {leadNfEnviado ? (
+                  <div className="parecer__acoes print-hide">
+                    <button type="button" className="btn btn--gold" onClick={() => window.print()}>
+                      Baixar parecer em PDF
+                    </button>
                   </div>
+                ) : (
+                  <CapturaLead
+                    payloadExtra={{ notasFiscais: arquivosSalvos, parecerNfe: resultadoArquivos }}
+                    aoConcluir={() => setLeadNfEnviado(true)}
+                  />
                 )}
               </div>
             )}

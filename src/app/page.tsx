@@ -64,7 +64,7 @@ export default function HomePage() {
       const res  = await fetch("/api/analisar-cartao-cnpj", { method: "POST", body: form });
       const data = await res.json();
       if (!res.ok) throw new Error(data.erro ?? "Erro na leitura do cartão.");
-      router.push(`/resultado?cnpj=${data.cnpjExtraido}`);
+      router.push(`/analise?cnpj=${data.cnpjExtraido}`);
     } catch (err: unknown) {
       setErroCartao(err instanceof Error ? err.message : "Erro inesperado.");
       setCarregandoCartao(false);
@@ -76,7 +76,7 @@ export default function HomePage() {
     e.preventDefault();
     if (!validCNPJ(cnpj)) { setErr(true); return; }
     setErr(false);
-    router.push(`/resultado?cnpj=${cnpj.replace(/\D/g,"")}`);
+    router.push(`/analise?cnpj=${cnpj.replace(/\D/g,"")}`);
   }
 
   return (

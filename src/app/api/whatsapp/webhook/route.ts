@@ -109,42 +109,38 @@ export async function POST(req: NextRequest) {
         const dados    = await consultarCNPJ(cnpjLimpo);
         const resultado = analisarViabilidade(dados);
 
-        const emoji = {
-          ALTA:       "✅",
-          MEDIA:      "⚠️",
-          BAIXA:      "🔍",
-          INELEGIVEL: "❌",
-        }[resultado.nivelViabilidade];
+        const ROTULO = {
+          COMPORTA_ANALISE:   "COMPORTA ANÁLISE",
+          REQUER_VERIFICACAO: "REQUER VERIFICAÇÃO",
+          NAO_COMPORTA:       "NÃO COMPORTA",
+        } as const;
 
-        const nivelTexto = {
-          ALTA:       "ALTA",
-          MEDIA:      "MÉDIA",
-          BAIXA:      "BAIXA",
-          INELEGIVEL: "NÃO ELEGÍVEL",
-        }[resultado.nivelViabilidade];
-
-        const cnaesElegiveis = resultado.cnaesElegiveis
+        const hospitalares = resultado.cnaes
+          .filter(c => c.natureza === "hospitalar")
           .slice(0, 3)
           .map(c => `  • ${c.codigo} — ${c.descricao}`)
           .join("\n");
 
-        const blocoElegiveis = cnaesElegiveis
-          ? `\n🏥 *Atividades elegíveis:*\n${cnaesElegiveis}\n`
+        const blocoCnaes = hospitalares
+          ? `\n*Atividades de natureza hospitalar:*\n${hospitalares}\n`
           : "";
 
         const bloCTA =
-          resultado.nivelViabilidade !== "INELEGIVEL"
-            ? `\n💡 *Próximo passo:*\n${resultado.proximosPasosRecomendados}\n\nPara receber o *cálculo do valor a recuperar*, acesse o site:\n👉 ${process.env.NEXT_PUBLIC_SITE_URL ?? "https://bohacmed.com.br"}\n\nOu responda com seu *nome completo* e *e-mail* que nossa equipe entra em contato.`
-            : `\nMesmo assim, se quiser conversar com um especialista, responda com seu *nome completo* que entraremos em contato.`;
+          resultado.nivel !== "NAO_COMPORTA"
+            ? `\n*Próximo passo:*\nA análise documental individualizada é sempre relevante e eleva o grau de precisão do resultado. Acesse:\n${process.env.NEXT_PUBLIC_SITE_URL ?? "https://bohacmed.com.br"}\n\nOu responda com seu *nome* e um *e-mail ou WhatsApp* para contato.`
+            : `\nO CNAE cadastrado pode divergir da atividade efetivamente exercida. Se quiser uma verificação documental, responda com seu *nome* e um meio de contato.`;
 
         const resposta =
-          `${emoji} *Análise de Equiparação Hospitalar*\n\n` +
-          `🏢 *Empresa:* ${resultado.razaoSocial}\n` +
-          `📊 *Viabilidade:* ${nivelTexto} (${resultado.pontuacao}/100 pts)\n\n` +
-          `${resultado.justificativa}` +
-          blocoElegiveis +
+          `*Verificação preliminar de enquadramento*\n` +
+          `Protocolo ${resultado.protocolo}\n\n` +
+          `*Empresa:* ${resultado.razaoSocial}\n` +
+          `*Situação cadastral:* ${resultado.situacao}\n` +
+          `*Resultado:* ${ROTULO[resultado.nivel]}\n\n` +
+          `${resultado.abertura}\n\n${resultado.motivo}` +
+          blocoCnaes +
           `\n---` +
-          bloCTA;
+          bloCTA +
+          `\n\n_Verificação preliminar, baseada apenas nos dados cadastrais. Não apura forma societária, regularidade sanitária nem a natureza efetiva dos serviços._`;
 
         await enviarTexto(de, resposta);
 
