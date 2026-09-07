@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type {
   ResultadoAnalise,
@@ -112,7 +112,7 @@ function ResultadoCnpjCard({
 }
 
 /* ── Componente principal ── */
-export default function AnalisePage() {
+function AnaliseContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [modo, setModo] = useState<Modo>(() => {
@@ -624,5 +624,13 @@ export default function AnalisePage() {
         )}
       </div>
     </main>
+  );
+}
+
+export default function AnalisePage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: "100vh", background: "var(--cream)" }} />}>
+      <AnaliseContent />
+    </Suspense>
   );
 }
