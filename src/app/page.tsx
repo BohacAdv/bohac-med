@@ -110,6 +110,61 @@ export default function HomePage() {
     <>
       {/* ── HEADER ── */}
       <header className="site-header" ref={headerRef}>
+
+        {/* ── Top Bar ── */}
+        <div className="topbar">
+          <div className="wrap topbar__wrap">
+            {/* Link para o site principal */}
+            <a
+              className="topbar__main-link"
+              href="https://www.bohac.com.br"
+              target="_blank"
+              rel="noopener"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+              </svg>
+              <span>bohac.com.br</span>
+              {" "}— Site Principal
+            </a>
+
+            <div className="topbar__right">
+              {/* Dropdown Outras Verticais */}
+              <div className="topbar__dd">
+                <button className="topbar__dd-trigger" type="button">
+                  Outras Verticais
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m6 9 6 6 6-6"/>
+                  </svg>
+                </button>
+                <div className="topbar__dd-menu">
+                  <a href="/" aria-current="page">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 21V8l8-5 8 5v13"/><path d="M12 10v6M9 13h6"/></svg>
+                    Bohac Med
+                    <span className="dd-tag">atual</span>
+                  </a>
+                  <a href="https://www.bohac.com.br/direito-medico" target="_blank" rel="noopener">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
+                    Direito Médico
+                  </a>
+                  <a href="https://www.bohac.com.br/empresarial" target="_blank" rel="noopener">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/></svg>
+                    Direito Empresarial
+                  </a>
+                  <a href="https://www.bohac.com.br/trabalhista" target="_blank" rel="noopener">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                    Trabalhista
+                  </a>
+                  <a href="https://www.bohac.com.br/previdenciario" target="_blank" rel="noopener">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12l2 2 4-4"/><path d="M5 7h14v12a2 2 0 01-2 2H7a2 2 0 01-2-2z"/><path d="M9 3h6v4H9z"/></svg>
+                    Previdenciário
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="wrap">
           <nav className="nav">
             <a className="nav__logo" href="#topo">
@@ -158,15 +213,16 @@ export default function HomePage() {
                 em tributos do que o devido
               </h1>
               <p className="hero__sub reveal" data-d="2">
-                A equiparação hospitalar reduz o percentual de presunção do IRPJ de 32% para 8% e da CSLL — Contribuição Social sobre o Lucro Líquido — de 12% para 3,08%. É um direito previsto no art. 15, §1°, III, "a" da Lei 9.249/1995 e reconhecido pela Receita Federal na Solução de Consulta COSIT n° 100/2013.
+                A equiparação hospitalar reduz a base de cálculo (percentual de presunção) do IRPJ de 32% para 8% e da CSLL de 32% para 12% sobre a receita bruta. Isso faz a alíquota efetiva combinada de IRPJ + CSLL cair de ~10,88% para ~3,08%. Direito previsto no art. 15, §1°, III, "a" da Lei 9.249/1995 e reconhecido na SC COSIT n° 100/2013.
               </p>
               <div className="hero__highlight reveal" data-d="2">
                 <span className="hero__pill">
                   <b>IRPJ</b> <s>32%</s> → <b>8%</b>
                 </span>
                 <span className="hero__pill">
-                  <b>CSLL</b> <s>12%</s> → <b>3,08%</b>
+                  <b>CSLL</b> <s>32%</s> → <b>12%</b>
                 </span>
+                <p className="hero__pill-note">bases de cálculo (presunção) — alíquota efetiva IRPJ + CSLL: <s>~10,88%</s> → <b>~3,08%</b> da receita</p>
               </div>
               <div className="hero__actions reveal" data-d="3">
                 <a
@@ -510,11 +566,11 @@ export default function HomePage() {
             </div>
             <div className="stat-cell">
               <div className="big">
-                <span className="from">12%</span>
-                <span className="to">3,08%</span>
+                <span className="from">~10,88%</span>
+                <span className="to">~3,08%</span>
               </div>
-              <p className="lab">Percentual de presunção — CSLL</p>
-              <p className="desc">A CSLL (Contribuição Social sobre o Lucro Líquido) segue o mesmo critério — presunção reduzida de 32% para 12% sobre a receita bruta</p>
+              <p className="lab">Alíquota efetiva IRPJ + CSLL</p>
+              <p className="desc">A alíquota efetiva combinada (o que se paga de verdade sobre a receita bruta) cai de ~10,88% para ~3,08%, resultado da redução das bases: IRPJ de 32%→8% e CSLL de 32%→12%</p>
             </div>
             <div className="stat-cell">
               <div className="big">
@@ -523,6 +579,40 @@ export default function HomePage() {
               <p className="lab">Redução média na carga tributária</p>
               <p className="desc">Estimativa baseada em apurações comparativas IRPJ + CSLL. A recuperação de tributos pagos a maior é possível em até 5 anos retroativos (art. 168 do CTN)</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CONCEITOS TRIBUTÁRIOS ── */}
+      <section className="conceitos">
+        <div className="wrap">
+          <div className="conceitos__head reveal">
+            <span className="kicker">Entenda os números</span>
+            <h2>Alíquota, base de cálculo e alíquota efetiva</h2>
+          </div>
+          <div className="conceitos__grid">
+            <div className="conceito-card reveal" data-d="1">
+              <div className="conceito-card__label">Alíquota nominal</div>
+              <div className="conceito-card__body">
+                O percentual previsto em lei sobre o qual o imposto incide. O IRPJ tem alíquota de <b>15%</b> (+ adicional de 10% quando o lucro trimestral supera R$ 60 mil); a CSLL, <b>9%</b>. Sozinha, a alíquota nominal não diz quanto você paga de verdade.
+              </div>
+            </div>
+            <div className="conceito-card reveal" data-d="2">
+              <div className="conceito-card__label">Base de cálculo (presunção)</div>
+              <div className="conceito-card__body">
+                No Lucro Presumido, o lucro tributável não é apurado contabilmente — ele é <em>presumido</em> como um percentual da receita bruta. Para serviços médicos sem equiparação: <b>32%</b>. Com equiparação hospitalar: <b>8%</b> (IRPJ) e <b>12%</b> (CSLL).
+              </div>
+            </div>
+            <div className="conceito-card reveal" data-d="3">
+              <div className="conceito-card__label">Alíquota efetiva</div>
+              <div className="conceito-card__body">
+                O percentual real pago sobre a receita bruta: <em>base de cálculo × alíquota nominal</em>. Sem equiparação, IRPJ + CSLL chegam a <b>~10,88%</b> da receita. Com equiparação: <b>~3,08%</b>. Essa diferença — não a alíquota nominal — é o que importa.
+              </div>
+            </div>
+          </div>
+          <div className="conceitos__simples reveal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".5" fill="currentColor"/></svg>
+            <p><b>Comparação com o Simples Nacional:</b> para clínicas enquadradas no Anexo V (fator R desfavorável), a alíquota do Simples começa em 15,5% e pode ultrapassar 20% — valor superior à alíquota efetiva de IRPJ + CSLL com equiparação (3,08%). Em determinados cenários de faturamento, o Lucro Presumido com equiparação hospitalar é mais vantajoso que o próprio Simples Nacional.</p>
           </div>
         </div>
       </section>
@@ -540,11 +630,11 @@ export default function HomePage() {
           <div className="tese-grid">
             <div className="tese-card reveal" data-d="1">
               <div className="ic">
+                {/* Livro aberto com check — Lei confirmada */}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 3v18"/><path d="M6 7h12"/>
-                  <path d="M6 7l-3 6a3 3 0 006 0z"/>
-                  <path d="M18 7l-3 6a3 3 0 006 0z"/>
-                  <path d="M8 21h8"/>
+                  <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
+                  <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+                  <path d="M9 10l2 2 4-4"/>
                 </svg>
               </div>
               <h3>Direito garantido em lei</h3>
@@ -554,19 +644,26 @@ export default function HomePage() {
             </div>
             <div className="tese-card reveal" data-d="2">
               <div className="ic">
+                {/* Cifrão em círculo — economia tributária imediata */}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 6l6 6 4-4 7 7"/><path d="M21 15v-5h-5"/><path d="M3 20h18"/>
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 6v1.5M12 16.5V18"/>
+                  <path d="M8.5 9.5a3.5 1.8 0 017 0c0 1-1 1.8-3.5 2.5-2.5.7-3.5 1.5-3.5 2.5a3.5 1.8 0 007 0"/>
                 </svg>
               </div>
               <h3>Economia real e imediata</h3>
-
-                O percentual de presunção do IRPJ cai de <b>32% para 8%</b> e o da CSLL (Contribuição Social sobre o Lucro Líquido) de 32% para 12% sobre a receita bruta. O impacto é imediato, refletindo-se já no <b>primeiro período de apuração trimestral</b> após o enquadramento.
+              <p>
+                As bases de cálculo caem: IRPJ de <b>32% para 8%</b> e CSLL de <b>32% para 12%</b> da receita bruta. Isso reduz a <b>alíquota efetiva</b> combinada de IRPJ + CSLL de ~10,88% para ~3,08% — impacto imediato já no <b>primeiro período de apuração trimestral</b>. Em muitos casos, a carga é inferior à do próprio Simples Nacional.
+              </p>
 
             </div>
             <div className="tese-card reveal" data-d="3">
               <div className="ic">
+                {/* Seta retroativa com relógio — restituição quinquenal */}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 21V8l8-5 8 5v13"/><path d="M4 21h16"/><path d="M12 11v6M9 14h6"/>
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                  <path d="M3 3v5h5"/>
+                  <path d="M12 7v5l4 2"/>
                 </svg>
               </div>
               <h3>Recuperação dos últimos 5 anos</h3>

@@ -696,6 +696,74 @@ section { position: relative; }
   .steps { grid-template-columns: 1fr; }
 }
 
+/* ── Hero pill note ── */
+.hero__pill-note {
+  width: 100%;
+  font-size: 12.5px;
+  color: rgba(255,255,255,.48);
+  margin-top: 10px;
+  text-align: center;
+  letter-spacing: .01em;
+  line-height: 1.5;
+}
+.hero__pill-note s { opacity: .55; text-decoration-color: rgba(255,255,255,.35); }
+.hero__pill-note b { color: var(--gold-300); font-weight: 600; }
+
+/* ── Conceitos tributários ── */
+.conceitos {
+  padding: 72px 0 56px;
+  background: var(--cream, #f7f4ef);
+}
+.conceitos__head {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.conceitos__head h2 {
+  font-family: var(--serif);
+  font-size: clamp(22px, 2.4vw, 32px);
+  color: var(--navy);
+  margin-top: 10px;
+  font-weight: 500;
+}
+.conceitos__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-bottom: 28px;
+}
+@media (max-width: 860px) {
+  .conceitos__grid { grid-template-columns: 1fr; }
+}
+.conceito-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.07);
+  border-top: 3px solid var(--gold);
+  padding: 26px 22px 22px;
+}
+.conceito-card__label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--gold-600, #8b6344);
+  margin-bottom: 10px;
+}
+.conceito-card__body {
+  font-size: 15px;
+  line-height: 1.68;
+  color: var(--ink);
+}
+.conceitos__simples {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: rgba(174,129,103,.09);
+  border-left: 3px solid var(--gold);
+  padding: 18px 22px;
+}
+.conceitos__simples svg { flex-shrink: 0; color: var(--gold); margin-top: 3px; }
+.conceitos__simples p { font-size: 14.5px; line-height: 1.65; color: var(--ink); margin: 0; }
+
 /* ============================================================
    PRINT / PDF — Parecer Bohac Med
    Ativa via window.print() ou Ctrl+P → Salvar como PDF
