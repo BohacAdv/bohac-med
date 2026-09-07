@@ -52,6 +52,9 @@ export default function HomePage() {
   const [erroCartao, setErroCartao]             = useState("");
   const [carregandoCartao, setCarregandoCartao] = useState(false);
 
+  // Checker: Notas Fiscais
+  const [arquivosNF, setArquivosNF] = useState<File[]>([]);
+
   async function handleCartao(e: React.FormEvent) {
     e.preventDefault();
     setErroCartao("");
@@ -225,30 +228,80 @@ export default function HomePage() {
                 <p className="checker__sub">Escolha a forma mais prática. Grátis e sem compromisso.</p>
 
                 {/* ── Tab switcher ── */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", marginBottom: "1.25rem", border: "1px solid rgba(255,255,255,0.12)" }}>
-                  {(["cnpj", "cartao", "notas"] as CheckerModo[]).map((m, idx) => {
-                    const labels: Record<CheckerModo, string> = { cnpj: "CNPJ", cartao: "Cartão CNPJ", notas: "Notas Fiscais" };
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: "1.5rem" }}>
+                  {([
+                    {
+                      id: "cnpj" as CheckerModo,
+                      label: "CNPJ",
+                      hint: "Digite e consulte",
+                      icon: (
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="5" width="18" height="14" rx="2"/>
+                          <path d="M7 10h2M7 14h2M13 10h4M13 14h2"/>
+                        </svg>
+                      ),
+                    },
+                    {
+                      id: "cartao" as CheckerModo,
+                      label: "Cartão CNPJ",
+                      hint: "Envie o documento",
+                      icon: (
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="2" y="5" width="20" height="14" rx="2"/>
+                          <circle cx="8" cy="12" r="2.5"/>
+                          <path d="M13 10h5M13 14h3"/>
+                        </svg>
+                      ),
+                    },
+                    {
+                      id: "notas" as CheckerModo,
+                      label: "Nota Fiscal",
+                      hint: "Análise por serviço",
+                      icon: (
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                          <path d="M14 2v6h6M8 13h8M8 17h5"/>
+                        </svg>
+                      ),
+                    },
+                  ]).map((opt) => {
+                    const active = checkerModo === opt.id;
                     return (
                       <button
-                        key={m}
+                        key={opt.id}
                         type="button"
-                        onClick={() => { setCheckerModo(m); setErr(false); setErroCartao(""); }}
+                        onClick={() => { setCheckerModo(opt.id); setErr(false); setErroCartao(""); }}
                         style={{
-                          padding: "9px 6px",
-                          fontSize: 10,
-                          letterSpacing: "0.1em",
-                          textTransform: "uppercase",
-                          background: checkerModo === m ? "rgba(174,129,103,0.18)" : "transparent",
-                          color: checkerModo === m ? "var(--gold-light, #c29a84)" : "rgba(245,240,232,0.45)",
-                          border: "none",
-                          borderLeft: idx > 0 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: 6,
+                          padding: "14px 6px 12px",
+                          background: active ? "rgba(174,129,103,0.14)" : "rgba(255,255,255,0.03)",
+                          border: `1px solid ${active ? "rgba(174,129,103,0.5)" : "rgba(255,255,255,0.08)"}`,
+                          borderTop: `2.5px solid ${active ? "#ae8167" : "transparent"}`,
                           cursor: "pointer",
-                          transition: "all 0.2s",
+                          transition: "all 0.18s",
                           fontFamily: "var(--sans, 'Jost', sans-serif)",
-                          fontWeight: checkerModo === m ? 500 : 300,
                         }}
                       >
-                        {labels[m]}
+                        <span style={{ color: active ? "#c29a84" : "rgba(245,240,232,0.35)", transition: "color 0.18s" }}>
+                          {opt.icon}
+                        </span>
+                        <span style={{
+                          fontSize: 11, fontWeight: active ? 600 : 300, letterSpacing: "0.07em",
+                          color: active ? "#e8d5c4" : "rgba(245,240,232,0.5)",
+                          transition: "color 0.18s", textTransform: "uppercase",
+                        }}>
+                          {opt.label}
+                        </span>
+                        <span style={{
+                          fontSize: 9.5, letterSpacing: "0.05em",
+                          color: active ? "rgba(194,154,132,0.8)" : "rgba(245,240,232,0.25)",
+                          transition: "color 0.18s",
+                        }}>
+                          {opt.hint}
+                        </span>
                       </button>
                     );
                   })}
@@ -335,16 +388,51 @@ export default function HomePage() {
 
                 {/* ── Tab: Notas Fiscais ── */}
                 {checkerModo === "notas" && (
-                  <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                    <p style={{ fontSize: 13, color: "rgba(245,240,232,0.65)", fontWeight: 300, lineHeight: 1.75, margin: 0 }}>
-                      Envie até 5 notas fiscais (PDF, JPG, PNG ou XML). Nossa IA analisa a descrição dos serviços e emite um parecer focado na tese de equiparação — independente dos CNAEs cadastrados.
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <label
+                      htmlFor="nf-input-hero"
+                      style={{
+                        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                        gap: 8, padding: "1.75rem 1rem",
+                        border: "1.5px dashed rgba(174,129,103,0.4)",
+                        cursor: "pointer", background: "rgba(174,129,103,0.06)", textAlign: "center",
+                      }}
+                    >
+                      {arquivosNF.length > 0 ? (
+                        <>
+                          <span style={{ fontSize: 22 }}>📄</span>
+                          <span style={{ fontSize: 12, color: "rgba(245,240,232,0.85)", fontWeight: 500 }}>
+                            {arquivosNF.length} arquivo{arquivosNF.length > 1 ? "s" : ""} selecionado{arquivosNF.length > 1 ? "s" : ""}
+                          </span>
+                          <span style={{ fontSize: 11, color: "rgba(245,240,232,0.4)" }}>Clique para trocar</span>
+                        </>
+                      ) : (
+                        <>
+                          <span style={{ fontSize: 22 }}>🧾</span>
+                          <span style={{ fontSize: 12, color: "rgba(245,240,232,0.7)", fontWeight: 300 }}>
+                            Clique para selecionar suas notas fiscais
+                          </span>
+                          <span style={{ fontSize: 11, color: "rgba(245,240,232,0.35)" }}>PDF, JPG, PNG ou XML — até 5 arquivos</span>
+                        </>
+                      )}
+                      <input
+                        id="nf-input-hero"
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png,.xml"
+                        multiple
+                        onChange={e => setArquivosNF(Array.from(e.target.files ?? []).slice(0, 5))}
+                        style={{ display: "none" }}
+                      />
+                    </label>
+                    <p style={{ fontSize: 11, color: "rgba(245,240,232,0.4)", fontWeight: 300, margin: 0 }}>
+                      Nossa IA analisa a descrição dos serviços — sem depender dos CNAEs cadastrados.
                     </p>
                     <button
                       type="button"
                       onClick={() => router.push("/analise?tab=notas-fiscais")}
                       className="btn btn--gold btn-lg checker__submit"
                     >
-                      Ir para análise de NF
+                      {arquivosNF.length > 0 ? "Analisar notas fiscais" : "Ir para análise completa"}
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="arrow"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                     </button>
                   </div>
