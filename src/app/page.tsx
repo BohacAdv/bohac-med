@@ -356,6 +356,20 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── DECLARAÇÃO ── */}
+      <section className="declaracao section-pad-tight">
+        <div className="wrap">
+          <div className="declaracao__inner reveal">
+            <span className="declaracao__rule" aria-hidden="true" />
+            <p className="declaracao__text">
+              A equiparação hospitalar não é estratégia tributária.{" "}
+              É vantagem competitiva que a maioria das clínicas ainda ignora.
+            </p>
+            <div className="declaracao__label">Bohac Med</div>
+          </div>
+        </div>
+      </section>
+
       {/* ── QUEM SE BENEFICIA ── */}
       <section className="benef section-pad" id="beneficiarios">
         <div className="wrap">

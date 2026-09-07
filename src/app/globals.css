@@ -7,18 +7,19 @@
    Fonte: styles.css + equiparacao.css do Claude Design
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Mulish:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Jost:wght@200;300;400;500;600;700&display=swap');
 
 :root {
   /* Marca */
   --navy:      #0C2438;
+  --navy-900:  #0a1226;
   --navy-700:  #102d45;
   --navy-600:  #173a58;
   --navy-500:  #1f486b;
-  --gold:      #BF9A57;
-  --gold-600:  #a9853f;
-  --gold-300:  #d8bc83;
-  --gold-100:  #ecdfc1;
+  --gold:      #ae8167;
+  --gold-600:  #99705a;
+  --gold-300:  #c29a84;
+  --gold-100:  #f2e8e0;
 
   /* Neutros quentes */
   --cream:     #F6F2EA;
@@ -32,7 +33,7 @@
 
   /* Tipografia */
   --serif: "Cormorant Garamond", Georgia, serif;
-  --sans:  "Mulish", system-ui, sans-serif;
+  --sans:  "Jost", "Century Gothic", system-ui, sans-serif;
 
   /* Layout */
   --maxw: 1200px;
@@ -40,8 +41,8 @@
   --ease: cubic-bezier(.2,.7,.2,1);
 
   /* aliases legados */
-  --gold-light: #d8bc83;
-  --gold-dark:  #a9853f;
+  --gold-light: #c29a84;
+  --gold-dark:  #99705a;
   --dark:       #0C2438;
 }
 
@@ -66,9 +67,9 @@ a { color: inherit; text-decoration: none; }
 
 h1, h2, h3, h4 {
   font-family: var(--serif);
-  font-weight: 600;
-  line-height: 1.06;
-  letter-spacing: .005em;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: .01em;
   margin: 0;
   text-wrap: balance;
 }
@@ -101,6 +102,7 @@ p { margin: 0; text-wrap: pretty; }
 /* Section scaffolding */
 section { position: relative; }
 .section-pad { padding: 110px 0; }
+.section-pad-tight { padding: clamp(56px,6vw,80px) 0; }
 .section-head { max-width: 680px; }
 .section-head.center { margin: 0 auto; text-align: center; }
 .section-head h2 {
@@ -427,10 +429,10 @@ section { position: relative; }
 .tese { background: var(--paper); }
 .tese-grid { display:grid; grid-template-columns: repeat(3,1fr); gap: 26px; margin-top: 56px; }
 .tese-card {
-  background: var(--paper); border:1px solid var(--line); border-radius:10px; padding: 36px 32px;
+  background: var(--paper); border:1px solid var(--line); border-top: 3px solid var(--gold); border-radius:0; padding: 36px 32px;
   transition: transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease);
 }
-.tese-card:hover { transform: translateY(-5px); box-shadow:0 26px 52px -30px rgba(12,36,56,.4); border-color: var(--line-gold); }
+.tese-card:hover { transform: translateY(-4px); box-shadow:0 24px 48px -28px rgba(12,36,56,.35); }
 .tese-card .ic {
   width: 58px; height:58px; border-radius:12px; margin-bottom: 24px;
   background: var(--navy); color: var(--gold-300);
@@ -485,6 +487,31 @@ section { position: relative; }
 .area-item .ic svg { width:100%;height:100%; }
 .area-item h4 { font-family:var(--serif); font-size:21px; color:var(--ink); font-weight:600; margin-bottom:7px; }
 .area-item p { color:var(--muted); font-size:14px; }
+
+/* Declaração */
+.declaracao { background: var(--navy-900, #0a1226); position: relative; overflow: hidden; }
+.declaracao::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(70% 140% at 18% 50%, rgba(174,129,103,.20) 0%, rgba(10,18,38,0) 62%);
+  pointer-events: none;
+}
+.declaracao__inner { position: relative; max-width: 720px; margin: 0 auto; text-align: center; }
+.declaracao__rule {
+  display: block; width: 56px; height: 2px;
+  background: var(--gold); margin: 0 auto 32px;
+}
+.declaracao__text {
+  font-family: var(--serif); font-style: italic;
+  font-weight: 400; font-size: clamp(20px, 2.2vw, 27px);
+  line-height: 1.55; letter-spacing: .01em;
+  color: var(--muted-on-navy);
+  margin: 0;
+}
+.declaracao__label {
+  margin-top: 28px; font-family: var(--sans); font-weight: 600;
+  font-size: 11px; text-transform: uppercase;
+  letter-spacing: .24em; color: var(--gold);
+}
 
 /* CTA final */
 .final { background: var(--navy); color:#fff; overflow:hidden; position:relative; text-align:center; }
