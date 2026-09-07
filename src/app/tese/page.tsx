@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { whatsappHref } from "@/lib/verticais";
 
 export const metadata: Metadata = {
   title: "A Tese da Equiparação Hospitalar — Análise Técnica | Bohac Med",
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 const WA_URL =
-  "https://wa.me/5518996205555?text=Gostaria%20de%20saber%20mais%20sobre%20a%20equiparação%20hospitalar";
+  whatsappHref("Olá! Gostaria de saber mais sobre a equiparação hospitalar.");
 
 /* ── Componente de âncora de seção ── */
 function SectionAnchor({ id }: { id: string }) {
@@ -24,7 +25,7 @@ function LegalBadge({ children }: { children: React.ReactNode }) {
         background: "rgba(174,129,103,0.1)",
         border: "1px solid rgba(174,129,103,0.35)",
         color: "#8a6348",
-        fontSize: 11,
+        fontSize: 12.5,
         fontWeight: 600,
         letterSpacing: "0.06em",
         padding: "3px 9px",
@@ -40,58 +41,12 @@ export default function TesePage() {
   return (
     <>
       {/* ── HEADER SIMPLIFICADO ── */}
-      <header
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
-          background: "var(--navy, var(--navy))",
-          borderBottom: "1px solid rgba(255,255,255,0.08)",
-          padding: "0",
-        }}
-      >
-        <div
-          className="wrap"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            height: 64,
-          }}
-        >
-          <Link href="/" style={{ display: "flex", alignItems: "center" }}>
-            <img src="/logo-inverted.png" alt="Bohac Med" style={{ height: 32 }} />
-          </Link>
-          <nav style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
-            <Link
-              href="/#tese"
-              style={{
-                fontSize: 13,
-                color: "rgba(245,240,232,0.6)",
-                textDecoration: "none",
-                letterSpacing: "0.04em",
-              }}
-            >
-              ← Voltar ao site
-            </Link>
-            <a
-              href={WA_URL}
-              target="_blank"
-              rel="noopener"
-              className="btn btn--gold"
-              style={{ fontSize: 13 }}
-            >
-              Falar com especialista
-            </a>
-          </nav>
-        </div>
-      </header>
 
       {/* ── HERO DA PÁGINA ── */}
       <section
         style={{
           background: "var(--navy, var(--navy))",
-          padding: "4rem 0 3.5rem",
+          padding: "170px 0 3.5rem",
           borderBottom: "1px solid rgba(255,255,255,0.06)",
         }}
       >
@@ -118,15 +73,15 @@ export default function TesePage() {
             style={{
               fontSize: "clamp(1rem, 1.8vw, 1.15rem)",
               color: "rgba(245,240,232,0.65)",
-              lineHeight: 1.7,
+              lineHeight: 1.75,
               maxWidth: 680,
               marginBottom: "2rem",
             }}
           >
             Fundamento legal, requisitos objetivos de enquadramento, limites de
             aplicação, vias de implementação e recuperação retroativa — análise
-            com base na Lei 9.249/1995, no Decreto 9.580/2018 e na Solução de
-            Consulta COSIT n° 100/2013.
+            com base na Lei 9.249/1995, na Lei 11.727/2008 e no julgamento do
+            STJ no REsp 1.116.399/BA (Tema 217 dos recursos repetitivos).
           </p>
           {/* Índice rápido */}
           <div
@@ -134,7 +89,7 @@ export default function TesePage() {
               display: "flex",
               flexWrap: "wrap",
               gap: "0.5rem",
-              fontSize: 12,
+              fontSize: 14,
             }}
           >
             {[
@@ -194,8 +149,7 @@ export default function TesePage() {
               legalmente correta para quem presta serviços de natureza
               hospitalar. A aplicação do percentual de 32% a essas atividades
               representa recolhimento de tributos acima do legalmente devido —
-              sujeito a restituição ou compensação dentro do prazo prescricional
-              de cinco anos (art. 168 do CTN).
+              sujeito a restituição ou compensação dentro do prazo de cinco anos (art. 168 do CTN).
             </p>
             <Callout>
               A tese não cria um direito novo. Ela aplica o direito já existente
@@ -229,18 +183,18 @@ export default function TesePage() {
                 body="Aplica, para fins de CSLL (Contribuição Social sobre o Lucro Líquido), lógica equivalente: o percentual de presunção cai de 32% para 12% para as mesmas atividades hospitalares. CSLL não é imposto — é contribuição de competência da União."
               />
               <NormCard
-                badge="Decreto 9.580/2018 — arts. 15 e 20 (RIR)"
-                title="Regulamentação — Regulamento do Imposto de Renda"
-                body="O RIR (Regulamento do Imposto de Renda) consolida e regulamenta os artigos da Lei 9.249/1995. Os arts. 15 e 20 do Decreto 9.580/2018 reproduzem os critérios e estabelecem a aplicação prática do percentual reduzido."
+                badge="Lei 11.727/2008 — requisitos cumulativos"
+                title="Requisitos legais — sociedade empresária e ANVISA"
+                body="A Lei 11.727/2008 alterou os arts. 15 e 20 da Lei 9.249/1995 e acrescentou dois requisitos cumulativos: a prestadora deve estar organizada sob a forma de sociedade empresária e atender às normas da ANVISA. Clínicas constituídas como sociedade simples, registradas em Cartório de Registro Civil de Pessoas Jurídicas, não preenchem o primeiro requisito enquanto não houver transformação do tipo societário."
               />
               <NormCard
-                badge="SC COSIT n° 100/2013 — Receita Federal"
-                title="Critérios administrativos — marco definitório"
-                body="A Solução de Consulta COSIT n° 100/2013 é o ato normativo mais relevante para definição prática do enquadramento. A Receita Federal estabeleceu os critérios objetivos para qualificação de 'serviços hospitalares': a entidade deve dispor de estrutura e serviços análogos aos de um hospital, com atendimento direto ao paciente. Não exige internação noturna ou leitos — posição posteriormente confirmada pelo STJ."
+                badge="STJ — REsp 1.116.399/BA (Tema 217)"
+                title="Alcance fixado em recurso repetitivo"
+                body="Julgado sob o rito dos repetitivos, o REsp 1.116.399/BA firmou que 'serviços hospitalares' são aqueles ligados às atividades desenvolvidas pelos hospitais, voltados diretamente à promoção da saúde — sem exigir internação noturna ou leitos. O mesmo julgado excluiu expressamente as simples consultas médicas. A disciplina administrativa consta da IN RFB 1.700/2017."
               />
             </div>
 
-            <p style={{ ...bodyText, color: "var(--muted, #6b7280)", fontSize: 13 }}>
+            <p style={{ ...bodyText, color: "var(--muted, #6b7280)", fontSize: 15 }}>
               <strong>Observação terminológica:</strong> O conjunto formado por
               IRPJ e CSLL é denominado, tecnicamente, de{" "}
               <em>tributos</em> (gênero). O IRPJ é imposto; a CSLL é
@@ -292,10 +246,10 @@ export default function TesePage() {
                     paddingBottom: 4,
                   }}
                 >
-                  <p style={{ fontWeight: 700, fontSize: 14, margin: "0 0 4px", color: "var(--dark, #1a1a2e)" }}>
+                  <p style={{ fontWeight: 700, fontSize: 16, margin: "0 0 4px", color: "var(--dark, #1a1a2e)" }}>
                     {item.title}
                   </p>
-                  <p style={{ fontSize: 14, margin: 0, color: "var(--mid, #4b5563)", lineHeight: 1.65 }}>
+                  <p style={{ fontSize: 16, margin: 0, color: "var(--mid, #4b5563)", lineHeight: 1.75 }}>
                     {item.body}
                   </p>
                 </div>
@@ -323,7 +277,7 @@ export default function TesePage() {
                     background: "rgba(174,129,103,0.1)",
                     border: "1px solid rgba(174,129,103,0.3)",
                     color: "#6b4c36",
-                    fontSize: 12,
+                    fontSize: 14,
                     padding: "4px 10px",
                     fontWeight: 500,
                   }}
@@ -332,7 +286,7 @@ export default function TesePage() {
                 </span>
               ))}
             </div>
-            <p style={{ ...bodyText, fontSize: 13, color: "var(--muted, #6b7280)" }}>
+            <p style={{ ...bodyText, fontSize: 15, color: "var(--muted, #6b7280)" }}>
               A lista não é taxativa. O enquadramento deve ser verificado caso a caso, com análise dos CNAEs, da estrutura física e dos serviços efetivamente prestados.
             </p>
           </article>
@@ -386,10 +340,10 @@ export default function TesePage() {
                     paddingBottom: 4,
                   }}
                 >
-                  <p style={{ fontWeight: 700, fontSize: 14, margin: "0 0 4px", color: "var(--dark, #1a1a2e)" }}>
+                  <p style={{ fontWeight: 700, fontSize: 16, margin: "0 0 4px", color: "var(--dark, #1a1a2e)" }}>
                     ✗ {item.title}
                   </p>
-                  <p style={{ fontSize: 14, margin: 0, color: "var(--mid, #4b5563)", lineHeight: 1.65 }}>
+                  <p style={{ fontSize: 16, margin: 0, color: "var(--mid, #4b5563)", lineHeight: 1.75 }}>
                     {item.body}
                   </p>
                 </div>
@@ -430,7 +384,7 @@ export default function TesePage() {
               >
                 <p
                   style={{
-                    fontSize: 11,
+                    fontSize: 12.5,
                     fontWeight: 700,
                     letterSpacing: "0.1em",
                     textTransform: "uppercase",
@@ -459,7 +413,7 @@ export default function TesePage() {
                       padding: "5px 0",
                       borderTop: i === 4 || i === 7 ? "1px solid rgba(12,36,56,0.12)" : undefined,
                       fontWeight: i === 4 || i === 7 ? 700 : 400,
-                      fontSize: 13,
+                      fontSize: 15,
                       color: "var(--dark, #1a1a2e)",
                     }}
                   >
@@ -475,7 +429,7 @@ export default function TesePage() {
                     display: "flex",
                     justifyContent: "space-between",
                     fontWeight: 800,
-                    fontSize: 15,
+                    fontSize: 17,
                     color: "var(--dark)",
                   }}
                 >
@@ -494,7 +448,7 @@ export default function TesePage() {
               >
                 <p
                   style={{
-                    fontSize: 11,
+                    fontSize: 12.5,
                     fontWeight: 700,
                     letterSpacing: "0.1em",
                     textTransform: "uppercase",
@@ -523,7 +477,7 @@ export default function TesePage() {
                       padding: "5px 0",
                       borderTop: i === 4 || i === 7 ? "1px solid rgba(174,129,103,0.2)" : undefined,
                       fontWeight: i === 4 || i === 7 ? 700 : 400,
-                      fontSize: 13,
+                      fontSize: 15,
                       color: "var(--dark, #1a1a2e)",
                     }}
                   >
@@ -539,7 +493,7 @@ export default function TesePage() {
                     display: "flex",
                     justifyContent: "space-between",
                     fontWeight: 800,
-                    fontSize: 15,
+                    fontSize: 17,
                     color: "#ae8167",
                   }}
                 >
@@ -563,19 +517,19 @@ export default function TesePage() {
               }}
             >
               <div>
-                <p style={{ fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase", opacity: 0.5, margin: "0 0 4px" }}>Economia anual</p>
+                <p style={{ fontSize: 14, letterSpacing: "0.08em", textTransform: "uppercase", opacity: 0.5, margin: "0 0 4px" }}>Economia anual</p>
                 <p style={{ fontSize: 28, fontWeight: 800, margin: 0, color: "#ae8167" }}>R$ 62.000</p>
               </div>
               <div>
-                <p style={{ fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase", opacity: 0.5, margin: "0 0 4px" }}>Redução na carga tributária</p>
+                <p style={{ fontSize: 14, letterSpacing: "0.08em", textTransform: "uppercase", opacity: 0.5, margin: "0 0 4px" }}>Redução na carga tributária</p>
                 <p style={{ fontSize: 28, fontWeight: 800, margin: 0, color: "#ae8167" }}>73%</p>
               </div>
               <div>
-                <p style={{ fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase", opacity: 0.5, margin: "0 0 4px" }}>Recuperação retroativa (5 anos)</p>
+                <p style={{ fontSize: 14, letterSpacing: "0.08em", textTransform: "uppercase", opacity: 0.5, margin: "0 0 4px" }}>Recuperação retroativa (5 anos)</p>
                 <p style={{ fontSize: 28, fontWeight: 800, margin: 0, color: "#ae8167" }}>até R$ 310.000</p>
               </div>
             </div>
-            <p style={{ ...bodyText, fontSize: 12, color: "var(--muted, #6b7280)", marginTop: 8 }}>
+            <p style={{ ...bodyText, fontSize: 14, color: "var(--muted, #6b7280)", marginTop: 8 }}>
               ¹ O IRPJ adicional de 10% incide sobre a parcela da base de cálculo que exceder R$ 240.000/ano (R$ 20.000/mês). Com equiparação, a base de R$ 80.000 não atinge o limite — o adicional deixa de incidir. Os valores são estimativas com base em receita bruta uniforme, sem deduções. O cálculo real pode variar conforme a apuração trimestral.
             </p>
           </article>
@@ -628,7 +582,7 @@ export default function TesePage() {
                 "Solicitar a restituição do valor em espécie, com correção pela taxa SELIC;",
                 "Compensar o crédito com outros tributos federais vincendos (IRPJ, CSLL, PIS, COFINS, contribuições previdenciárias).",
               ].map((item) => (
-                <p key={item} style={{ fontSize: 14, color: "var(--mid, #4b5563)", margin: 0, lineHeight: 1.65 }}>
+                <p key={item} style={{ fontSize: 16, color: "var(--mid, #4b5563)", margin: 0, lineHeight: 1.75 }}>
                   → {item}
                 </p>
               ))}
@@ -638,20 +592,20 @@ export default function TesePage() {
               indeferido, o contribuinte pode recorrer ao{" "}
               <strong>CARF (Conselho Administrativo de Recursos Fiscais)</strong>{" "}
               e, posteriormente, ao Judiciário — sem perda do prazo
-              prescricional original.
+              do art. 168 do CTN original.
             </p>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, margin: "20px 0" }}>
               <div style={{ background: "rgba(22,163,74,0.07)", border: "1px solid rgba(22,163,74,0.2)", padding: "1rem" }}>
-                <p style={{ fontWeight: 700, fontSize: 13, color: "#15803d", marginBottom: 8 }}>Vantagens</p>
+                <p style={{ fontWeight: 700, fontSize: 15, color: "#15803d", marginBottom: 8 }}>Vantagens</p>
                 {["Menor custo (sem honorários advocatícios de êxito judiciais)", "Processo mais rápido se a RF homologar", "Possibilidade de compensação imediata com tributos devidos", "Sem necessidade de propositura de ação judicial"].map(v => (
-                  <p key={v} style={{ fontSize: 13, color: "#166534", margin: "4px 0", lineHeight: 1.5 }}>✓ {v}</p>
+                  <p key={v} style={{ fontSize: 15, color: "#166534", margin: "4px 0", lineHeight: 1.5 }}>✓ {v}</p>
                 ))}
               </div>
               <div style={{ background: "rgba(220,38,38,0.05)", border: "1px solid rgba(220,38,38,0.15)", padding: "1rem" }}>
-                <p style={{ fontWeight: 700, fontSize: 13, color: "#b91c1c", marginBottom: 8 }}>Limitações</p>
+                <p style={{ fontWeight: 700, fontSize: 15, color: "#b91c1c", marginBottom: 8 }}>Limitações</p>
                 {["Sujeito a auditoria e possível indeferimento pela RF", "Sem coisa julgada — RF pode questionar futuramente", "Demora no processamento do PER/DCOMP (até 5 anos)", "Exige retificação das DIRPJ/DCTF dos exercícios anteriores"].map(v => (
-                  <p key={v} style={{ fontSize: 13, color: "#991b1b", margin: "4px 0", lineHeight: 1.5 }}>✗ {v}</p>
+                  <p key={v} style={{ fontSize: 15, color: "#991b1b", margin: "4px 0", lineHeight: 1.5 }}>✗ {v}</p>
                 ))}
               </div>
             </div>
@@ -686,7 +640,7 @@ export default function TesePage() {
                 "Condenação da União à restituição dos valores pagos a maior nos últimos 5 anos;",
                 "Correção pelo índice SELIC (Tema STJ n° 905 e RE 1.346.152 — incidência de SELIC como índice único de atualização do indébito tributário).",
               ].map((item) => (
-                <p key={item} style={{ fontSize: 14, color: "var(--mid, #4b5563)", margin: 0, lineHeight: 1.65 }}>
+                <p key={item} style={{ fontSize: 16, color: "var(--mid, #4b5563)", margin: 0, lineHeight: 1.75 }}>
                   → {item}
                 </p>
               ))}
@@ -713,15 +667,15 @@ export default function TesePage() {
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, margin: "20px 0" }}>
               <div style={{ background: "rgba(22,163,74,0.07)", border: "1px solid rgba(22,163,74,0.2)", padding: "1rem" }}>
-                <p style={{ fontWeight: 700, fontSize: 13, color: "#15803d", marginBottom: 8 }}>Vantagens</p>
+                <p style={{ fontWeight: 700, fontSize: 15, color: "#15803d", marginBottom: 8 }}>Vantagens</p>
                 {["Coisa julgada material — segurança jurídica definitiva", "Correção pela SELIC sobre todo o período", "Proteção contra autuações futuras pelo mesmo fundamento", "Adequado quando PER/DCOMP é indeferido"].map(v => (
-                  <p key={v} style={{ fontSize: 13, color: "#166534", margin: "4px 0", lineHeight: 1.5 }}>✓ {v}</p>
+                  <p key={v} style={{ fontSize: 15, color: "#166534", margin: "4px 0", lineHeight: 1.5 }}>✓ {v}</p>
                 ))}
               </div>
               <div style={{ background: "rgba(220,38,38,0.05)", border: "1px solid rgba(220,38,38,0.15)", padding: "1rem" }}>
-                <p style={{ fontWeight: 700, fontSize: 13, color: "#b91c1c", marginBottom: 8 }}>Limitações</p>
+                <p style={{ fontWeight: 700, fontSize: 15, color: "#b91c1c", marginBottom: 8 }}>Limitações</p>
                 {["Prazo: 3 a 10+ anos dependendo da Vara e do Tribunal", "Honorários advocatícios e custas processuais", "Risco de improcedência se os critérios não forem atendidos", "Requer representação por advogado habilitado"].map(v => (
-                  <p key={v} style={{ fontSize: 13, color: "#991b1b", margin: "4px 0", lineHeight: 1.5 }}>✗ {v}</p>
+                  <p key={v} style={{ fontSize: 15, color: "#991b1b", margin: "4px 0", lineHeight: 1.5 }}>✗ {v}</p>
                 ))}
               </div>
             </div>
@@ -732,7 +686,7 @@ export default function TesePage() {
               custosa. A via judicial é prioritária quando: (a) o PER/DCOMP é
               indeferido; (b) os valores envolvidos justificam o custo do
               litígio; (c) o contribuinte necessita de coisa julgada para
-              segurança em exercícios futuros; ou (d) o prazo prescricional para
+              segurança em exercícios futuros; ou (d) o prazo do art. 168 do CTN para
               alguns períodos está próximo de se expirar.
             </Callout>
           </article>
@@ -799,8 +753,8 @@ export default function TesePage() {
                 { n: "4.", text: "Transmissão do PER/DCOMP via e-CAC, ou ajuizamento da ação de repetição de indébito." },
               ].map(({ n, text }) => (
                 <div key={n} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                  <span style={{ fontWeight: 800, color: "#ae8167", fontSize: 14, minWidth: 20, marginTop: 2 }}>{n}</span>
-                  <p style={{ fontSize: 14, color: "var(--mid, #4b5563)", margin: 0, lineHeight: 1.65 }}>{text}</p>
+                  <span style={{ fontWeight: 800, color: "#ae8167", fontSize: 16, minWidth: 20, marginTop: 2 }}>{n}</span>
+                  <p style={{ fontSize: 16, color: "var(--mid, #4b5563)", margin: 0, lineHeight: 1.75 }}>{text}</p>
                 </div>
               ))}
             </div>
@@ -827,7 +781,7 @@ export default function TesePage() {
           >
             <p
               style={{
-                fontSize: 12,
+                fontSize: 14,
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
                 color: "rgba(245,240,232,0.4)",
@@ -850,8 +804,8 @@ export default function TesePage() {
             <p
               style={{
                 color: "rgba(245,240,232,0.55)",
-                fontSize: 14,
-                lineHeight: 1.65,
+                fontSize: 16,
+                lineHeight: 1.75,
                 maxWidth: 500,
                 margin: "0 auto 2rem",
               }}
@@ -895,25 +849,25 @@ export default function TesePage() {
         }}
       >
         <div className="wrap">
-          <p style={{ fontSize: 12, color: "rgba(245,240,232,0.3)", margin: 0 }}>
+          <p style={{ fontSize: 14, color: "rgba(245,240,232,0.3)", margin: 0 }}>
             © {new Date().getFullYear()} Bohac Advogados Associados · OAB/SP ·{" "}
             <a
-              href="mailto:contato@bohacadvogados.com.br"
+              href="mailto:contato@bohac.com.br"
               style={{ color: "rgba(245,240,232,0.4)" }}
             >
-              contato@bohacadvogados.com.br
+              contato@bohac.com.br
             </a>{" "}
             ·{" "}
             <a
-              href="https://wa.me/5518996205555"
+              href={whatsappHref("Olá! Vim pela análise técnica da tese.")}
               target="_blank"
               rel="noopener"
               style={{ color: "rgba(245,240,232,0.4)" }}
             >
-              (18) 99620-5555
+              (18) 3222-6245
             </a>
           </p>
-          <p style={{ fontSize: 11, color: "rgba(245,240,232,0.18)", margin: "6px 0 0" }}>
+          <p style={{ fontSize: 12.5, color: "rgba(245,240,232,0.18)", margin: "6px 0 0" }}>
             Este conteúdo tem caráter informativo e não constitui parecer
             jurídico. A análise de elegibilidade deve ser realizada caso a caso
             por profissional habilitado.
@@ -932,7 +886,7 @@ function SectionHeader({ n, title }: { n: string; title: string }) {
       <span
         style={{
           fontFamily: "var(--mono, monospace)",
-          fontSize: 11,
+          fontSize: 12.5,
           fontWeight: 700,
           color: "#ae8167",
           opacity: 0.8,
@@ -966,9 +920,9 @@ function Callout({ children }: { children: React.ReactNode }) {
         background: "rgba(174,129,103,0.07)",
         padding: "1rem 1.25rem",
         margin: "20px 0",
-        fontSize: 14,
+        fontSize: 16,
         color: "var(--dark, #1a1a2e)",
-        lineHeight: 1.7,
+        lineHeight: 1.75,
       }}
     >
       {children}
@@ -1009,7 +963,7 @@ function NormCard({
       <p
         style={{
           fontWeight: 700,
-          fontSize: 14,
+          fontSize: 16,
           margin: "8px 0 4px",
           color: "var(--dark, #1a1a2e)",
         }}
@@ -1018,10 +972,10 @@ function NormCard({
       </p>
       <p
         style={{
-          fontSize: 13,
+          fontSize: 15,
           color: "var(--mid, #4b5563)",
           margin: 0,
-          lineHeight: 1.65,
+          lineHeight: 1.75,
         }}
       >
         {body}
@@ -1049,7 +1003,7 @@ function PrecedentCard({
     >
       <p
         style={{
-          fontSize: 11,
+          fontSize: 12.5,
           fontWeight: 700,
           letterSpacing: "0.08em",
           textTransform: "uppercase",
@@ -1062,10 +1016,10 @@ function PrecedentCard({
       <LegalBadge>{badge}</LegalBadge>
       <p
         style={{
-          fontSize: 14,
+          fontSize: 16,
           color: "var(--mid, #4b5563)",
           margin: "12px 0 0",
-          lineHeight: 1.7,
+          lineHeight: 1.75,
         }}
       >
         {body}
@@ -1080,7 +1034,7 @@ const sectionStyle: React.CSSProperties = {
 };
 
 const bodyText: React.CSSProperties = {
-  fontSize: 15,
+  fontSize: 17,
   lineHeight: 1.75,
   color: "var(--mid, #374151)",
   margin: "0 0 1rem",

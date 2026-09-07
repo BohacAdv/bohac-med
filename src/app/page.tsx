@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { whatsappHref } from "@/lib/verticais";
 
 /* ── CNPJ mask ── */
 function maskCNPJ(v: string) {
@@ -117,9 +118,7 @@ export default function HomePage() {
               </div>
               <div className="hero__actions reveal" data-d="3">
                 <a
-                  href="https://wa.me/5518996205555?text=Quero%20verificar%20minha%20elegibilidade"
-                  target="_blank"
-                  rel="noopener"
+                  href="/analise"
                   className="btn btn--gold btn-lg"
                 >
                   Verificar elegibilidade da minha clínica
@@ -433,7 +432,7 @@ export default function HomePage() {
                 <p className="checker__alt">
                   Prefere falar com um especialista?{" "}
                   <a
-                    href="https://wa.me/5518996205555?text=Quero%20verificar%20elegibilidade%20para%20equiparação%20hospitalar"
+                    href={whatsappHref("Olá! Gostaria de falar com o escritório sobre a equiparação hospitalar.")}
                     target="_blank"
                     rel="noopener"
                   >
@@ -801,9 +800,7 @@ export default function HomePage() {
             A verificação por CNAE é preliminar e não conclui pelo enquadramento: este depende ainda da forma societária e da regularidade sanitária, verificáveis somente em análise documental.
           </p>
           <a
-            href="https://wa.me/5518996205555?text=Quero%20verificar%20se%20minha%20empresa%20é%20elegível"
-            target="_blank"
-            rel="noopener"
+            href="/analise"
             className="benef__cta reveal"
           >
             Solicitar análise de elegibilidade
@@ -856,16 +853,19 @@ export default function HomePage() {
             </p>
             <div className="final__actions reveal" data-d="3">
               <a
-                href="https://wa.me/5518996205555?text=Quero%20verificar%20minha%20elegibilidade%20para%20equiparação%20hospitalar"
-                target="_blank"
-                rel="noopener"
+                href="/analise"
                 className="btn btn--gold btn-lg"
               >
                 Solicitar a análise de enquadramento
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="arrow"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
-              <a href="#topo" className="btn btn--ghost-light btn-lg">
-                Verificar meu CNPJ
+              <a
+                href={whatsappHref("Olá! Gostaria de falar com o escritório sobre a equiparação hospitalar.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn--ghost-light btn-lg"
+              >
+                Falar com o escritório
               </a>
             </div>
           </div>

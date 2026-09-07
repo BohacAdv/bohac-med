@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import BrandMark from "@/components/BrandMark";
 
 export const metadata: Metadata = {
   title: "Termos de Uso — Bohac Med",
@@ -11,20 +10,8 @@ export default function TermosPage() {
   const atualizadoEm = "15 de junho de 2026";
 
   return (
-    <main className="min-h-screen bg-cream font-sans text-bohac-dark">
+    <main className="min-h-screen bg-cream font-sans text-bohac-dark pt-40">
       {/* Header */}
-      <header className="bg-navy text-cream px-6 md:px-10 py-8 border-b border-gold/30">
-        <div className="max-w-3xl mx-auto">
-          <Link href="/" className="inline-flex items-center gap-2 text-gold-light hover:text-cream text-xs uppercase tracking-widest transition-colors">
-            ← Voltar ao início
-          </Link>
-          <Link href="/" aria-label="Voltar para a página inicial" className="flex items-center gap-3 mt-4 w-fit hover:opacity-80 transition-opacity">
-            <BrandMark size={32} tone="onDark" />
-            <h1 className="font-sans text-3xl font-light">Termos de Uso</h1>
-          </Link>
-          <p className="text-gold-light/60 text-sm mt-1">Atualizados em {atualizadoEm}</p>
-        </div>
-      </header>
 
       <article className="max-w-3xl mx-auto px-6 py-12">
 
@@ -94,8 +81,8 @@ export default function TermosPage() {
           <p className="text-mid text-sm mt-3">
             O usuário pode solicitar a interrupção do contato a qualquer momento respondendo
             "PARAR" via WhatsApp ou enviando e-mail para{" "}
-            <a href="mailto:privacidade@bohacadvogados.com.br" className="text-gold-dark underline hover:text-gold transition-colors">
-              privacidade@bohacadvogados.com.br
+            <a href="mailto:contato@bohac.com.br" className="text-gold-dark underline hover:text-gold transition-colors">
+              contato@bohac.com.br
             </a>
             .
           </p>
@@ -182,8 +169,8 @@ export default function TermosPage() {
           <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">8. Contato</h2>
           <p className="text-mid leading-relaxed">
             Dúvidas, solicitações ou reclamações podem ser dirigidas a:{" "}
-            <a href="mailto:contato@bohacadvogados.com.br" className="text-gold-dark underline hover:text-gold transition-colors">
-              contato@bohacadvogados.com.br
+            <a href="mailto:contato@bohac.com.br" className="text-gold-dark underline hover:text-gold transition-colors">
+              contato@bohac.com.br
             </a>{" "}
             ou pelo WhatsApp disponível na plataforma.
           </p>

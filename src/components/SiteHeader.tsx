@@ -49,8 +49,16 @@ export default function SiteHeader() {
   // Fecha o drawer ao trocar de rota.
   useEffect(() => setDrawer(false), [pathname]);
 
+  /* O header é transparente por desenho, para dissolver no hero navy da home.
+     Nas demais rotas o fundo é claro e o texto branco ficaria ilegível — ali
+     ele nasce sólido. */
+  const soltoSobreHero = pathname === "/";
+
   return (
-    <header className="site-header" ref={headerRef}>
+    <header
+      className={`site-header${soltoSobreHero ? "" : " site-header--solid"}`}
+      ref={headerRef}
+    >
       <div className="wrap">
         <nav className="nav" aria-label="Principal">
           <a className="nav__logo" href="/">

@@ -1268,3 +1268,42 @@ section { position: relative; }
   margin-top: 14px; font-size: var(--fs-caption); line-height: 1.65; color: var(--muted);
 }
 .parecer__resto b { color: var(--ink); font-weight: var(--fw-medium); }
+
+/* ── Header sólido nas rotas de fundo claro ──
+   O header nasce transparente para dissolver no hero navy da home. Fora dela
+   o fundo é claro e o texto branco ficava praticamente invisível. */
+.site-header--solid {
+  background: var(--navy);
+  box-shadow: 0 1px 0 rgba(255,255,255,.06);
+  padding: 12px 0;
+}
+.site-header--solid .nav__logo img { height: 44px; }
+
+/* ── Botões legados da /analise ──
+   `.btn-gold` e `.btn-outline-gold` eram usados no markup mas NUNCA tiveram
+   regra no CSS: o "Verificar elegibilidade" renderizava como texto solto. */
+.btn-gold,
+.btn-outline-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--sans);
+  font-weight: var(--fw-medium);
+  font-size: 15px;
+  letter-spacing: .04em;
+  padding: 15px 26px;
+  border-radius: 0;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease);
+}
+.btn-gold {
+  background: linear-gradient(135deg, #bb8e74 0%, var(--gold) 52%, #9b6f57 100%);
+  color: var(--navy);
+  border-color: var(--gold);
+}
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -12px rgba(174,129,103,.6); }
+.btn-gold:disabled { opacity: .55; cursor: default; transform: none; box-shadow: none; }
+.btn-outline-gold { background: transparent; color: var(--gold); border-color: var(--line-gold); }
+.btn-outline-gold:hover { background: rgba(174,129,103,.1); border-color: var(--gold); }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import BrandMark from "@/components/BrandMark";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade — Bohac Med",
@@ -11,20 +10,8 @@ export default function PrivacidadePage() {
   const atualizadoEm = "15 de junho de 2026";
 
   return (
-    <main className="min-h-screen bg-cream font-sans text-bohac-dark">
+    <main className="min-h-screen bg-cream font-sans text-bohac-dark pt-40">
       {/* Header */}
-      <header className="bg-navy text-cream px-6 md:px-10 py-8 border-b border-gold/30">
-        <div className="max-w-3xl mx-auto">
-          <Link href="/" className="inline-flex items-center gap-2 text-gold-light hover:text-cream text-xs uppercase tracking-widest transition-colors">
-            ← Voltar ao início
-          </Link>
-          <Link href="/" aria-label="Voltar para a página inicial" className="flex items-center gap-3 mt-4 w-fit hover:opacity-80 transition-opacity">
-            <BrandMark size={32} tone="onDark" />
-            <h1 className="font-sans text-3xl font-light">Política de Privacidade</h1>
-          </Link>
-          <p className="text-gold-light/60 text-sm mt-1">Atualizada em {atualizadoEm}</p>
-        </div>
-      </header>
 
       <article className="max-w-3xl mx-auto px-6 py-12">
 
@@ -38,8 +25,8 @@ export default function PrivacidadePage() {
             com sede na Rua Emílio Mori, 426, Presidente Prudente/SP — CEP 19015-230. Para
             questões relacionadas à privacidade e proteção de dados, entre em contato pelo
             e-mail{" "}
-            <a href="mailto:privacidade@bohacadvogados.com.br" className="text-gold-dark underline hover:text-gold transition-colors">
-              privacidade@bohacadvogados.com.br
+            <a href="mailto:contato@bohac.com.br" className="text-gold-dark underline hover:text-gold transition-colors">
+              contato@bohac.com.br
             </a>
             .
           </p>
@@ -192,8 +179,8 @@ export default function PrivacidadePage() {
           </ul>
           <p className="text-mid text-sm mt-3">
             Para exercer qualquer desses direitos, envie solicitação para{" "}
-            <a href="mailto:privacidade@bohacadvogados.com.br" className="text-gold-dark underline hover:text-gold transition-colors">
-              privacidade@bohacadvogados.com.br
+            <a href="mailto:contato@bohac.com.br" className="text-gold-dark underline hover:text-gold transition-colors">
+              contato@bohac.com.br
             </a>
             . Responderemos em até 15 dias corridos.
           </p>
