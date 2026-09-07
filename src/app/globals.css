@@ -1204,6 +1204,10 @@ section { position: relative; }
 
 /* ── Vídeo explicativo ── */
 .explainer { background: var(--paper); }
+/* O padding inferior desta secao somava com o superior da .tese (~120-184px).
+   Encurta os dois no ponto de contato. */
+.explainer.section-pad-tight { padding-bottom: clamp(20px, 2vw, 32px); }
+.explainer + .tese { padding-top: clamp(36px, 3.5vw, 56px); }
 .explainer__inner { max-width: 900px; margin: 0 auto; text-align: center; }
 .explainer__inner h2 {
   margin-top: 20px;
