@@ -23,12 +23,52 @@ function validCNPJ(c: string) {
   return r1===parseInt(n[12])&&r2===parseInt(n[13]);
 }
 
+type CheckerModo = "cnpj" | "cartao" | "notas";
+
+function Spinner() {
+  return (
+    <svg style={{ animation: "spin 1s linear infinite", width: 14, height: 14 }} viewBox="0 0 24 24" fill="none">
+      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+      <circle style={{ opacity: 0.25 }} cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path style={{ opacity: 0.75 }} fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+    </svg>
+  );
+}
+
 export default function HomePage() {
   const router = useRouter();
   const headerRef = useRef<HTMLElement>(null);
   const waRef     = useRef<HTMLAnchorElement>(null);
+
+  // Checker: CNPJ
   const [cnpj, setCnpj] = useState("");
   const [err,  setErr]  = useState(false);
+
+  // Checker: modo
+  const [checkerModo, setCheckerModo] = useState<CheckerModo>("cnpj");
+
+  // Checker: Cartão CNPJ
+  const [arquivoCartao, setArquivoCartao]       = useState<File | null>(null);
+  const [erroCartao, setErroCartao]             = useState("");
+  const [carregandoCartao, setCarregandoCartao] = useState(false);
+
+  async function handleCartao(e: React.FormEvent) {
+    e.preventDefault();
+    setErroCartao("");
+    if (!arquivoCartao) { setErroCartao("Selecione o arquivo do Cartão CNPJ."); return; }
+    setCarregandoCartao(true);
+    try {
+      const form = new FormData();
+      form.append("cartao", arquivoCartao);
+      const res  = await fetch("/api/analisar-cartao-cnpj", { method: "POST", body: form });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.erro ?? "Erro na leitura do cartão.");
+      router.push(`/resultado?cnpj=${data.cnpjExtraido}`);
+    } catch (err: unknown) {
+      setErroCartao(err instanceof Error ? err.message : "Erro inesperado.");
+      setCarregandoCartao(false);
+    }
+  }
 
   /* Header scroll + WA float + reveal */
   useEffect(() => {
@@ -172,63 +212,169 @@ export default function HomePage() {
             {/* Coluna direita — Checker */}
             <div className="reveal" data-d="2">
               <div className="checker">
-                <form className="checker__form" onSubmit={handleSubmit}>
-                  <div className="checker__top">
-                    <div className="checker__badge">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/>
-                        <path d="M9 12l2 2 4-4"/>
-                      </svg>
+                {/* ── Cabeçalho ── */}
+                <div className="checker__top">
+                  <div className="checker__badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/>
+                      <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                  </div>
+                  <h3>Verificação de Elegibilidade</h3>
+                </div>
+                <p className="checker__sub">Escolha a forma mais prática. Grátis e sem compromisso.</p>
+
+                {/* ── Tab switcher ── */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", marginBottom: "1.25rem", border: "1px solid rgba(255,255,255,0.12)" }}>
+                  {(["cnpj", "cartao", "notas"] as CheckerModo[]).map((m, idx) => {
+                    const labels: Record<CheckerModo, string> = { cnpj: "CNPJ", cartao: "Cartão CNPJ", notas: "Notas Fiscais" };
+                    return (
+                      <button
+                        key={m}
+                        type="button"
+                        onClick={() => { setCheckerModo(m); setErr(false); setErroCartao(""); }}
+                        style={{
+                          padding: "9px 6px",
+                          fontSize: 10,
+                          letterSpacing: "0.1em",
+                          textTransform: "uppercase",
+                          background: checkerModo === m ? "rgba(174,129,103,0.18)" : "transparent",
+                          color: checkerModo === m ? "var(--gold-light, #c29a84)" : "rgba(245,240,232,0.45)",
+                          border: "none",
+                          borderLeft: idx > 0 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                          cursor: "pointer",
+                          transition: "all 0.2s",
+                          fontFamily: "var(--sans, 'Jost', sans-serif)",
+                          fontWeight: checkerModo === m ? 500 : 300,
+                        }}
+                      >
+                        {labels[m]}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* ── Tab: Digitar CNPJ ── */}
+                {checkerModo === "cnpj" && (
+                  <form className="checker__form" onSubmit={handleSubmit} style={{ paddingTop: 0 }}>
+                    <div className={`checker__field${err ? " invalid" : ""}`}>
+                      <label htmlFor="cnpj-input">CNPJ da sua empresa</label>
+                      <div className="checker__input-row">
+                        <input
+                          id="cnpj-input"
+                          className="checker__input"
+                          type="text"
+                          inputMode="numeric"
+                          placeholder="00.000.000/0000-00"
+                          value={cnpj}
+                          onChange={e => { setCnpj(maskCNPJ(e.target.value)); setErr(false); }}
+                          maxLength={18}
+                          autoComplete="off"
+                        />
+                      </div>
+                      <p className="checker__err">CNPJ inválido. Verifique e tente novamente.</p>
                     </div>
-                    <h3>Verificação de Elegibilidade</h3>
-                  </div>
-                  <p className="checker__sub">Descubra em segundos se sua clínica tem direito à redução. Grátis e sem compromisso.</p>
-                  <div className={`checker__field${err ? " invalid" : ""}`}>
-                    <label htmlFor="cnpj-input">CNPJ da sua empresa</label>
-                    <div className="checker__input-row">
-                      <input
-                        id="cnpj-input"
-                        className="checker__input"
-                        type="text"
-                        inputMode="numeric"
-                        placeholder="00.000.000/0000-00"
-                        value={cnpj}
-                        onChange={e => { setCnpj(maskCNPJ(e.target.value)); setErr(false); }}
-                        maxLength={18}
-                        autoComplete="off"
-                      />
-                    </div>
-                    <p className="checker__err">CNPJ inválido. Verifique e tente novamente.</p>
-                  </div>
-                  <button type="submit" className="btn btn--gold btn-lg checker__submit">
-                    Verificar agora — é grátis
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="arrow"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                  </button>
-                  <div className="checker__trust">
-                    <span className="t">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
-                      100% seguro
-                    </span>
-                    <span className="t">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-                      Resultado em segundos
-                    </span>
-                    <span className="t">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
-                      Sem custo
-                    </span>
-                  </div>
-                  <p className="checker__alt">
-                    Prefere falar com um especialista?{" "}
-                    <a
-                      href="https://wa.me/5518996205555?text=Quero%20verificar%20elegibilidade%20para%20equiparação%20hospitalar"
-                      target="_blank"
-                      rel="noopener"
+                    <button type="submit" className="btn btn--gold btn-lg checker__submit">
+                      Verificar agora — é grátis
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="arrow"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </form>
+                )}
+
+                {/* ── Tab: Cartão CNPJ ── */}
+                {checkerModo === "cartao" && (
+                  <form onSubmit={handleCartao} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <label
+                      htmlFor="cartao-input-hero"
+                      style={{
+                        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                        gap: 8, padding: "1.75rem 1rem", border: "1.5px dashed rgba(174,129,103,0.4)",
+                        cursor: "pointer", background: "rgba(174,129,103,0.06)", textAlign: "center", borderRadius: 0,
+                      }}
                     >
-                      Clique aqui
-                    </a>
-                  </p>
-                </form>
+                      {arquivoCartao ? (
+                        <>
+                          <span style={{ fontSize: 22 }}>📄</span>
+                          <span style={{ fontSize: 12, color: "rgba(245,240,232,0.85)", fontWeight: 500 }}>{arquivoCartao.name}</span>
+                          <span style={{ fontSize: 11, color: "rgba(245,240,232,0.4)" }}>Clique para trocar</span>
+                        </>
+                      ) : (
+                        <>
+                          <span style={{ fontSize: 22 }}>🪪</span>
+                          <span style={{ fontSize: 12, color: "rgba(245,240,232,0.7)", fontWeight: 300 }}>
+                            Clique para selecionar o Cartão CNPJ
+                          </span>
+                          <span style={{ fontSize: 11, color: "rgba(245,240,232,0.35)" }}>PDF, JPG ou PNG — máx. 8MB</span>
+                        </>
+                      )}
+                      <input
+                        id="cartao-input-hero"
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={e => { setArquivoCartao(e.target.files?.[0] ?? null); setErroCartao(""); }}
+                        disabled={carregandoCartao}
+                        style={{ display: "none" }}
+                      />
+                    </label>
+                    <p style={{ fontSize: 11, color: "rgba(245,240,232,0.4)", fontWeight: 300, margin: 0 }}>
+                      Nossa IA extrai o CNPJ e os CNAEs automaticamente do documento.
+                    </p>
+                    {erroCartao && <p style={{ fontSize: 12, color: "#fca5a5", margin: 0 }}>{erroCartao}</p>}
+                    <button
+                      type="submit"
+                      disabled={carregandoCartao || !arquivoCartao}
+                      className="btn btn--gold btn-lg checker__submit"
+                    >
+                      {carregandoCartao
+                        ? <span style={{ display: "flex", alignItems: "center", gap: 8 }}><Spinner /> Lendo cartão com IA…</span>
+                        : <>Analisar Cartão CNPJ <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="arrow"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></>
+                      }
+                    </button>
+                  </form>
+                )}
+
+                {/* ── Tab: Notas Fiscais ── */}
+                {checkerModo === "notas" && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    <p style={{ fontSize: 13, color: "rgba(245,240,232,0.65)", fontWeight: 300, lineHeight: 1.75, margin: 0 }}>
+                      Envie até 5 notas fiscais (PDF, JPG, PNG ou XML). Nossa IA analisa a descrição dos serviços e emite um parecer focado na tese de equiparação — independente dos CNAEs cadastrados.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => router.push("/analise?tab=notas-fiscais")}
+                      className="btn btn--gold btn-lg checker__submit"
+                    >
+                      Ir para análise de NF
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="arrow"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </div>
+                )}
+
+                {/* ── Trust strip ── */}
+                <div className="checker__trust" style={{ marginTop: "1.25rem" }}>
+                  <span className="t">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
+                    100% seguro
+                  </span>
+                  <span className="t">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                    Resultado em segundos
+                  </span>
+                  <span className="t">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+                    Sem custo
+                  </span>
+                </div>
+                <p className="checker__alt">
+                  Prefere falar com um especialista?{" "}
+                  <a
+                    href="https://wa.me/5518996205555?text=Quero%20verificar%20elegibilidade%20para%20equiparação%20hospitalar"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    Clique aqui
+                  </a>
+                </p>
               </div>
             </div>
           </div>
