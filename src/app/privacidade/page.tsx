@@ -20,7 +20,7 @@ export default function PrivacidadePage() {
           </Link>
           <Link href="/" aria-label="Voltar para a página inicial" className="flex items-center gap-3 mt-4 w-fit hover:opacity-80 transition-opacity">
             <BrandMark size={32} tone="onDark" />
-            <h1 className="font-serif text-3xl font-light">Política de Privacidade</h1>
+            <h1 className="font-sans text-3xl font-light">Política de Privacidade</h1>
           </Link>
           <p className="text-gold-light/60 text-sm mt-1">Atualizada em {atualizadoEm}</p>
         </div>
@@ -30,7 +30,7 @@ export default function PrivacidadePage() {
 
         {/* 1. Identificação do controlador */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">1. Identificação do Controlador</h2>
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">1. Identificação do Controlador</h2>
           <p className="text-mid leading-relaxed">
             A plataforma <strong>Bohac Med</strong>, acessível em{" "}
             <a href="https://bohacmed.com.br" className="text-gold-dark underline hover:text-gold transition-colors">bohacmed.com.br</a>, é
@@ -47,7 +47,7 @@ export default function PrivacidadePage() {
 
         {/* 2. Dados coletados */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">2. Quais Dados Coletamos</h2>
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">2. Quais Dados Coletamos</h2>
           <p className="text-mid leading-relaxed mb-3">
             Coletamos as seguintes categorias de dados, sempre com a finalidade específica
             de verificar a viabilidade da equiparação hospitalar:
@@ -55,7 +55,7 @@ export default function PrivacidadePage() {
 
           <div className="space-y-4">
             <div className="bg-white border border-gold/20 p-4">
-              <h3 className="font-serif font-semibold text-bohac-dark mb-1">2.1 Dados de identificação pessoal</h3>
+              <h3 className="font-sans font-semibold text-bohac-dark mb-1">2.1 Dados de identificação pessoal</h3>
               <p className="text-muted text-sm">
                 Nome completo, endereço de e-mail e número de telefone/WhatsApp, fornecidos
                 voluntariamente ao solicitar contato com a equipe jurídica.
@@ -63,7 +63,7 @@ export default function PrivacidadePage() {
             </div>
 
             <div className="bg-white border border-gold/20 p-4">
-              <h3 className="font-serif font-semibold text-bohac-dark mb-1">2.2 Dados empresariais (CNPJ e CNAEs)</h3>
+              <h3 className="font-sans font-semibold text-bohac-dark mb-1">2.2 Dados empresariais (CNPJ e CNAEs)</h3>
               <p className="text-muted text-sm">
                 Número do CNPJ fornecido pelo usuário. A partir dele, consultamos automaticamente
                 a Receita Federal (API pública) para obter a razão social, atividades econômicas
@@ -94,15 +94,15 @@ export default function PrivacidadePage() {
 
         {/* 3. Finalidades e bases legais */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">
             3. Finalidades do Tratamento e Bases Legais (LGPD)
           </h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm border border-gold/20">
               <thead className="bg-cream-dark">
                 <tr>
-                  <th className="text-left px-4 py-2 text-bohac-dark font-serif font-semibold">Finalidade</th>
-                  <th className="text-left px-4 py-2 text-bohac-dark font-serif font-semibold">Base Legal (LGPD)</th>
+                  <th className="text-left px-4 py-2 text-bohac-dark font-sans font-semibold">Finalidade</th>
+                  <th className="text-left px-4 py-2 text-bohac-dark font-sans font-semibold">Base Legal (LGPD)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gold/10">
@@ -124,7 +124,7 @@ export default function PrivacidadePage() {
 
         {/* 4. Compartilhamento */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">4. Compartilhamento de Dados</h2>
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">4. Compartilhamento de Dados</h2>
           <p className="text-mid leading-relaxed mb-3">
             Não vendemos, alugamos ou comercializamos seus dados pessoais. O compartilhamento
             ocorre somente com os seguintes <strong>operadores</strong> contratados, que tratam
@@ -163,7 +163,7 @@ export default function PrivacidadePage() {
 
         {/* 5. Retenção */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">5. Prazo de Retenção</h2>
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">5. Prazo de Retenção</h2>
           <p className="text-mid leading-relaxed">
             Os dados de identificação e o resultado da análise são retidos por{" "}
             <strong>5 (cinco) anos</strong> a partir da coleta, prazo compatível com a
@@ -175,7 +175,7 @@ export default function PrivacidadePage() {
 
         {/* 6. Direitos dos titulares */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">
             6. Direitos dos Titulares de Dados
           </h2>
           <p className="text-mid leading-relaxed mb-3">
@@ -201,7 +201,7 @@ export default function PrivacidadePage() {
 
         {/* 7. Segurança */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">7. Segurança dos Dados</h2>
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">7. Segurança dos Dados</h2>
           <p className="text-mid leading-relaxed">
             Adotamos medidas técnicas e organizacionais adequadas para proteger seus dados,
             incluindo: transmissão criptografada via HTTPS/TLS 1.3, controle de acesso por
@@ -214,7 +214,7 @@ export default function PrivacidadePage() {
 
         {/* 8. Cookies */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">8. Cookies</h2>
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">8. Cookies</h2>
           <p className="text-mid leading-relaxed">
             Esta plataforma utiliza apenas cookies estritamente necessários para o funcionamento
             da sessão. Não utilizamos cookies de rastreamento, publicidade ou analytics de
@@ -224,7 +224,7 @@ export default function PrivacidadePage() {
 
         {/* 9. Alterações */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">9. Alterações desta Política</h2>
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">9. Alterações desta Política</h2>
           <p className="text-mid leading-relaxed">
             Reservamo-nos o direito de atualizar esta Política periodicamente. Alterações
             relevantes serão comunicadas pelo e-mail cadastrado ou por aviso na plataforma

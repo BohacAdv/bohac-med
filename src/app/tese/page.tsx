@@ -45,7 +45,7 @@ export default function TesePage() {
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "var(--navy, #0c2438)",
+          background: "var(--navy, var(--navy))",
           borderBottom: "1px solid rgba(255,255,255,0.08)",
           padding: "0",
         }}
@@ -90,7 +90,7 @@ export default function TesePage() {
       {/* ── HERO DA PÁGINA ── */}
       <section
         style={{
-          background: "var(--navy, #0c2438)",
+          background: "var(--navy, var(--navy))",
           padding: "4rem 0 3.5rem",
           borderBottom: "1px solid rgba(255,255,255,0.06)",
         }}
@@ -104,7 +104,7 @@ export default function TesePage() {
           </span>
           <h1
             style={{
-              fontFamily: "var(--serif, Georgia, serif)",
+              fontFamily: "var(--sans)",
               fontSize: "clamp(2rem, 4vw, 3rem)",
               color: "var(--cream, #f5f0e8)",
               fontWeight: 700,
@@ -552,7 +552,7 @@ export default function TesePage() {
             {/* Resultado */}
             <div
               style={{
-                background: "var(--navy, #0c2438)",
+                background: "var(--navy, var(--navy))",
                 color: "var(--cream, #f5f0e8)",
                 padding: "1.25rem 1.5rem",
                 display: "flex",
@@ -819,7 +819,7 @@ export default function TesePage() {
           {/* ── CTA DISCRETO ── */}
           <div
             style={{
-              background: "var(--navy, #0c2438)",
+              background: "var(--navy, var(--navy))",
               padding: "2.5rem 2rem",
               textAlign: "center",
               marginTop: "2rem",
@@ -838,7 +838,7 @@ export default function TesePage() {
             </p>
             <h3
               style={{
-                fontFamily: "var(--serif, Georgia, serif)",
+                fontFamily: "var(--sans)",
                 color: "var(--cream, #f5f0e8)",
                 fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
                 fontWeight: 700,
@@ -888,7 +888,7 @@ export default function TesePage() {
       {/* ── FOOTER SIMPLIFICADO ── */}
       <footer
         style={{
-          background: "var(--navy, #0c2438)",
+          background: "var(--navy, var(--navy))",
           borderTop: "1px solid rgba(255,255,255,0.06)",
           padding: "1.5rem 0",
           textAlign: "center",
@@ -944,7 +944,7 @@ function SectionHeader({ n, title }: { n: string; title: string }) {
       </span>
       <h2
         style={{
-          fontFamily: "var(--serif, Georgia, serif)",
+          fontFamily: "var(--sans)",
           fontSize: "clamp(1.2rem, 2.5vw, 1.6rem)",
           color: "var(--dark, #1a1a2e)",
           fontWeight: 700,
@@ -1087,7 +1087,7 @@ const bodyText: React.CSSProperties = {
 };
 
 const subheadStyle: React.CSSProperties = {
-  fontFamily: "var(--serif, Georgia, serif)",
+  fontFamily: "var(--sans)",
   fontSize: "1.05rem",
   fontWeight: 700,
   color: "var(--dark, #1a1a2e)",

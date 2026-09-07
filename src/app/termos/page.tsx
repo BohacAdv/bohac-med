@@ -20,7 +20,7 @@ export default function TermosPage() {
           </Link>
           <Link href="/" aria-label="Voltar para a página inicial" className="flex items-center gap-3 mt-4 w-fit hover:opacity-80 transition-opacity">
             <BrandMark size={32} tone="onDark" />
-            <h1 className="font-serif text-3xl font-light">Termos de Uso</h1>
+            <h1 className="font-sans text-3xl font-light">Termos de Uso</h1>
           </Link>
           <p className="text-gold-light/60 text-sm mt-1">Atualizados em {atualizadoEm}</p>
         </div>
@@ -40,7 +40,7 @@ export default function TermosPage() {
 
         {/* 1. Objeto */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">1. Objeto da Plataforma</h2>
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">1. Objeto da Plataforma</h2>
           <p className="text-mid leading-relaxed">
             O Bohac Med é uma ferramenta de <strong>triagem informativa</strong> que permite a
             médicos, dentistas, clínicas e empresas da área da saúde verificar preliminarmente
@@ -52,7 +52,7 @@ export default function TermosPage() {
 
         {/* 2. Natureza do serviço */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">
             2. Natureza Informativa — Não Configura Consultoria Jurídica
           </h2>
           <div className="bg-yellow-50 border border-yellow-200 p-4 mb-4">
@@ -74,7 +74,7 @@ export default function TermosPage() {
 
         {/* 3. Cadastro e lead */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">3. Cadastro e Contato</h2>
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">3. Cadastro e Contato</h2>
           <p className="text-mid leading-relaxed mb-3">
             Ao preencher o formulário de contato, o usuário:
           </p>
@@ -103,7 +103,7 @@ export default function TermosPage() {
 
         {/* 4. Uso das NF-e */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">
             4. Fornecimento de Dados de Nota Fiscal Eletrônica
           </h2>
           <p className="text-mid leading-relaxed mb-3">
@@ -130,16 +130,16 @@ export default function TermosPage() {
 
         {/* 5. Responsabilidades */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">5. Responsabilidades</h2>
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">5. Responsabilidades</h2>
 
-          <h3 className="font-serif font-semibold text-bohac-dark mb-2">5.1 Do Usuário</h3>
+          <h3 className="font-sans font-semibold text-bohac-dark mb-2">5.1 Do Usuário</h3>
           <p className="text-mid text-sm leading-relaxed mb-4">
             O usuário é responsável pela veracidade das informações fornecidas, pelo uso adequado
             da plataforma e por não utilizar o serviço para fins ilícitos, fraudulentos ou
             contrários aos presentes Termos.
           </p>
 
-          <h3 className="font-serif font-semibold text-bohac-dark mb-2">5.2 Da Bohac Sociedade de Advogados</h3>
+          <h3 className="font-sans font-semibold text-bohac-dark mb-2">5.2 Da Bohac Sociedade de Advogados</h3>
           <p className="text-mid text-sm leading-relaxed">
             A Bohac empreende esforços razoáveis para manter a plataforma disponível e os
             algoritmos de análise atualizados com a jurisprudência vigente. Contudo, não se
@@ -153,7 +153,7 @@ export default function TermosPage() {
 
         {/* 6. Propriedade intelectual */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">6. Propriedade Intelectual</h2>
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">6. Propriedade Intelectual</h2>
           <p className="text-mid leading-relaxed">
             Todo o conteúdo da plataforma — incluindo textos, lógica de análise, interface,
             código-fonte e marca Bohac Med — é de propriedade exclusiva da Bohac Sociedade de
@@ -165,7 +165,7 @@ export default function TermosPage() {
 
         {/* 7. Legislação */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">
             7. Legislação Aplicável e Foro
           </h2>
           <p className="text-mid leading-relaxed">
@@ -179,7 +179,7 @@ export default function TermosPage() {
 
         {/* 8. Contato */}
         <section className="mb-8">
-          <h2 className="text-xl font-serif font-semibold text-bohac-dark mb-3">8. Contato</h2>
+          <h2 className="text-xl font-sans font-semibold text-bohac-dark mb-3">8. Contato</h2>
           <p className="text-mid leading-relaxed">
             Dúvidas, solicitações ou reclamações podem ser dirigidas a:{" "}
             <a href="mailto:contato@bohacadvogados.com.br" className="text-gold-dark underline hover:text-gold transition-colors">

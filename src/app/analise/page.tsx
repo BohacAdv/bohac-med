@@ -72,7 +72,7 @@ function ResultadoCnpjCard({
         <p style={{ fontSize: 13, fontWeight: 500, color: "var(--dark)", marginBottom: 4 }}>
           {resultado.razaoSocial}
         </p>
-        <p style={{ fontSize: 14, fontWeight: 300, lineHeight: 1.85, color: "var(--mid)", marginBottom: "1.25rem" }}>
+        <p style={{ fontSize: 14, fontWeight: 300, lineHeight: 1.85, color: "var(--navy-500)", marginBottom: "1.25rem" }}>
           {resultado.justificativa}
         </p>
         {resultado.cnaesElegiveis.length > 0 && (
@@ -82,7 +82,7 @@ function ResultadoCnpjCard({
             </div>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 6 }}>
               {resultado.cnaesElegiveis.map((c, i) => (
-                <li key={i} style={{ fontSize: 13, color: "var(--mid)", fontWeight: 300, display: "flex", gap: 8 }}>
+                <li key={i} style={{ fontSize: 13, color: "var(--navy-500)", fontWeight: 300, display: "flex", gap: 8 }}>
                   <span style={{ color: "var(--gold)" }}>—</span>
                   <span><strong style={{ fontWeight: 500 }}>{c.codigo}</strong> · {c.descricao}</span>
                 </li>
@@ -95,7 +95,7 @@ function ResultadoCnpjCard({
       {resultado.nivelViabilidade !== "INELEGIVEL" && (
         <div style={{ background: "var(--dark)", padding: "2rem", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem" }}>
           <div>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 300, color: "#F5F0E8" }}>
+            <p style={{ fontFamily: "var(--sans)", fontSize: 20, fontWeight: 300, color: "#F5F0E8" }}>
               Quer uma análise completa com as notas fiscais?
             </p>
             <p style={{ fontSize: 12, fontWeight: 300, color: "rgba(245,240,232,0.5)", marginTop: 6 }}>
@@ -271,7 +271,7 @@ function AnaliseContent() {
         >
           <BrandMark size={30} />
           <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 600, letterSpacing: "0.08em" }}>
+            <span style={{ fontFamily: "var(--sans)", fontSize: 20, fontWeight: 600, letterSpacing: "0.08em" }}>
               BOHAC <span style={{ color: "var(--gold)" }}>MED</span>
             </span>
             <span style={{ fontSize: 9, letterSpacing: "0.22em", fontWeight: 300, color: "var(--muted)", textTransform: "uppercase" }}>Advogados Associados</span>
@@ -289,7 +289,7 @@ function AnaliseContent() {
           <span style={{ display: "block", width: 24, height: 1, background: "var(--gold)" }} />
           Verificação de elegibilidade
         </div>
-        <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 38, fontWeight: 300, marginBottom: "1rem" }}>
+        <h1 style={{ fontFamily: "var(--sans)", fontSize: 38, fontWeight: 300, marginBottom: "1rem" }}>
           Analise sua clínica em<br /><em style={{ fontStyle: "italic" }}>três formas diferentes</em>
         </h1>
         <p style={{ fontSize: 14, fontWeight: 300, lineHeight: 1.85, color: "var(--muted)", marginBottom: "2.5rem", maxWidth: 560 }}>
@@ -404,7 +404,7 @@ function AnaliseContent() {
                   ) : (
                     <>
                       <span style={{ fontSize: 28 }}>🪪</span>
-                      <span style={{ fontSize: 13, color: "var(--mid)", fontWeight: 300 }}>
+                      <span style={{ fontSize: 13, color: "var(--navy-500)", fontWeight: 300 }}>
                         Clique para selecionar o Cartão CNPJ
                       </span>
                       <span style={{ fontSize: 11, color: "var(--muted)" }}>PDF, JPG ou PNG — máx. 8MB</span>
@@ -466,7 +466,7 @@ function AnaliseContent() {
                   }}
                 >
                   <span style={{ fontSize: 24 }}>📎</span>
-                  <span style={{ fontSize: 13, color: "var(--mid)", fontWeight: 300 }}>
+                  <span style={{ fontSize: 13, color: "var(--navy-500)", fontWeight: 300 }}>
                     Clique para selecionar até {MAX_NOTAS} arquivos
                   </span>
                   <span style={{ fontSize: 11, color: "var(--muted)" }}>PDF, JPG, PNG ou XML — máx. 8MB cada</span>
@@ -487,7 +487,7 @@ function AnaliseContent() {
                 {arquivos.length > 0 && (
                   <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 12 }}>
                     {arquivos.map((f, i) => (
-                      <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 12, color: "var(--mid)", background: "#fff", border: "1px solid var(--line)", padding: "8px 12px" }}>
+                      <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 12, color: "var(--navy-500)", background: "#fff", border: "1px solid var(--line)", padding: "8px 12px" }}>
                         <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{f.name}</span>
                         <button type="button" onClick={() => removerArquivo(i)} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer", fontSize: 14, marginLeft: 10 }}>
                           ✕
@@ -523,7 +523,7 @@ function AnaliseContent() {
                       {corNivelArquivos.titulo}
                     </span>
                   </div>
-                  <p style={{ fontSize: 14, fontWeight: 300, lineHeight: 1.85, color: "var(--mid)", whiteSpace: "pre-line" }}>
+                  <p style={{ fontSize: 14, fontWeight: 300, lineHeight: 1.85, color: "var(--navy-500)", whiteSpace: "pre-line" }}>
                     {resultadoArquivos.parecer}
                   </p>
                 </div>
@@ -544,7 +544,7 @@ function AnaliseContent() {
                           </span>
                         </div>
                         {n.servicosIdentificados.length > 0 && (
-                          <p style={{ fontSize: 12, color: "var(--mid)", fontWeight: 300, marginBottom: 4 }}>
+                          <p style={{ fontSize: 12, color: "var(--navy-500)", fontWeight: 300, marginBottom: 4 }}>
                             Serviços: {n.servicosIdentificados.join(", ")}
                           </p>
                         )}
@@ -560,7 +560,7 @@ function AnaliseContent() {
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "start" }}>
                         <div>
                           <div style={{ fontSize: 10, letterSpacing: "0.28em", color: "var(--gold-light)", textTransform: "uppercase", marginBottom: "1rem" }}>Próximo passo</div>
-                          <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 32, fontWeight: 300, color: "#F5F0E8", marginBottom: "1.25rem", lineHeight: 1.15 }}>
+                          <h2 style={{ fontFamily: "var(--sans)", fontSize: 32, fontWeight: 300, color: "#F5F0E8", marginBottom: "1.25rem", lineHeight: 1.15 }}>
                             Quanto você pode <em style={{ fontStyle: "italic", color: "var(--gold-light)" }}>recuperar</em>?
                           </h2>
                           <p style={{ fontSize: 13, fontWeight: 300, lineHeight: 1.85, color: "rgba(245,240,232,0.55)", marginBottom: "2rem" }}>
@@ -609,8 +609,8 @@ function AnaliseContent() {
                       </div>
                     ) : (
                       <div style={{ textAlign: "center", padding: "3rem 0" }}>
-                        <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 56, color: "var(--gold)", marginBottom: "1rem", lineHeight: 1 }}>✓</div>
-                        <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 300, color: "#F5F0E8", marginBottom: "0.75rem" }}>Solicitação recebida</h3>
+                        <div style={{ fontFamily: "var(--sans)", fontSize: 56, color: "var(--gold)", marginBottom: "1rem", lineHeight: 1 }}>✓</div>
+                        <h3 style={{ fontFamily: "var(--sans)", fontSize: 28, fontWeight: 300, color: "#F5F0E8", marginBottom: "0.75rem" }}>Solicitação recebida</h3>
                         <p style={{ fontSize: 13, fontWeight: 300, lineHeight: 1.85, color: "rgba(245,240,232,0.55)", maxWidth: 400, margin: "0 auto" }}>
                           Nossa equipe entrará em contato em até 1 dia útil pelo WhatsApp informado, já com suas notas fiscais em análise.
                         </p>

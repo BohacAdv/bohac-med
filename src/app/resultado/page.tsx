@@ -96,7 +96,7 @@ export default function ResultadoPage() {
         >
           <BrandMark size={30} />
           <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 600, letterSpacing: "0.08em" }}>
+            <span style={{ fontFamily: "var(--sans)", fontSize: 20, fontWeight: 600, letterSpacing: "0.08em" }}>
               BOHAC <span style={{ color: "var(--gold)" }}>MED</span>
             </span>
             <span style={{ fontSize: 9, letterSpacing: "0.22em", fontWeight: 300, color: "var(--muted)", textTransform: "uppercase" }}>Advogados Associados</span>
@@ -140,7 +140,7 @@ export default function ResultadoPage() {
             Equiparação Hospitalar — Análise de Elegibilidade
           </div>
           <div style={{ fontSize: 11, letterSpacing: "0.1em", color: "var(--muted)", textTransform: "uppercase", marginBottom: 4 }}>
-            CNPJ analisado: <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 14, letterSpacing: "0.06em", color: "var(--mid)", textTransform: "none" }}>{cnpjFormatado}</span>
+            CNPJ analisado: <span style={{ fontFamily: "var(--sans)", fontSize: 14, letterSpacing: "0.06em", color: "var(--navy-500)", textTransform: "none" }}>{cnpjFormatado}</span>
           </div>
           <div className="print-only" style={{ display: "none", fontSize: 10, color: "#9ca3af", marginTop: 4 }}>
             Data de emissão: {hoje} · Bohac Med — bohacmed.com.br
@@ -166,10 +166,10 @@ export default function ResultadoPage() {
               </span>
             </div>
           </div>
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 26, fontWeight: 400, color: "var(--dark)", marginBottom: "1rem", lineHeight: 1.2 }}>
+          <h1 style={{ fontFamily: "var(--sans)", fontSize: 26, fontWeight: 400, color: "var(--dark)", marginBottom: "1rem", lineHeight: 1.2 }}>
             {resultado.razaoSocial}
           </h1>
-          <p style={{ fontSize: 14, fontWeight: 300, lineHeight: 1.85, color: "var(--mid)", margin: 0 }}>
+          <p style={{ fontSize: 14, fontWeight: 300, lineHeight: 1.85, color: "var(--navy-500)", margin: 0 }}>
             {resultado.justificativa}
           </p>
         </div>
@@ -194,7 +194,7 @@ export default function ResultadoPage() {
                 {resultado.cnaesElegiveis.map((c, i) => (
                   <tr key={c.codigo} className="cnae-row" style={{ background: i % 2 === 0 ? "#fff" : "rgba(240,253,244,0.5)", borderBottom: "1px solid var(--line)" }}>
                     <td style={{ padding: "10px 16px", fontFamily: "monospace", fontSize: 12, color: "var(--gold)", fontWeight: 600 }}>{c.codigo}</td>
-                    <td style={{ padding: "10px 16px", fontSize: 13, color: "var(--mid)", fontWeight: 300 }}>{c.descricao}</td>
+                    <td style={{ padding: "10px 16px", fontSize: 13, color: "var(--navy-500)", fontWeight: 300 }}>{c.descricao}</td>
                     <td style={{ padding: "10px 16px", textAlign: "center" }}>
                       <span style={{ fontSize: 11, color: "#15803d", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 500 }}>✓ Elegível</span>
                     </td>
@@ -231,7 +231,7 @@ export default function ResultadoPage() {
           <div style={{ fontSize: 10, letterSpacing: "0.28em", color: "var(--gold)", textTransform: "uppercase", marginBottom: "0.75rem", fontWeight: 600 }}>
             Próximos passos recomendados
           </div>
-          <p style={{ fontSize: 14, fontWeight: 300, lineHeight: 1.85, color: "var(--mid)", margin: 0 }}>
+          <p style={{ fontSize: 14, fontWeight: 300, lineHeight: 1.85, color: "var(--navy-500)", margin: 0 }}>
             {resultado.proximosPasosRecomendados}
           </p>
         </div>
@@ -243,7 +243,7 @@ export default function ResultadoPage() {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "start" }}>
                 <div>
                   <div style={{ fontSize: 10, letterSpacing: "0.28em", color: "var(--gold-light)", textTransform: "uppercase", marginBottom: "1rem" }}>Próximo passo</div>
-                  <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 30, fontWeight: 300, color: "#F5F0E8", marginBottom: "1.25rem", lineHeight: 1.15 }}>
+                  <h2 style={{ fontFamily: "var(--sans)", fontSize: 30, fontWeight: 300, color: "#F5F0E8", marginBottom: "1.25rem", lineHeight: 1.15 }}>
                     Quanto você pode <em style={{ fontStyle: "italic", color: "var(--gold-light)" }}>recuperar</em>?
                   </h2>
                   <p style={{ fontSize: 13, fontWeight: 300, lineHeight: 1.85, color: "rgba(245,240,232,0.55)", marginBottom: "2rem" }}>
@@ -292,8 +292,8 @@ export default function ResultadoPage() {
               </div>
             ) : (
               <div style={{ textAlign: "center", padding: "3rem 0" }}>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 56, color: "var(--gold)", marginBottom: "1rem", lineHeight: 1 }}>✓</div>
-                <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 300, color: "#F5F0E8", marginBottom: "0.75rem" }}>Solicitação recebida</h3>
+                <div style={{ fontFamily: "var(--sans)", fontSize: 56, color: "var(--gold)", marginBottom: "1rem", lineHeight: 1 }}>✓</div>
+                <h3 style={{ fontFamily: "var(--sans)", fontSize: 28, fontWeight: 300, color: "#F5F0E8", marginBottom: "0.75rem" }}>Solicitação recebida</h3>
                 <p style={{ fontSize: 13, fontWeight: 300, lineHeight: 1.85, color: "rgba(245,240,232,0.55)", maxWidth: 400, margin: "0 auto" }}>
                   Nossa equipe entrará em contato em até 1 dia útil pelo WhatsApp informado.
                 </p>

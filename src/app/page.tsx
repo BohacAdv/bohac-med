@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 /* ── CNPJ mask ── */
@@ -37,8 +37,6 @@ function Spinner() {
 
 export default function HomePage() {
   const router = useRouter();
-  const headerRef = useRef<HTMLElement>(null);
-  const waRef     = useRef<HTMLAnchorElement>(null);
 
   // Checker: CNPJ
   const [cnpj, setCnpj] = useState("");
@@ -73,31 +71,6 @@ export default function HomePage() {
     }
   }
 
-  /* Header scroll + WA float + reveal */
-  useEffect(() => {
-    const hdr = headerRef.current;
-    const wa  = waRef.current;
-    const body = document.body;
-
-    if (!window.matchMedia("(prefers-reduced-motion:reduce)").matches) {
-      body.classList.add("motion-ok");
-    }
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach(e => e.target.classList.toggle("in", e.isIntersecting)),
-      { threshold: 0.12 }
-    );
-    document.querySelectorAll(".reveal").forEach(el => obs.observe(el));
-
-    function onScroll() {
-      const y = window.scrollY;
-      hdr?.classList.toggle("scrolled", y > 60);
-      wa?.classList.toggle("show", y > 400);
-    }
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => { window.removeEventListener("scroll", onScroll); obs.disconnect(); };
-  }, []);
-
   /* Form submit */
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -108,88 +81,6 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ── HEADER ── */}
-      <header className="site-header" ref={headerRef}>
-
-        {/* ── Top Bar ── */}
-        <div className="topbar">
-          <div className="wrap topbar__wrap">
-            {/* Link para o site principal */}
-            <a
-              className="topbar__main-link"
-              href="https://www.bohac.com.br"
-              target="_blank"
-              rel="noopener"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-              </svg>
-              <span>bohac.com.br</span>
-              {" "}— Site Principal
-            </a>
-
-            <div className="topbar__right">
-              {/* Dropdown Outras Verticais */}
-              <div className="topbar__dd">
-                <button className="topbar__dd-trigger" type="button">
-                  Outras Verticais
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="m6 9 6 6 6-6"/>
-                  </svg>
-                </button>
-                <div className="topbar__dd-menu">
-                  <a href="/" aria-current="page">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 21V8l8-5 8 5v13"/><path d="M12 10v6M9 13h6"/></svg>
-                    Bohac Med
-                    <span className="dd-tag">atual</span>
-                  </a>
-                  <a href="https://www.bohac.com.br/direito-medico" target="_blank" rel="noopener">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
-                    Direito Médico
-                  </a>
-                  <a href="https://www.bohac.com.br/empresarial" target="_blank" rel="noopener">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/></svg>
-                    Direito Empresarial
-                  </a>
-                  <a href="https://www.bohac.com.br/trabalhista" target="_blank" rel="noopener">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-                    Trabalhista
-                  </a>
-                  <a href="https://www.bohac.com.br/previdenciario" target="_blank" rel="noopener">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12l2 2 4-4"/><path d="M5 7h14v12a2 2 0 01-2 2H7a2 2 0 01-2-2z"/><path d="M9 3h6v4H9z"/></svg>
-                    Previdenciário
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="wrap">
-          <nav className="nav">
-            <a className="nav__logo" href="#topo">
-              <img src="/logo-inverted.png" alt="Bohac Med" />
-            </a>
-            <div className="nav__links">
-              <a href="#tese">A Tese</a>
-              <a href="#como-funciona">Como Funciona</a>
-              <a href="#beneficiarios">Quem se Beneficia</a>
-              <a href="#areas">Outras Áreas</a>
-            </div>
-            <div className="nav__cta">
-              <a
-                href="https://wa.me/5518996205555?text=Olá,%20gostaria%20de%20verificar%20minha%20elegibilidade%20para%20equiparação%20hospitalar"
-                target="_blank"
-                rel="noopener"
-                className="btn btn--gold"
-              >
-                Fale com especialista
-              </a>
-            </div>
-          </nav>
-        </div>
-      </header>
-
       {/* ── HERO ── */}
       <section className="hero hero--eq section-pad" id="topo">
         <video
@@ -208,12 +99,12 @@ export default function HomePage() {
                 <span className="kicker on-navy">Equiparação Hospitalar</span>
               </div>
               <h1 className="reveal" data-d="1">
-                Sua clínica pode estar pagando{" "}
-                <em>até 60% a mais</em>{" "}
-                em tributos do que o devido
+                Clínicas no Lucro Presumido podem estar recolhendo{" "}
+                <em>IRPJ e CSLL</em>{" "}
+                sobre uma base maior do que a devida
               </h1>
               <p className="hero__sub reveal" data-d="2">
-                A equiparação hospitalar reduz a base de cálculo (percentual de presunção) do IRPJ de 32% para 8% e da CSLL de 32% para 12% sobre a receita bruta. Isso faz a alíquota efetiva combinada de IRPJ + CSLL cair de ~10,88% para ~3,08%. Direito previsto no art. 15, §1°, III, "a" da Lei 9.249/1995 e reconhecido na SC COSIT n° 100/2013.
+                A equiparação hospitalar reduz a base de cálculo (percentual de presunção) do IRPJ de 32% para 8% e da CSLL de 32% para 12% sobre a receita bruta. A alíquota efetiva combinada de IRPJ + CSLL pode cair da faixa de 7,68%–10,88% para 2,28%–3,08%, conforme a incidência do adicional de 10%. Previsto no art. 15, §1º, III, "a" da Lei 9.249/1995, na redação da Lei 11.727/2008, que exige sociedade empresária e atendimento às normas da ANVISA.
               </p>
               <div className="hero__highlight reveal" data-d="2">
                 <span className="hero__pill">
@@ -222,7 +113,7 @@ export default function HomePage() {
                 <span className="hero__pill">
                   <b>CSLL</b> <s>32%</s> → <b>12%</b>
                 </span>
-                <p className="hero__pill-note">bases de cálculo (presunção) — alíquota efetiva IRPJ + CSLL: <s>~10,88%</s> → <b>~3,08%</b> da receita</p>
+                <p className="hero__pill-note">bases de cálculo (presunção) — alíquota efetiva IRPJ + CSLL: <s>7,68%–10,88%</s> → <b>2,28%–3,08%</b> da receita bruta</p>
               </div>
               <div className="hero__actions reveal" data-d="3">
                 <a
@@ -245,13 +136,13 @@ export default function HomePage() {
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M8 3h8l3 5-7 13L4 8z"/><path d="M8 3l4 5 4-5M4 8h16"/>
                   </svg>
-                  <span><b>Lei 9.249/1995</b> art. 15 · Decreto 9.580/2018 (RIR)</span>
+                  <span><b>Lei 9.249/1995</b> art. 15, §1º, III, &quot;a&quot;</span>
                 </span>
                 <span className="li">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M3 21h18"/><path d="M5 21V8h14v13"/><path d="M9 21v-5h6v5"/><path d="M5 8l7-5 7 5"/>
                   </svg>
-                  <span><b>STJ</b> — jurisprudência pacificada</span>
+                  <span><b>STJ</b> — REsp 1.116.399/BA (Tema 217)</span>
                 </span>
                 <span className="li">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -279,7 +170,7 @@ export default function HomePage() {
                       <path d="M9 12l2 2 4-4"/>
                     </svg>
                   </div>
-                  <h3>Verificação de Elegibilidade</h3>
+                  <h3>Verificação preliminar de enquadramento</h3>
                 </div>
                 <p className="checker__sub">Escolha a forma mais prática. Grátis e sem compromisso.</p>
 
@@ -292,8 +183,9 @@ export default function HomePage() {
                       hint: "Digite e consulte",
                       icon: (
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                          <rect x="3" y="5" width="18" height="14" rx="2"/>
-                          <path d="M7 10h2M7 14h2M13 10h4M13 14h2"/>
+                          <rect x="2" y="6" width="20" height="12" rx="0"/>
+                          <path d="M6 12h1M9.5 12h1M13 12h1M16.5 12h1.5"/>
+                          <path d="M6 15.5h12"/>
                         </svg>
                       ),
                     },
@@ -303,9 +195,9 @@ export default function HomePage() {
                       hint: "Envie o documento",
                       icon: (
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                          <rect x="2" y="5" width="20" height="14" rx="2"/>
-                          <circle cx="8" cy="12" r="2.5"/>
-                          <path d="M13 10h5M13 14h3"/>
+                          <path d="M20 15v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4"/>
+                          <path d="M12 3v12"/>
+                          <path d="m7.5 7.5 4.5-4.5 4.5 4.5"/>
                         </svg>
                       ),
                     },
@@ -315,8 +207,8 @@ export default function HomePage() {
                       hint: "Análise por serviço",
                       icon: (
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                          <path d="M14 2v6h6M8 13h8M8 17h5"/>
+                          <path d="M5 3h14v18l-2.3-1.6L14.4 21l-2.4-1.6L9.6 21l-2.3-1.6L5 21z"/>
+                          <path d="M9 8h6M9 12h6M9 16h3"/>
                         </svg>
                       ),
                     },
@@ -398,7 +290,7 @@ export default function HomePage() {
                         <p className="checker__err">CNPJ inválido. Verifique e tente novamente.</p>
                       </div>
                       <button type="submit" className="btn btn--gold btn-lg checker__submit">
-                        Verificar agora — é grátis
+                        Verificar o enquadramento
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="arrow"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                       </button>
                     </form>
@@ -423,13 +315,13 @@ export default function HomePage() {
                       >
                         {arquivoCartao ? (
                           <>
-                            <span style={{ fontSize: 22 }}>📄</span>
+                            <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--gold)" }} aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg></span>
                             <span style={{ fontSize: 12, color: "var(--ink)", fontWeight: 500 }}>{arquivoCartao.name}</span>
                             <span style={{ fontSize: 11, color: "var(--muted)" }}>Clique para trocar</span>
                           </>
                         ) : (
                           <>
-                            <span style={{ fontSize: 22 }}>🪪</span>
+                            <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--gold)" }} aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="0"/><circle cx="8" cy="11" r="2"/><path d="M4.5 16.5c.7-1.4 2-2 3.5-2s2.8.6 3.5 2M14 10h5M14 14h3"/></svg></span>
                             <span style={{ fontSize: 12, color: "var(--mid, #4b5563)", fontWeight: 400 }}>
                               Clique para selecionar o Cartão CNPJ
                             </span>
@@ -482,7 +374,7 @@ export default function HomePage() {
                       >
                         {arquivosNF.length > 0 ? (
                           <>
-                            <span style={{ fontSize: 22 }}>📄</span>
+                            <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--gold)" }} aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg></span>
                             <span style={{ fontSize: 12, color: "var(--ink)", fontWeight: 500 }}>
                               {arquivosNF.length} arquivo{arquivosNF.length > 1 ? "s" : ""} selecionado{arquivosNF.length > 1 ? "s" : ""}
                             </span>
@@ -490,7 +382,7 @@ export default function HomePage() {
                           </>
                         ) : (
                           <>
-                            <span style={{ fontSize: 22 }}>🧾</span>
+                            <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--gold)" }} aria-hidden="true"><path d="M5 3h14v18l-2.3-1.6L14.4 21l-2.4-1.6L9.6 21l-2.3-1.6L5 21z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span>
                             <span style={{ fontSize: 12, color: "var(--mid, #4b5563)", fontWeight: 400 }}>
                               Clique para selecionar suas notas fiscais
                             </span>
@@ -507,7 +399,9 @@ export default function HomePage() {
                         />
                       </label>
                       <p style={{ fontSize: 11, color: "var(--muted)", fontWeight: 300, margin: 0 }}>
-                        Nossa IA analisa a descrição dos serviços — sem depender dos CNAEs cadastrados.
+                        A leitura considera a descrição dos serviços, sem depender dos CNAEs cadastrados.{" "}
+                        <b style={{ color: "var(--gold-600)" }}>Antes de enviar, oculte ou remova os dados do tomador</b>{" "}
+                        (nome e CPF do paciente): são dados pessoais sensíveis, nos termos do art. 11 da LGPD, e não são necessários à análise.
                       </p>
                       <button
                         type="button"
@@ -525,15 +419,15 @@ export default function HomePage() {
                 <div className="checker__trust" style={{ marginTop: "1.25rem" }}>
                   <span className="t">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/></svg>
-                    100% seguro
+                    Dados protegidos
                   </span>
                   <span className="t">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-                    Resultado em segundos
+                    Retorno imediato
                   </span>
                   <span className="t">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
-                    Sem custo
+                    Sem compromisso
                   </span>
                 </div>
                 <p className="checker__alt">
@@ -562,22 +456,22 @@ export default function HomePage() {
                 <span className="to">8%</span>
               </div>
               <p className="lab">Percentual de presunção — IRPJ</p>
-              <p className="desc">Queda de 75% no percentual de presunção do IRPJ (Lucro Presumido), com reflexo já no próximo período de apuração trimestral</p>
+              <p className="desc">Queda de 75% no percentual de presunção do IRPJ (Lucro Presumido), aplicável a partir do período de apuração seguinte, uma vez confirmado o enquadramento</p>
             </div>
             <div className="stat-cell">
               <div className="big">
-                <span className="from">~10,88%</span>
-                <span className="to">~3,08%</span>
+                <span className="from">10,88%</span>
+                <span className="to">3,08%</span>
               </div>
               <p className="lab">Alíquota efetiva IRPJ + CSLL</p>
-              <p className="desc">A alíquota efetiva combinada (o que se paga de verdade sobre a receita bruta) cai de ~10,88% para ~3,08%, resultado da redução das bases: IRPJ de 32%→8% e CSLL de 32%→12%</p>
+              <p className="desc">A alíquota efetiva é o que de fato se recolhe sobre a receita bruta. Sem o adicional de 10%, vai de 7,68% para 2,28%; com o adicional integral, de 10,88% para 3,08%. Resultado da redução das bases: IRPJ de 32%→8% e CSLL de 32%→12%</p>
             </div>
             <div className="stat-cell">
               <div className="big">
-                <span>+60%</span>
+                <span>5 anos</span>
               </div>
-              <p className="lab">Redução média na carga tributária</p>
-              <p className="desc">Estimativa baseada em apurações comparativas IRPJ + CSLL. A recuperação de tributos pagos a maior é possível em até 5 anos retroativos (art. 168 do CTN)</p>
+              <p className="lab">Prazo para pleitear a restituição</p>
+              <p className="desc">O direito de pleitear a restituição de tributo pago a maior extingue-se em 5 anos contados do recolhimento (art. 168 do CTN). Confirmado o enquadramento, o período anterior pode ser objeto de restituição ou compensação</p>
             </div>
           </div>
         </div>
@@ -610,9 +504,58 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+          {/* Barra comparativa — a resposta à pergunta "dá para gerar imagem
+              para explicar os números": não. Isto é 100% CSS, o texto continua
+              indexável e legível por leitor de tela, pesa 0 KB, e um dígito
+              nunca é alucinado. A largura faz o argumento em 200ms. */}
+          <div className="barra reveal">
+            <div className="barra__row">
+              <span className="barra__lab">Sem equiparação</span>
+              <div className="barra__track">
+                <span className="barra__fill barra__fill--sem" style={{ ["--w" as string]: "100%" }}>
+                  <b>10,88%</b>
+                </span>
+              </div>
+            </div>
+            <div className="barra__row">
+              <span className="barra__lab">Com equiparação</span>
+              <div className="barra__track">
+                <span className="barra__fill barra__fill--com" style={{ ["--w" as string]: "28.3%" }}>
+                  <b>3,08%</b>
+                </span>
+              </div>
+            </div>
+            <p className="barra__nota">
+              Alíquota efetiva de IRPJ + CSLL sobre a mesma receita bruta, no cenário de
+              incidência integral do adicional de 10%. Sem o adicional, a comparação é de
+              7,68% para 2,28%. As larguras são proporcionais.
+            </p>
+          </div>
+
           <div className="conceitos__simples reveal">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".5" fill="currentColor"/></svg>
-            <p><b>Comparação com o Simples Nacional:</b> para clínicas enquadradas no Anexo V (fator R desfavorável), a alíquota do Simples começa em 15,5% e pode ultrapassar 20% — valor superior à alíquota efetiva de IRPJ + CSLL com equiparação (3,08%). Em determinados cenários de faturamento, o Lucro Presumido com equiparação hospitalar é mais vantajoso que o próprio Simples Nacional.</p>
+            <p><b>Comparação com o Simples Nacional — como fazer corretamente:</b> a alíquota do Anexo V começa em 15,5%, mas é uma cesta: embute IRPJ, CSLL, PIS, COFINS, contribuição previdenciária patronal e ISS. Confrontá-la diretamente com os 3,08% de IRPJ + CSLL compara grandezas diferentes. No Lucro Presumido é preciso somar PIS e COFINS (0,65% + 3%), o ISS do município (2% a 5%) e a contribuição patronal de 20% sobre a folha. Feita a soma, há faixas de faturamento e composições de custo em que o Lucro Presumido com equiparação resulta em carga total inferior — mas a conclusão depende do caso concreto.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── VÍDEO EXPLICATIVO ── */}
+      <section className="explainer section-pad-tight">
+        <div className="wrap">
+          <div className="explainer__inner reveal">
+            <span className="kicker center">Em 40 segundos</span>
+            <h2>A tese, resumida</h2>
+            <div className="explainer__frame">
+              <video
+                controls
+                preload="none"
+                playsInline
+                poster="/video-poster.jpg"
+                src="/bohac-med-equiparacao.mp4"
+              >
+                Seu navegador não reproduz vídeo em HTML5.
+              </video>
+            </div>
           </div>
         </div>
       </section>
@@ -624,7 +567,7 @@ export default function HomePage() {
             <span className="kicker">Fundamento jurídico</span>
             <h2>Por que sua clínica tem esse direito</h2>
             <p className="lede">
-              A equiparação hospitalar não é planejamento tributário agressivo. É um benefício expresso no art. 15, §1°, III, "a" da Lei 9.249/1995, regulamentado pelo Decreto 9.580/2018 (RIR), com critérios definidos pela Receita Federal na Solução de Consulta COSIT n° 100/2013 e jurisprudência pacificada no STJ. Não aplicá-lo implica recolhimento de tributos acima do legalmente devido.
+              A equiparação hospitalar não é planejamento tributário agressivo: é um regime expresso no art. 15, §1º, III, "a" da Lei 9.249/1995, na redação dada pela Lei 11.727/2008, e reconhecido pelo STJ no REsp 1.116.399/BA (Tema 217 dos recursos repetitivos). Depende de requisitos cumulativos — entre eles a organização sob a forma de sociedade empresária e o atendimento às normas da ANVISA — e não alcança as simples consultas médicas.
             </p>
           </div>
           <div className="tese-grid">
@@ -639,7 +582,7 @@ export default function HomePage() {
               </div>
               <h3>Direito garantido em lei</h3>
               <p>
-                Previsto no <b>art. 15, §1°, III, "a" da Lei 9.249/1995</b> e regulamentado pelos arts. 15 e 20 do Decreto 9.580/2018 (RIR — Regulamento do Imposto de Renda). Não é brecha — é norma. A Receita Federal definiu os critérios de enquadramento na <b>Solução de Consulta COSIT n° 100/2013</b>.
+                Previsto no <b>art. 15, §1º, III, &quot;a&quot;</b> (IRPJ) e no <b>art. 20</b> (CSLL) da <b>Lei 9.249/1995</b>, com a redação da <b>Lei 11.727/2008</b>. Não é brecha — é norma. O alcance foi fixado pelo STJ no <b>REsp 1.116.399/BA</b>, julgado sob o rito dos repetitivos (Tema 217), e disciplinado pela Receita Federal na IN RFB 1.700/2017.
               </p>
             </div>
             <div className="tese-card reveal" data-d="2">
@@ -653,7 +596,7 @@ export default function HomePage() {
               </div>
               <h3>Economia real e imediata</h3>
               <p>
-                As bases de cálculo caem: IRPJ de <b>32% para 8%</b> e CSLL de <b>32% para 12%</b> da receita bruta. Isso reduz a <b>alíquota efetiva</b> combinada de IRPJ + CSLL de ~10,88% para ~3,08% — impacto imediato já no <b>primeiro período de apuração trimestral</b>. Em muitos casos, a carga é inferior à do próprio Simples Nacional.
+                As bases de cálculo caem: IRPJ de <b>32% para 8%</b> e CSLL de <b>32% para 12%</b> da receita bruta. A <b>alíquota efetiva</b> combinada de IRPJ + CSLL pode passar da faixa de <b>7,68%–10,88%</b> para <b>2,28%–3,08%</b>, conforme incida ou não o adicional de 10%. Confirmado o enquadramento, o efeito se dá a partir do período de apuração seguinte.
               </p>
 
             </div>
@@ -725,7 +668,7 @@ export default function HomePage() {
               <div className="step__n">02</div>
               <div className="step__bar" />
               <h3>Levantamento do indébito tributário</h3>
-              <p>Apuramos os recolhimentos de IRPJ e CSLL dos últimos 5 anos (prazo prescricional do art. 168 do CTN) e calculamos o montante passível de restituição ou compensação.</p>
+              <p>Apuramos os recolhimentos de IRPJ e CSLL dos últimos 5 anos (prazo do art. 168 do CTN) e calculamos o montante passível de restituição ou compensação.</p>
             </div>
             <div className="step reveal" data-d="3">
               <div className="step__n">03</div>
@@ -764,7 +707,7 @@ export default function HomePage() {
             <span className="kicker on-navy">Elegibilidade</span>
             <h2>Quem pode se enquadrar na equiparação</h2>
             <p className="lede">
-              O enquadramento depende da análise do CNAE principal frente aos critérios da SC COSIT n° 100/2013. Em geral, prestadores de serviços de saúde no Lucro Presumido com atividades análogas às hospitalares têm alta possibilidade de elegibilidade:
+              O CNAE é apenas o primeiro dos requisitos. A lei exige também organização sob a forma de sociedade empresária e atendimento às normas da ANVISA — e as simples consultas médicas ficam de fora (STJ, Tema 217). As atividades abaixo são as que mais frequentemente comportam a discussão:
             </p>
           </div>
           <div className="benef-grid">
@@ -855,7 +798,7 @@ export default function HomePage() {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><circle cx="12" cy="16" r=".5" fill="currentColor"/>
             </svg>
-            O enquadramento é restrito a empresas no regime de Lucro Presumido com CNAEs de serviços de saúde compatíveis com os critérios da SC COSIT n° 100/2013. A análise de elegibilidade é gratuita e sem compromisso.
+            A verificação por CNAE é preliminar e não conclui pelo enquadramento: este depende ainda da forma societária e da regularidade sanitária, verificáveis somente em análise documental.
           </p>
           <a
             href="https://wa.me/5518996205555?text=Quero%20verificar%20se%20minha%20empresa%20é%20elegível"
@@ -869,53 +812,32 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── OUTRAS ÁREAS ── */}
-      <section className="areas section-pad" id="areas">
+      {/* ── OMNIJURÍDICO ── */}
+      <section className="omni section-pad" id="areas">
         <div className="wrap">
-          <div className="section-head reveal">
-            <span className="kicker">Bohac Advogados</span>
-            <h2>Outras áreas de atuação</h2>
-            <p className="lede">
-              Além da equiparação hospitalar, o escritório Bohac Advogados oferece assessoria jurídica completa para empresas e profissionais de saúde.
+          <div className="omni__inner">
+            <span className="kicker reveal">Bohac Sociedade de Advogados</span>
+            <h2 className="reveal" data-d="1">Uma clínica raramente tem só um problema jurídico</h2>
+            <p className="omni__lead reveal" data-d="2">
+              A equiparação hospitalar é uma tese tributária. A clínica que a discute também
+              contrata equipe, guarda prontuários, recebe fiscalização sanitária, credencia-se
+              a operadoras e responde perante o Conselho — frentes que quase sempre chegam a
+              escritórios diferentes, sem que ninguém enxergue o conjunto. Aqui elas são
+              tratadas pela mesma banca: do alvará da vigilância ao contrato social, do
+              prontuário à defesa no CRM.
             </p>
-          </div>
-          <div className="areas-grid">
-            <div className="area-item reveal" data-d="1">
-              <span className="ic">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/>
-                </svg>
-              </span>
-              <h4>Direito Médico</h4>
-              <p>Defesa de profissionais e instituições de saúde em processos administrativos e judiciais.</p>
-            </div>
-            <div className="area-item reveal" data-d="2">
-              <span className="ic">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 21h18"/><path d="M5 21V8l7-4 7 4v13"/><path d="M9 21v-6h6v6"/>
-                </svg>
-              </span>
-              <h4>Direito Empresarial</h4>
-              <p>Constituição, reestruturação societária e planejamento jurídico para empresas do setor de saúde.</p>
-            </div>
-            <div className="area-item reveal" data-d="3">
-              <span className="ic">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M9 12l2 2 4-4"/><path d="M5 7h14v12a2 2 0 01-2 2H7a2 2 0 01-2-2z"/><path d="M9 3h6v4H9z"/>
-                </svg>
-              </span>
-              <h4>Contratos</h4>
-              <p>Elaboração e revisão de contratos de prestação de serviços, convênios e parcerias no setor de saúde.</p>
-            </div>
-            <div className="area-item reveal" data-d="4">
-              <span className="ic">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/>
-                  <path d="M9 12l2 2 4-4"/>
-                </svg>
-              </span>
-              <h4>Compliance</h4>
-              <p>Implementação de programas de conformidade regulatória para clínicas e hospitais.</p>
+            <p className="omni__frentes reveal" data-d="3">
+              Regulação sanitária e licenciamento do estabelecimento · Processos éticos no CRM
+              e responsabilidade civil · Convênios, operadoras e glosas · LGPD, prontuário e
+              publicidade médica · Societário, sucessório e trabalhista da clínica
+            </p>
+            <div className="omni__actions reveal" data-d="3">
+              {/* Ghost, não gold: dourado é a cor da conversão. Gastá-lo num
+                  link que tira o visitante da landing dilui a ação única. */}
+              <a href="/areas" className="btn btn--ghost btn-lg">
+                Ver as frentes de atuação na clínica
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="arrow"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
             </div>
           </div>
         </div>
@@ -925,12 +847,12 @@ export default function HomePage() {
       <section className="final section-pad">
         <div className="wrap">
           <div className="final__inner">
-            <span className="kicker on-navy center reveal">Prescrição quinquenal</span>
+            <span className="kicker on-navy center reveal">Prazo do art. 168 do CTN</span>
             <h2 className="reveal" data-d="1">
               Tributos recolhidos a maior só são recuperáveis dentro do prazo legal
             </h2>
             <p className="reveal" data-d="2">
-              O direito à restituição ou compensação dos valores pagos indevidamente extingue-se em 5 anos contados do recolhimento (art. 168 do CTN). A verificação de elegibilidade é gratuita e não gera qualquer obrigação.
+              O direito de pleitear a restituição ou a compensação de valores pagos indevidamente extingue-se em 5 anos contados do recolhimento (art. 168 do CTN). A análise prévia de enquadramento não é cobrada e não gera obrigação.
             </p>
             <div className="final__actions reveal" data-d="3">
               <a
@@ -939,7 +861,7 @@ export default function HomePage() {
                 rel="noopener"
                 className="btn btn--gold btn-lg"
               >
-                Solicitar diagnóstico tributário gratuito
+                Solicitar a análise de enquadramento
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="arrow"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
               <a href="#topo" className="btn btn--ghost-light btn-lg">
@@ -950,87 +872,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="footer">
-        <div className="wrap">
-          <div className="footer__top">
-            <div className="footer__brand">
-              <img src="/logo-inverted.png" alt="Bohac Med" />
-              <p>
-                Assessoria jurídico-tributária para o setor de saúde. Atuamos no enquadramento de prestadores de serviços médicos ao regime de equiparação hospitalar (Lei 9.249/1995, art. 15) com segurança técnica e jurídica.
-              </p>
-            </div>
-            <div className="footer__col">
-              <h4>Serviços</h4>
-              <a href="#tese">Equiparação Hospitalar</a>
-              <a href="#como-funciona">Como Funciona</a>
-              <a href="#beneficiarios">Quem se Beneficia</a>
-              <a href="#areas">Outras Áreas</a>
-            </div>
-            <div className="footer__col">
-              <h4>Contato</h4>
-              <a
-                href="https://wa.me/5518996205555"
-                target="_blank"
-                rel="noopener"
-              >
-                (18) 99620-5555
-              </a>
-              <p>Álvares Machado — SP</p>
-              <a href="mailto:contato@bohacadvogados.com.br">
-                contato@bohacadvogados.com.br
-              </a>
-            </div>
-          </div>
-          <div className="footer__bottom">
-            <span className="oab">
-              © {new Date().getFullYear()} Bohac Advogados Associados · OAB/SP
-            </span>
-            <div className="footer__social">
-              {/* Instagram */}
-              <a
-                href="https://instagram.com/bohacadvogados"
-                target="_blank"
-                rel="noopener"
-                aria-label="Instagram"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="5"/>
-                  <circle cx="12" cy="12" r="4"/>
-                  <circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/>
-                </svg>
-              </a>
-              {/* LinkedIn */}
-              <a
-                href="https://linkedin.com/company/bohacadvogados"
-                target="_blank"
-                rel="noopener"
-                aria-label="LinkedIn"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/>
-                  <rect x="2" y="9" width="4" height="12"/>
-                  <circle cx="4" cy="4" r="2"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
-
-      {/* ── WhatsApp Float ── */}
-      <a
-        href="https://wa.me/5518996205555?text=Olá,%20gostaria%20de%20informações%20sobre%20equiparação%20hospitalar"
-        target="_blank"
-        rel="noopener"
-        className="wa-float"
-        ref={waRef}
-        aria-label="Fale no WhatsApp"
-      >
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-        </svg>
-      </a>
     </>
   );
 }

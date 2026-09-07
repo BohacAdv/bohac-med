@@ -1,31 +1,58 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Jost } from "next/font/google";
 import "./globals.css";
+import SiteChrome from "@/components/SiteChrome";
 
-const inter = Inter({ subsets: ["latin"] });
+/**
+ * Jost é a família do grupo Bohac (bohac.com.br usa a mesma).
+ * Sem `weight`: o Google serve o arquivo variável (wght 100–900) num único
+ * download. Passar `weight: [...]` forçaria 6 instâncias estáticas.
+ */
+const jost = Jost({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-jost",
+});
 
 export const metadata: Metadata = {
-  title: "Bohac Med — Análise de Equiparação Hospitalar",
+  metadataBase: new URL("https://bohacmed.com.br"),
+  title: "Bohac Med — Equiparação Hospitalar para clínicas médicas",
   description:
-    "Descubra em segundos se sua clínica ou empresa médica tem direito à redução de impostos pela tese de equiparação hospitalar. Análise gratuita.",
-  keywords: ["equiparação hospitalar", "redução de impostos médicos", "IRPJ CSLL clínica", "tese tributária médica"],
+    "Verificação preliminar de enquadramento de clínicas e serviços médicos no regime de equiparação hospitalar (Lei 9.249/1995, art. 15, §1º, III, 'a').",
+  keywords: [
+    "equiparação hospitalar",
+    "IRPJ CSLL clínica médica",
+    "lucro presumido serviços hospitalares",
+    "direito médico tributário",
+  ],
   openGraph: {
-    title: "Bohac Med — Análise Gratuita de Equiparação Hospitalar",
-    description: "Sua clínica pode pagar muito menos imposto. Descubra agora em segundos.",
+    title: "Bohac Med — Equiparação Hospitalar",
+    description:
+      "Clínicas no Lucro Presumido podem estar recolhendo IRPJ e CSLL sobre base maior do que a devida.",
     type: "website",
+    locale: "pt_BR",
+    siteName: "Bohac Med",
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Bohac Med" }],
   },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#0f1a33",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
-      <body className={`${inter.className} bg-gray-50 text-gray-900`}>
-        {children}
+    /* A variável da fonte VAI NO <html>.
+       `:root` (onde --sans é declarada em globals.css) É o <html>; se
+       --font-jost nascesse no <body>, `--sans` resolveria como valor inválido
+       e a tipografia inteira cairia para o fallback — sem erro visível. */
+    <html lang="pt-BR" className={jost.variable}>
+      {/* Sem className: cor e fundo vêm de body{} em globals.css. */}
+      <body>
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

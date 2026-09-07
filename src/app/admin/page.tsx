@@ -272,11 +272,11 @@ export default function AdminPage() {
   // ── Login ───────────────────────────────────────────────────────────────────
   if (!autenticado) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center font-sans">
+      <div className="min-h-screen bg-cream text-gray-900 flex items-center justify-center font-sans">
         <div className="bg-white border border-gold/20 shadow-lg p-8 w-full max-w-sm">
           <div className="text-center mb-6 flex flex-col items-center gap-2">
             <BrandMark size={40} />
-            <div className="font-serif text-2xl font-semibold text-bohac-dark mt-1">
+            <div className="font-sans text-2xl font-semibold text-bohac-dark mt-1">
               BOHAC <span className="text-gold font-light">MED</span>
             </div>
             <div className="text-muted text-sm">Painel administrativo</div>
@@ -321,7 +321,7 @@ export default function AdminPage() {
 
   // ── Dashboard ───────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 text-gray-900">
       {/* Header */}
       <header className="bg-blue-900 text-white px-6 py-4 flex items-center justify-between">
         <div>

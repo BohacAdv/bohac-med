@@ -1,5 +1,10 @@
 import type { Config } from "tailwindcss";
 
+/**
+ * Tokens espelham os custom properties de globals.css, que por sua vez
+ * espelham o design system de bohac.com.br. Não divergir: /privacidade,
+ * /termos e o login do /admin consomem exclusivamente estas cores.
+ */
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,24 +15,25 @@ const config: Config = {
     extend: {
       colors: {
         gold: {
-          DEFAULT: "#B8975A",
-          light: "#D4B483",
-          dark: "#8B6E3A",
+          DEFAULT: "#ae8167",
+          light: "#c29a84",
+          dark: "#99705a",
         },
-        cream: "#F9F6F0",
-        "cream-dark": "#EDE8DF",
+        cream: "#fefaf7",
+        "cream-dark": "#ebe0d9",
         navy: {
-          DEFAULT: "#1B2240",
-          deep: "#11152A",
-          light: "#3A4568",
+          DEFAULT: "#0f1a33",
+          deep: "#0a1226",
+          light: "#22304f",
         },
-        "bohac-dark": "#161B2C",
-        mid: "#34405E",
-        muted: "#6B7280",
+        "bohac-dark": "#0a1226",
+        mid: "#35446b",
+        muted: "#6a7189",
       },
       fontFamily: {
-        serif: ["Cormorant Garamond", "Georgia", "serif"],
-        sans: ["Jost", "system-ui", "sans-serif"],
+        // Uma só família em todo o grupo Bohac.
+        sans: ["var(--font-jost)", "Century Gothic", "system-ui", "sans-serif"],
+        serif: ["var(--font-jost)", "Century Gothic", "system-ui", "sans-serif"],
       },
     },
   },
