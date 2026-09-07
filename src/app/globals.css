@@ -562,3 +562,170 @@ section { position: relative; }
   .legal-strip { gap: 12px 22px; }
   .steps { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   PRINT / PDF — Parecer Bohac Med
+   Ativa via window.print() ou Ctrl+P → Salvar como PDF
+   ============================================================ */
+@media print {
+  /* ── Configuração de página A4 ── */
+  @page {
+    size: A4 portrait;
+    margin: 22mm 20mm 26mm 20mm;
+  }
+
+  /* ── Reset de tela ── */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  html, body {
+    background: #ffffff !important;
+    color: #12253a !important;
+    font-family: "Jost", "Century Gothic", system-ui, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.65;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ── Elementos escondidos no PDF ── */
+  .print-hide,
+  .site-header,
+  .wa-float,
+  nav,
+  form,
+  button:not(.print-btn),
+  .checker,
+  .declaracao {
+    display: none !important;
+  }
+
+  /* ── Elementos visíveis APENAS no PDF ── */
+  .print-only {
+    display: block !important;
+  }
+
+  /* ── Cabeçalho do PDF (logo + título) ── */
+  .pdf-header {
+    display: flex !important;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 14pt;
+    border-bottom: 1.5pt solid #ae8167;
+    margin-bottom: 20pt;
+  }
+  .pdf-header__brand {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 22pt;
+    font-weight: 500;
+    letter-spacing: .08em;
+    color: #0C2438;
+    line-height: 1;
+  }
+  .pdf-header__brand em { color: #ae8167; font-style: normal; }
+  .pdf-header__sub {
+    font-size: 7pt;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: #5a6776;
+    font-weight: 300;
+    margin-top: 3pt;
+  }
+  .pdf-header__doc {
+    font-size: 8pt;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: #5a6776;
+    text-align: right;
+  }
+  .pdf-header__date { font-weight: 500; color: #ae8167; }
+
+  /* ── Rodapé do PDF (WA link) ── */
+  .pdf-footer {
+    display: block !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8pt 20mm;
+    border-top: 1pt solid rgba(12,36,56,.12);
+    font-size: 8pt;
+    color: #5a6776;
+    background: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .pdf-footer a {
+    color: #ae8167 !important;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* ── Conteúdo do parecer ── */
+  main, .print-content {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* ── Evitar quebra dentro de blocos ── */
+  .print-no-break,
+  .cnae-row,
+  .print-section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* ── Seção de resultado principal ── */
+  .resultado-card {
+    border: 1.5pt solid rgba(12,36,56,.15) !important;
+    padding: 16pt !important;
+    margin-bottom: 14pt !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* ── Tabelas de CNAE ── */
+  .cnae-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 14pt;
+  }
+  .cnae-table th {
+    font-size: 7.5pt;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: #ae8167;
+    border-bottom: 1pt solid rgba(12,36,56,.12);
+    padding: 6pt 8pt;
+    text-align: left;
+  }
+  .cnae-table td {
+    padding: 6pt 8pt;
+    font-size: 9pt;
+    color: #374151;
+    border-bottom: .5pt solid rgba(12,36,56,.07);
+  }
+
+  /* ── Links visíveis no PDF ── */
+  a[href] {
+    color: #ae8167 !important;
+    text-decoration: underline;
+  }
+
+  /* ── Cabeçalhos ── */
+  h1 { font-size: 18pt; }
+  h2 { font-size: 14pt; }
+  h3 { font-size: 12pt; }
+
+  /* ── Disclaimer legal ── */
+  .print-disclaimer {
+    font-size: 8pt !important;
+    color: #9ca3af !important;
+    margin-top: 16pt;
+    padding-top: 10pt;
+    border-top: .5pt solid rgba(12,36,56,.10);
+    line-height: 1.5;
+  }
+}
