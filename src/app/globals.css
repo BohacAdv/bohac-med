@@ -1307,3 +1307,10 @@ section { position: relative; }
 .btn-gold:disabled { opacity: .55; cursor: default; transform: none; box-shadow: none; }
 .btn-outline-gold { background: transparent; color: var(--gold); border-color: var(--line-gold); }
 .btn-outline-gold:hover { background: rgba(174,129,103,.1); border-color: var(--gold); }
+
+/* ── Captura de lead: banco indisponível ──
+   Âmbar, não vermelho: nada deu errado por culpa do visitante, e o parecer
+   dele continua disponível. É um desvio de rota, não uma falha. */
+.lead--fallback { border-top-color: #b45309; background: rgba(180,83,9,.05); }
+.lead--fallback .lead__ok-t { color: #92400e; }
+.lead--fallback .btn { margin-top: 18px; }

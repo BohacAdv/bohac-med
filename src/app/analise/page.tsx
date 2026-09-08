@@ -8,8 +8,9 @@ import type {
   NotaFiscalAnexo,
 } from "@/types";
 import Parecer from "@/components/Parecer";
-import CapturaLead from "@/components/CapturaLead";
+import CapturaLead, { type ResultadoCaptura } from "@/components/CapturaLead";
 import { ENCERRAMENTO_PARECER } from "@/components/Parecer";
+import { whatsappHref } from "@/lib/verticais";
 
 const MAX_NOTAS = 5;
 const EXTENSOES_ACEITAS = ".pdf,.jpg,.jpeg,.png,.xml";
@@ -54,6 +55,25 @@ function Spinner() {
   );
 }
 
+/* Banco hibernado (plano free do Supabase): o parecer sai assim mesmo e o
+   visitante recebe uma mensagem pronta. Sem isto, o lead evaporava em
+   silêncio — o pior desfecho possível para um funil de captação. */
+function AvisoIndisponivel({ mensagem }: { mensagem: string }) {
+  return (
+    <div className="lead lead--fallback print-hide">
+      <p className="lead__ok-t">Não conseguimos registrar seu contato agora</p>
+      <p className="lead__ok-d">
+        O parecer já está liberado acima. Nosso sistema de cadastro está
+        temporariamente indisponível — para garantir que o escritório receba
+        seus dados, envie a mensagem abaixo pelo WhatsApp. Ela já vai preenchida.
+      </p>
+      <a href={whatsappHref(mensagem)} target="_blank" rel="noopener noreferrer" className="btn btn--gold">
+        Enviar meus dados pelo WhatsApp
+      </a>
+    </div>
+  );
+}
+
 /* ── Bloco de parecer + captura + PDF (modalidades CNPJ e Cartão) ── */
 function BlocoParecer({
   resultado,
@@ -63,26 +83,33 @@ function BlocoParecer({
   onCTA: () => void;
 }) {
   const [liberado, setLiberado] = useState(false);
+  const [avisoWa, setAvisoWa] = useState<string | null>(null);
 
   return (
     <div style={{ marginTop: "2.5rem" }}>
       <Parecer r={resultado} />
 
       {liberado ? (
-        <div className="parecer__acoes print-hide">
-          <button type="button" className="btn btn--gold" onClick={() => window.print()}>
-            Baixar parecer em PDF
-          </button>
-          {resultado.nivel !== "NAO_COMPORTA" && (
-            <button type="button" className="btn btn--ghost" onClick={onCTA}>
-              Aprofundar com as notas fiscais
+        <>
+          <div className="parecer__acoes print-hide">
+            <button type="button" className="btn btn--gold" onClick={() => window.print()}>
+              Baixar parecer em PDF
             </button>
-          )}
-        </div>
+            {resultado.nivel !== "NAO_COMPORTA" && (
+              <button type="button" className="btn btn--ghost" onClick={onCTA}>
+                Aprofundar com as notas fiscais
+              </button>
+            )}
+          </div>
+          {avisoWa && <AvisoIndisponivel mensagem={avisoWa} />}
+        </>
       ) : (
         <CapturaLead
           payloadExtra={{ cnpj: resultado.cnpj, resultadoAnalise: resultado }}
-          aoConcluir={() => setLiberado(true)}
+          aoConcluir={(r: ResultadoCaptura) => {
+            setLiberado(true);
+            if (r.status === "indisponivel") setAvisoWa(r.mensagemWhatsapp);
+          }}
         />
       )}
     </div>
@@ -182,6 +209,7 @@ function AnaliseContent() {
   const [arquivosSalvos, setArquivosSalvos]           = useState<NotaFiscalAnexo[]>([]);
   const [analiseId, setAnaliseId]                     = useState<string>("");
   const [leadNfEnviado, setLeadNfEnviado]             = useState(false);
+  const [avisoNf, setAvisoNf]                         = useState<string | null>(null);
 
   function handleSelecionarArquivos(e: React.ChangeEvent<HTMLInputElement>) {
     const selecionados = Array.from(e.target.files ?? []);
@@ -530,15 +558,21 @@ function AnaliseContent() {
                 </p>
 
                 {leadNfEnviado ? (
-                  <div className="parecer__acoes print-hide">
-                    <button type="button" className="btn btn--gold" onClick={() => window.print()}>
-                      Baixar parecer em PDF
-                    </button>
-                  </div>
+                  <>
+                    <div className="parecer__acoes print-hide">
+                      <button type="button" className="btn btn--gold" onClick={() => window.print()}>
+                        Baixar parecer em PDF
+                      </button>
+                    </div>
+                    {avisoNf && <AvisoIndisponivel mensagem={avisoNf} />}
+                  </>
                 ) : (
                   <CapturaLead
                     payloadExtra={{ notasFiscais: arquivosSalvos, parecerNfe: resultadoArquivos }}
-                    aoConcluir={() => setLeadNfEnviado(true)}
+                    aoConcluir={(r: ResultadoCaptura) => {
+                      setLeadNfEnviado(true);
+                      if (r.status === "indisponivel") setAvisoNf(r.mensagemWhatsapp);
+                    }}
                   />
                 )}
               </div>

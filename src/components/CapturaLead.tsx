@@ -28,6 +28,14 @@ function maskTel(v: string) {
   return n.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3").replace(/-$/, "");
 }
 
+export type ResultadoCaptura =
+  | { status: "ok" }
+  /* O banco pode estar hibernado (plano free do Supabase). O parecer é
+     liberado assim mesmo e o pai exibe o desvio para o WhatsApp — este
+     componente é desmontado no instante em que `aoConcluir` roda, então
+     não pode ser ele a mostrar a mensagem. */
+  | { status: "indisponivel"; mensagemWhatsapp: string };
+
 export default function CapturaLead({
   payloadExtra,
   aoConcluir,
@@ -35,7 +43,7 @@ export default function CapturaLead({
   descricao = "Informe seu nome e um meio de contato. O documento fica disponível para download e uma via é encaminhada ao escritório.",
 }: {
   payloadExtra: Record<string, unknown>;
-  aoConcluir: () => void;
+  aoConcluir: (r: ResultadoCaptura) => void;
   titulo?: string;
   descricao?: string;
 }) {
@@ -45,6 +53,15 @@ export default function CapturaLead({
   const [erro, setErro] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
+
+  const mensagemFallback = [
+    "Olá! Fiz a verificação de enquadramento no site do Bohac Med e gostaria de receber o parecer.",
+    "",
+    `Nome: ${nome || "—"}`,
+    email.trim() ? `E-mail: ${email.trim()}` : null,
+    telefone.trim() ? `WhatsApp: ${telefone.trim()}` : null,
+    typeof payloadExtra.cnpj === "string" ? `CNPJ analisado: ${payloadExtra.cnpj}` : null,
+  ].filter(Boolean).join("\n");
 
   async function enviar(e: React.FormEvent) {
     e.preventDefault();
@@ -61,12 +78,30 @@ export default function CapturaLead({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nome, email, telefone, origem: "site", ...payloadExtra }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.erro ?? "Não foi possível registrar.");
+      const data = await res.json().catch(() => ({}));
+
+      /* Qualquer falha do servidor (5xx) vira desvio para o WhatsApp, não só o
+         503. Um 500 devolve HTML, o `res.json()` acima falha em silêncio e o
+         visitante ficaria com uma mensagem de erro seca — sem PDF e sem
+         caminho até o escritório. Erros 4xx continuam aparecendo no
+         formulário, porque ali quem corrige é o próprio visitante. */
+      if (res.status >= 500 || data?.codigo === "PERSISTENCIA_INDISPONIVEL") {
+        // Libera o PDF assim mesmo: o visitante fez a parte dele.
+        aoConcluir({ status: "indisponivel", mensagemWhatsapp: mensagemFallback });
+        return;
+      }
+      if (!res.ok) throw new Error(data?.erro ?? "Não foi possível registrar.");
+
       setEnviado(true);
-      aoConcluir();
+      aoConcluir({ status: "ok" });
     } catch (err: unknown) {
-      setErro(err instanceof Error ? err.message : "Erro inesperado.");
+      // Falha de rede do lado do visitante cai aqui e recebe o mesmo tratamento.
+      const msg = err instanceof Error ? err.message : "";
+      if (/fetch|network|failed/i.test(msg)) {
+        aoConcluir({ status: "indisponivel", mensagemWhatsapp: mensagemFallback });
+        return;
+      }
+      setErro(msg || "Erro inesperado.");
     } finally { setEnviando(false); }
   }
 
